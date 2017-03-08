@@ -42,6 +42,7 @@ public class MainActivity extends AppCompatActivity
     private Toolbar mToolbar;
     private NavigationView mNavigationView;
 
+    private int mSize;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -84,6 +85,7 @@ public class MainActivity extends AppCompatActivity
                 FirebaseUser user = firebaseAuth.getCurrentUser();
                 if (user != null) {
                     setupProfilePicInNavDrawer(user);
+                    mNavigationView.getMenu().getItem(mSize-1).setChecked(false);
                     // User is signed in
 //                    Toast.makeText(MainActivity.this, "You're now signed in.", Toast.LENGTH_SHORT).show();
                 } else {
@@ -184,6 +186,7 @@ public class MainActivity extends AppCompatActivity
                 this, mDrawer, mToolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         mNavigationView = (NavigationView) findViewById(R.id.nav_view);
         mNavigationView.setNavigationItemSelectedListener(this);
+        mSize = mNavigationView.getMenu().size();
     }
 
     @SuppressWarnings("StatementWithEmptyBody")
