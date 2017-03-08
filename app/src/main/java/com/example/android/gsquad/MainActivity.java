@@ -83,27 +83,7 @@ public class MainActivity extends AppCompatActivity
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
                 FirebaseUser user = firebaseAuth.getCurrentUser();
                 if (user != null) {
-                    String facebookUserId = "";
-                    String photoUrl = "";
-                    View headerLayout = mNavigationView.getHeaderView(0);
-                    CircleImageView profilePic = (CircleImageView) headerLayout.findViewById(R.id.user_pic);
-                    for (UserInfo profile : user.getProviderData()) {
-                        if (profile.getProviderId().equals(getString(R.string.facebook_provider_id))) {
-                            facebookUserId = profile.getUid();
-                            photoUrl = "https://graph.facebook.com/" + facebookUserId +
-                                    "/picture?height=500&width=500";
-                        } else if (profile.getProviderId().equals(getString(R.string.google_provider_id))) {
-                            photoUrl = profile.getPhotoUrl().toString();
-                        }
-                    }
-
-                    Glide.with(MainActivity.this)
-                            .load(photoUrl)
-                            .asBitmap()  // Provides auto refreshing of image after it's downloading in case of CircularImageView
-                            .placeholder(android.R.drawable.sym_def_app_icon)
-                            .placeholder(android.R.drawable.sym_def_app_icon)
-                            .into(profilePic);
-
+                    setupProfilePicInNavDrawer(user);
                     // User is signed in
 //                    Toast.makeText(MainActivity.this, "You're now signed in.", Toast.LENGTH_SHORT).show();
                 } else {
@@ -229,5 +209,32 @@ public class MainActivity extends AppCompatActivity
         }
         mDrawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    /*
+    *  Setup Profile pic from the login providers like Facebook, Google, etc. into the Profile Pic
+    *  icon of Navigational Drawer
+    */
+    private void setupProfilePicInNavDrawer(FirebaseUser user) {
+        String facebookUserId = "";
+        String photoUrl = "";
+        View headerLayout = mNavigationView.getHeaderView(0);
+        CircleImageView profilePic = (CircleImageView) headerLayout.findViewById(R.id.user_pic);
+        for (UserInfo profile : user.getProviderData()) {
+            if (profile.getProviderId().equals(getString(R.string.facebook_provider_id))) {
+                facebookUserId = profile.getUid();
+                photoUrl = "https://graph.facebook.com/" + facebookUserId +
+                        "/picture?height=500&width=500";
+            } else if (profile.getProviderId().equals(getString(R.string.google_provider_id))) {
+                photoUrl = profile.getPhotoUrl().toString();
+            }
+        }
+
+        Glide.with(MainActivity.this)
+                .load(photoUrl)
+                .asBitmap()  // Provides auto refreshing of image after it's downloading in case of CircularImageView
+                .placeholder(android.R.drawable.sym_def_app_icon)
+                .placeholder(android.R.drawable.sym_def_app_icon)
+                .into(profilePic);
     }
 }
