@@ -18,12 +18,16 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.firebase.ui.auth.AuthUI;
 import com.firebase.ui.auth.IdpResponse;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.UserInfo;
 
 import java.util.Arrays;
+
+import de.hdodenhof.circleimageview.CircleImageView;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -36,6 +40,7 @@ public class MainActivity extends AppCompatActivity
     private DrawerLayout mDrawer;
     private ActionBarDrawerToggle mToggle;
     private Toolbar mToolbar;
+    private NavigationView mNavigationView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,6 +83,27 @@ public class MainActivity extends AppCompatActivity
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
                 FirebaseUser user = firebaseAuth.getCurrentUser();
                 if (user != null) {
+                    String facebookUserId = "";
+                    String photoUrl = "";
+                    View headerLayout = mNavigationView.getHeaderView(0);
+                    CircleImageView profilePic = (CircleImageView) headerLayout.findViewById(R.id.user_pic);
+                    for (UserInfo profile : user.getProviderData()) {
+                        if (profile.getProviderId().equals(getString(R.string.facebook_provider_id))) {
+                            facebookUserId = profile.getUid();
+                            photoUrl = "https://graph.facebook.com/" + facebookUserId +
+                                    "/picture?height=500&width=500";
+                        } else if (profile.getProviderId().equals(getString(R.string.google_provider_id))) {
+                            photoUrl = profile.getPhotoUrl().toString();
+                        }
+                    }
+
+                    Glide.with(MainActivity.this)
+                            .load(photoUrl)
+                            .asBitmap()  // Provides auto refreshing of image after it's downloading in case of CircularImageView
+                            .placeholder(android.R.drawable.sym_def_app_icon)
+                            .placeholder(android.R.drawable.sym_def_app_icon)
+                            .into(profilePic);
+
                     // User is signed in
 //                    Toast.makeText(MainActivity.this, "You're now signed in.", Toast.LENGTH_SHORT).show();
                 } else {
@@ -176,8 +202,8 @@ public class MainActivity extends AppCompatActivity
         mDrawer  = (DrawerLayout) findViewById(R.id.drawer_layout);
         mToggle = new ActionBarDrawerToggle(
                 this, mDrawer, mToolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-        navigationView.setNavigationItemSelectedListener(this);
+        mNavigationView = (NavigationView) findViewById(R.id.nav_view);
+        mNavigationView.setNavigationItemSelectedListener(this);
     }
 
     @SuppressWarnings("StatementWithEmptyBody")
@@ -198,6 +224,7 @@ public class MainActivity extends AppCompatActivity
 
                 break;
             case R.id.logout:
+                //ToDo : Add offline logout support
                 AuthUI.getInstance().signOut(this);
         }
         mDrawer.closeDrawer(GravityCompat.START);

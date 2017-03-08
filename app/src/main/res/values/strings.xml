@@ -4,4 +4,6 @@
     <string name="facebook_application_id" translatable="false">1785392411486722</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="facebook_provider_id">facebook.com</string>
+    <string name="google_provider_id">google.com</string>
 </resources>
