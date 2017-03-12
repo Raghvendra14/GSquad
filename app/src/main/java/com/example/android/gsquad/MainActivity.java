@@ -5,9 +5,7 @@ import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
-import android.support.design.widget.Snackbar;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -69,15 +67,6 @@ public class MainActivity extends AppCompatActivity
 //        }
 
         mFirebaseAuth = FirebaseAuth.getInstance();
-
-        final FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
 
         mAuthStateListener = new FirebaseAuth.AuthStateListener() {
             @Override
@@ -216,7 +205,7 @@ public class MainActivity extends AppCompatActivity
 
     /*
     *  Setup Profile pic from the login providers like Facebook, Google, etc. into the Profile Pic
-    *  icon of Navigational Drawer
+    *  imageview of Navigational Drawer
     */
     private void setupProfilePicInNavDrawer(FirebaseUser user) {
         String facebookUserId = "";
@@ -235,7 +224,7 @@ public class MainActivity extends AppCompatActivity
 
         Glide.with(MainActivity.this)
                 .load(photoUrl)
-                .asBitmap()  // Provides auto refreshing of image after it's downloading in case of CircularImageView
+                .asBitmap()  // Provides auto refreshing of image after it's downloaded in case of CircularImageView
                 .placeholder(android.R.drawable.sym_def_app_icon)
                 .placeholder(android.R.drawable.sym_def_app_icon)
                 .into(profilePic);
