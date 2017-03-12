@@ -12,4 +12,5 @@
     <string name="menu_about_us">About us</string>
     <string name="menu_logout">Logout</string>
     <string name="title_activity_friend_list">Find Friends</string>
+    <string name="permission_denied">Closing App. Cannot work without location permission.</string>
 </resources>

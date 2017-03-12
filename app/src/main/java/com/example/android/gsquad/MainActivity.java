@@ -1,16 +1,23 @@
 package com.example.android.gsquad;
 
+import android.*;
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.content.res.Configuration;
+import android.location.Location;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -19,6 +26,9 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.firebase.ui.auth.AuthUI;
 import com.firebase.ui.auth.IdpResponse;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.location.LocationServices;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserInfo;
@@ -28,12 +38,25 @@ import java.util.Arrays;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+        implements NavigationView.OnNavigationItemSelectedListener, GoogleApiClient.ConnectionCallbacks,
+        GoogleApiClient.OnConnectionFailedListener {
 
+    private static final String TAG = MainActivity.class.getSimpleName();
+
+    public static final int RC_PERMISSION = 2;
     public static final int RC_SIGN_IN = 1;
 
+    /*
+    *  All the firebase related module level variable declared here
+    */
     private FirebaseAuth mFirebaseAuth;
     private FirebaseAuth.AuthStateListener mAuthStateListener;
+
+    /*
+    *  All the location related module level variable declared here
+    */
+    protected GoogleApiClient mGoogleApiClient;
+    protected Location mLastLocation;
 
     private DrawerLayout mDrawer;
     private ActionBarDrawerToggle mToggle;
@@ -73,8 +96,7 @@ public class MainActivity extends AppCompatActivity
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
                 FirebaseUser user = firebaseAuth.getCurrentUser();
                 if (user != null) {
-                    setupProfilePicInNavDrawer(user);
-                    mNavigationView.getMenu().getItem(mSize-1).setChecked(false);
+                    signInInitialize(user);
                     // User is signed in
 //                    Toast.makeText(MainActivity.this, "You're now signed in.", Toast.LENGTH_SHORT).show();
                 } else {
@@ -91,6 +113,15 @@ public class MainActivity extends AppCompatActivity
                 }
             }
         };
+        buildGoogleApiClient();
+    }
+
+    protected synchronized void buildGoogleApiClient() {
+        mGoogleApiClient = new GoogleApiClient.Builder(this)
+                .addConnectionCallbacks(this)
+                .addOnConnectionFailedListener(this)
+                .addApi(LocationServices.API)
+                .build();
     }
 
     @Override
@@ -107,6 +138,20 @@ public class MainActivity extends AppCompatActivity
                 finish();
             }
         }
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        if (mGoogleApiClient.isConnected()) {
+            mGoogleApiClient.disconnect();
+        }
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        mGoogleApiClient.connect();
     }
 
     @Override
@@ -203,6 +248,15 @@ public class MainActivity extends AppCompatActivity
         return true;
     }
 
+    private void signInInitialize(FirebaseUser user) {
+        setupProfilePicInNavDrawer(user);
+        mNavigationView.getMenu().getItem(mSize-1).setChecked(false);
+//        if (mLastLocation != null) {
+//
+//        }
+
+    }
+
     /*
     *  Setup Profile pic from the login providers like Facebook, Google, etc. into the Profile Pic
     *  imageview of Navigational Drawer
@@ -228,5 +282,56 @@ public class MainActivity extends AppCompatActivity
                 .placeholder(android.R.drawable.sym_def_app_icon)
                 .placeholder(android.R.drawable.sym_def_app_icon)
                 .into(profilePic);
+    }
+
+    @Override
+    public void onConnected(@Nullable Bundle bundle) {
+        requestForRequiredPermissions();
+
+        if (mLastLocation != null) {
+            Log.d(TAG, "Last Location is " + String.valueOf(mLastLocation.getLatitude()) + " and "
+                + String.valueOf(mLastLocation.getLongitude()));
+        }
+
+    }
+
+    @Override
+    public void onConnectionSuspended(int i) {
+        Log.i(TAG, "In onConnectionSuspended");
+    }
+
+    @Override
+    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+        Log.i(TAG, "In onConnectionFailed " + connectionResult.getErrorMessage());
+    }
+
+    private void requestForRequiredPermissions() {
+        if (ContextCompat.checkSelfPermission(MainActivity.this, android.Manifest.permission.ACCESS_FINE_LOCATION) !=
+                PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(MainActivity.this,
+                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                    RC_PERMISSION);
+        } else {
+            mLastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        switch(requestCode) {
+            case RC_PERMISSION: {
+                if (grantResults.length > 0 &&
+                        grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    mLastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
+                    if (mLastLocation != null) {
+                        Log.d(TAG, "Last Location is " + String.valueOf(mLastLocation.getLatitude()) + " and "
+                                + String.valueOf(mLastLocation.getLongitude()));
+                    }
+                } else {
+                    Toast.makeText(MainActivity.this, getString(R.string.permission_denied), Toast.LENGTH_SHORT).show();
+                    finish();
+                }
+            }
+        }
     }
 }
