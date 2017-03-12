@@ -14,7 +14,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -135,17 +134,12 @@ public class MainActivityFragment extends Fragment implements GoogleApiClient.Co
     private void onSignedInIntialize() {
         mUserDatabaseReference = FirebaseDatabase.getInstance().getReference()
                 .child("users").child(mFirebaseUser.getUid());
-//        Log.d(TAG, "User email " + mFirebaseUser.getEmail() + "\nUsername " + mFirebaseUser.getDisplayName() + "\nLongitude " + mLastLocation.getLongitude() + "\nLatitude " + mLastLocation.getLatitude());
-        if (mLastLocation != null && mFirebaseUser.getDisplayName() != null && mFirebaseUser.getEmail() != null) {
+
+        if (mFirebaseUser.getDisplayName() != null && mFirebaseUser.getEmail() != null) {
             mUsername = mFirebaseUser.getDisplayName();
             mUserEmailId = mFirebaseUser.getEmail();
-            mUserLastLongitude = String.valueOf(mLastLocation.getLongitude());
-            mUserLastLatitude = String.valueOf(mLastLocation.getLatitude());
-            Log.d(TAG, "User email inside the if condition " + mUserEmailId);
             mUserDatabaseReference.child("name").setValue(mUsername);
             mUserDatabaseReference.child("email").setValue(mUserEmailId);
-            mUserDatabaseReference.child("long").setValue(mUserLastLongitude);
-            mUserDatabaseReference.child("lat").setValue(mUserLastLatitude);
         }
         attachDatabaseReadListener();
 
@@ -190,11 +184,16 @@ public class MainActivityFragment extends Fragment implements GoogleApiClient.Co
     public void onConnected(@Nullable Bundle bundle) {
         Log.d(TAG, "In onConnected");
         requestForRequiredPermissions();
-
-        if (mLastLocation != null) {
-            Log.d(TAG, "Last Location is " + String.valueOf(mLastLocation.getLatitude()) + " and "
-                    + String.valueOf(mLastLocation.getLongitude()));
+        if (mUserDatabaseReference != null && mLastLocation != null) {
+            mUserLastLongitude = String.valueOf(mLastLocation.getLongitude());
+            mUserLastLatitude = String.valueOf(mLastLocation.getLatitude());
+            mUserDatabaseReference.child("long").setValue(mUserLastLongitude);
+            mUserDatabaseReference.child("lat").setValue(mUserLastLatitude);
         }
+//        if (mLastLocation != null) {
+//            Log.d(TAG, "Last Location from onConnected is " + String.valueOf(mLastLocation.getLatitude()) + " and "
+//                    + String.valueOf(mLastLocation.getLongitude()));
+//        }
 
     }
 
@@ -216,27 +215,6 @@ public class MainActivityFragment extends Fragment implements GoogleApiClient.Co
                     RC_PERMISSION);
         } else {
             mLastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
-        }
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        switch(requestCode) {
-            case RC_PERMISSION: {
-                if (grantResults.length > 0 &&
-                        grantResults[0] == PackageManager.PERMISSION_GRANTED &&
-                        ContextCompat.checkSelfPermission(getActivity(), android.Manifest.permission.ACCESS_FINE_LOCATION) ==
-                                PackageManager.PERMISSION_GRANTED) {
-                    mLastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
-                    if (mLastLocation != null) {
-                        Log.d(TAG, "Last Location is " + String.valueOf(mLastLocation.getLatitude()) + " and "
-                                + String.valueOf(mLastLocation.getLongitude()));
-                    }
-                } else {
-                    Toast.makeText(getActivity(), getString(R.string.permission_denied), Toast.LENGTH_SHORT).show();
-                    getActivity().finish();
-                }
-            }
         }
     }
 }
