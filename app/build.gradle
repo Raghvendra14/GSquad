@@ -25,18 +25,16 @@ dependencies {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
 
+// Displaying images
+// Firebase dependencies
     compile 'com.android.support:appcompat-v7:25.2.0'
     compile 'com.android.support:design:25.2.0'
-    testCompile 'junit:junit:4.12'
-
-    // Displaying images
     compile 'com.github.bumptech.glide:glide:3.6.1'
     compile 'de.hdodenhof:circleimageview:2.1.0'
-
-    // Firebase dependencies
     compile 'com.google.firebase:firebase-auth:10.2.0'
     compile 'com.firebaseui:firebase-ui-auth:1.2.0'
-
+    compile 'com.android.support.constraint:constraint-layout:1.0.2'
+    testCompile 'junit:junit:4.12'
 }
 
 allprojects {

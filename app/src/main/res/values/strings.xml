@@ -11,4 +11,5 @@
     <string name="menu_help_and_feedback">Help and Feedback</string>
     <string name="menu_about_us">About us</string>
     <string name="menu_logout">Logout</string>
+    <string name="title_activity_friend_list">Find Friends</string>
 </resources>
