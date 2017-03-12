@@ -29,7 +29,6 @@ public class MainActivityFragment extends Fragment {
                         .setAction("Action", null).show();
             }
         });
-
         return rootView;
     }
 }
