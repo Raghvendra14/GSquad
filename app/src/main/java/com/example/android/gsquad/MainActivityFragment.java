@@ -14,8 +14,10 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.firebase.auth.FirebaseAuth;
@@ -32,6 +34,7 @@ import com.google.firebase.database.ValueEventListener;
 public class MainActivityFragment extends Fragment implements GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener  {
 
+    private final static int PLAY_SERVICES_RESOLUTION_REQUEST = 1000;
     public static final String TAG = MainActivityFragment.class.getSimpleName();
     public static final String ANONYMOUS = "anonymous";
 
@@ -89,7 +92,9 @@ public class MainActivityFragment extends Fragment implements GoogleApiClient.Co
             }
         };
 
-        buildGoogleApiClient();
+        if (checkPlayServices()) {
+            buildGoogleApiClient();
+        }
         return rootView;
     }
 
@@ -127,6 +132,7 @@ public class MainActivityFragment extends Fragment implements GoogleApiClient.Co
     @Override
     public void onResume() {
         super.onResume();
+        checkPlayServices();
         mFirebaseAuth.addAuthStateListener(mAuthStateListener);
 
     }
@@ -216,5 +222,22 @@ public class MainActivityFragment extends Fragment implements GoogleApiClient.Co
         } else {
             mLastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
         }
+    }
+
+    private boolean checkPlayServices() {
+        int resultCode = GooglePlayServicesUtil
+                .isGooglePlayServicesAvailable(getActivity());
+        if (resultCode != ConnectionResult.SUCCESS) {
+            if (GooglePlayServicesUtil.isUserRecoverableError(resultCode)) {
+                GooglePlayServicesUtil.getErrorDialog(resultCode, getActivity(),
+                      PLAY_SERVICES_RESOLUTION_REQUEST).show();
+            } else {
+                Toast.makeText(getActivity(), "This device is not supported", Toast.LENGTH_LONG)
+                        .show();
+                getActivity().finish();
+            }
+            return false;
+        }
+        return true;
     }
 }
