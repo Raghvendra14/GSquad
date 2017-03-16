@@ -12,5 +12,7 @@
     <string name="menu_about_us">About us</string>
     <string name="menu_logout">Logout</string>
     <string name="title_activity_friend_list">Find Friends</string>
-    <string name="permission_denied">Closing App. Cannot work without location permission.</string>
+    <string name="device_unsupported">This device is not supported.</string>
+    <string name="tab_title_games">Games</string>
+    <string name="tab_title_friends">Friends</string>
 </resources>

@@ -232,7 +232,7 @@ public class MainActivityFragment extends Fragment implements GoogleApiClient.Co
                 GooglePlayServicesUtil.getErrorDialog(resultCode, getActivity(),
                       PLAY_SERVICES_RESOLUTION_REQUEST).show();
             } else {
-                Toast.makeText(getActivity(), "This device is not supported", Toast.LENGTH_LONG)
+                Toast.makeText(getActivity(), getString(R.string.device_unsupported), Toast.LENGTH_LONG)
                         .show();
                 getActivity().finish();
             }
