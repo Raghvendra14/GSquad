@@ -56,7 +56,6 @@ public class MainActivity extends AppCompatActivity
         setContentView(R.layout.activity_main);
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(mToolbar);
-        this.setTitle(R.string.tab_title_games);
 
         // It is meant to setup the Navigational Drawer for home screen of the app.
         setUpNavigationalDrawer();
@@ -243,49 +242,14 @@ public class MainActivity extends AppCompatActivity
     }
 
     private void setupTabLayoutWithViewPager() {
-        final TabLayout tabLayout = (TabLayout) findViewById(R.id.tab_layout);
-        tabLayout.addTab(tabLayout.newTab().setText(R.string.tab_title_games));
-        tabLayout.addTab(tabLayout.newTab().setText(R.string.tab_title_friends));
-        tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
-
-        setupViewPager(tabLayout);
-    }
-
-    private void setupViewPager(TabLayout tabLayout) {
-        final ViewPager viewPager = (ViewPager) findViewById(R.id.view_pager);
-        final ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager(), tabLayout.getTabCount());
+        ViewPager viewPager = (ViewPager) findViewById(R.id.view_pager);
+        ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
+        adapter.addFragment(new MainActivityFragment(), getString(R.string.tab_title_games));
+        adapter.addFragment(new FriendListFragment(), getString(R.string.tab_title_friends));
         viewPager.setAdapter(adapter);
-        viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
-        tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
-            @Override
-            public void onTabSelected(TabLayout.Tab tab) {
-                viewPager.setCurrentItem(tab.getPosition());
-                setTabTitle(tab.getPosition());
-            }
+        TabLayout tabLayout = (TabLayout) findViewById(R.id.tab_layout);
+        tabLayout.setupWithViewPager(viewPager);
 
-            @Override
-            public void onTabUnselected(TabLayout.Tab tab) {
 
-            }
-
-            @Override
-            public void onTabReselected(TabLayout.Tab tab) {
-
-            }
-        });
-    }
-
-    private void setTabTitle(int position) {
-        switch (position) {
-            case 0:
-                setTitle(R.string.tab_title_games);
-                break;
-            case 1:
-                setTitle(R.string.tab_title_friends);
-                break;
-            default:
-                setTitle(R.string.app_name);
-                break;
-        }
     }
 }
