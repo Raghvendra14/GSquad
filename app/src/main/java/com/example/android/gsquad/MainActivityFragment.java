@@ -69,7 +69,8 @@ public class MainActivityFragment extends Fragment implements GoogleApiClient.Co
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(getActivity(), FriendListActivity.class));
+                //TODO: Check network availability before starting add game activity
+                startActivity(new Intent(getActivity(), AddGameActivity.class));
             }
         });
 

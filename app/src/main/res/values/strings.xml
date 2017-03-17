@@ -15,4 +15,7 @@
     <string name="device_unsupported">This device is not supported.</string>
     <string name="tab_title_games">Games</string>
     <string name="tab_title_friends">Friends</string>
+    <string name="title_activity_add_game">Add Games</string>
+    <string name="search_button_label">Search</string>
+    <string name="search_placeholder">Enter title or keyword of game</string>
 </resources>
