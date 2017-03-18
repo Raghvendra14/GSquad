@@ -1,4 +1,4 @@
-package com.example.android.gsquad;
+package com.example.android.gsquad.activity;
 
 import android.content.Intent;
 import android.content.res.Configuration;
@@ -20,6 +20,10 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.example.android.gsquad.fragment.FriendListFragment;
+import com.example.android.gsquad.fragment.MainActivityFragment;
+import com.example.android.gsquad.R;
+import com.example.android.gsquad.adapter.ViewPagerAdapter;
 import com.firebase.ui.auth.AuthUI;
 import com.firebase.ui.auth.IdpResponse;
 import com.google.firebase.auth.FirebaseAuth;

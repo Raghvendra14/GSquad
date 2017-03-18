@@ -1,4 +1,4 @@
-package com.example.android.gsquad;
+package com.example.android.gsquad.adapter;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
@@ -10,6 +10,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.example.android.gsquad.R;
 import com.example.android.gsquad.model.Cover;
 import com.example.android.gsquad.model.Game;
 

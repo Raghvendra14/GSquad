@@ -1,4 +1,4 @@
-package com.example.android.gsquad;
+package com.example.android.gsquad.activity;
 
 import android.app.Activity;
 import android.app.LoaderManager;
@@ -21,6 +21,8 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 
+import com.example.android.gsquad.adapter.GameListAdapter;
+import com.example.android.gsquad.R;
 import com.example.android.gsquad.async.SearchGameTask;
 import com.example.android.gsquad.listener.RecyclerClickListener;
 import com.example.android.gsquad.listener.RecyclerTouchListener;

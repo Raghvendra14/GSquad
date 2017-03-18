@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context="com.example.android.gsquad.AddGameActivity"
+    tools:context="com.example.android.gsquad.activity.AddGameActivity"
     tools:showIn="@layout/activity_add_game"
     android:padding="@dimen/add_friends_padding"
     android:clickable="true"

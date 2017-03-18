@@ -1,4 +1,4 @@
-package com.example.android.gsquad;
+package com.example.android.gsquad.adapter;
 
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;

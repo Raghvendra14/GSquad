@@ -1,8 +1,10 @@
-package com.example.android.gsquad;
+package com.example.android.gsquad.activity;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+
+import com.example.android.gsquad.R;
 
 public class FriendListActivity extends AppCompatActivity {
 

@@ -1,4 +1,4 @@
-package com.example.android.gsquad;
+package com.example.android.gsquad.fragment;
 
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -16,6 +16,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.example.android.gsquad.R;
+import com.example.android.gsquad.activity.AddGameActivity;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.common.api.GoogleApiClient;

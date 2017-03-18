@@ -7,8 +7,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
-import com.example.android.gsquad.AddGameActivity;
-import com.example.android.gsquad.GameListAdapter;
+import com.example.android.gsquad.activity.AddGameActivity;
+import com.example.android.gsquad.adapter.GameListAdapter;
 import com.example.android.gsquad.R;
 import com.example.android.gsquad.async.SubmitGameDetails;
 import com.example.android.gsquad.model.Game;
