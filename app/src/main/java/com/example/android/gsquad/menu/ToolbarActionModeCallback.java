@@ -9,8 +9,10 @@ import android.view.MenuItem;
 import com.example.android.gsquad.AddGameActivity;
 import com.example.android.gsquad.GameListAdapter;
 import com.example.android.gsquad.R;
+import com.example.android.gsquad.async.SubmitGameDetails;
 import com.example.android.gsquad.model.Game;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -48,7 +50,7 @@ public class ToolbarActionModeCallback implements ActionMode.Callback {
     public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
         switch (item.getItemId()) {
             case R.id.submit: {
-
+                List<Game> mGameIdList = new ArrayList<Game>();
                 SparseBooleanArray selected = mGameListAdapter.getSelectedIds();
 
                 int selectedMessageSize = selected.size();
@@ -58,9 +60,15 @@ public class ToolbarActionModeCallback implements ActionMode.Callback {
                     if (selected.valueAt(i)) {
                         // get selected data in Model
                         Game game = mGameList.get(selected.keyAt(i));
+                        mGameIdList.add(game);
                         Log.d("Hello", "Selected items: Id - " + game.getId() + " Name - " + game.getName());
 
                     }
+                }
+
+                if (!mGameIdList.isEmpty()) {
+                    SubmitGameDetails submitGameDetails = new SubmitGameDetails(mGameIdList);
+                    submitGameDetails.submitData();
                 }
                 mode.finish();
                 break;

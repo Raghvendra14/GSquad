@@ -21,6 +21,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 
+import com.example.android.gsquad.async.SearchGameTask;
 import com.example.android.gsquad.listener.RecyclerClickListener;
 import com.example.android.gsquad.listener.RecyclerTouchListener;
 import com.example.android.gsquad.menu.ToolbarActionModeCallback;

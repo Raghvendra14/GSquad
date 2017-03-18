@@ -1,10 +1,7 @@
-package com.example.android.gsquad;
+package com.example.android.gsquad.async;
 
 import android.content.AsyncTaskLoader;
 import android.content.Context;
-import android.content.pm.ActivityInfo;
-import android.content.res.Configuration;
-import android.content.res.Resources;
 import android.util.Log;
 
 import com.example.android.gsquad.model.Game;
@@ -25,11 +22,10 @@ public class SearchGameTask extends AsyncTaskLoader<List<Game>> {
 
     public static final String TAG = SearchGameTask.class.getSimpleName();
 
-    private final static String field = "name,cover";
+    private final static String field = "name,cover.url";
     private static String mGameTitle;
-    final InterestingConfigChanges mLastConfig = new InterestingConfigChanges();
 
-    List<Game> mGames;
+    private List<Game> mGames;
 
     public SearchGameTask(Context context, String gameTitle) {
         super(context);
@@ -45,7 +41,7 @@ public class SearchGameTask extends AsyncTaskLoader<List<Game>> {
             try {
                 Response<List<Game>> response = call.execute();
                 List<Game> entries = response.body();
-                Log.d(TAG, entries.get(0).getName());
+//                Log.d(TAG, entries.get(0).getName());
                 if (!entries.isEmpty()) {
                     return entries;
                 }
@@ -78,15 +74,6 @@ public class SearchGameTask extends AsyncTaskLoader<List<Game>> {
             // immediately.
             deliverResult(mGames);
         }
-        // Has something interesting in the configuration changed since we
-        // last fetched the game list?
-        boolean configChange = mLastConfig.applyNewConfig(getContext().getResources());
-
-//        if (takeContentChanged() || mGames == null || configChange) {
-//            // If the data has changed since the last time it was loaded
-//            // or is not currently available, start a load.
-//            forceLoad();
-//        }
     }
 
     /**
@@ -106,34 +93,4 @@ public class SearchGameTask extends AsyncTaskLoader<List<Game>> {
         super.onCanceled(data);
     }
 
-//    /**
-//     * Handles a request to completely reset the Loader.
-//     */
-//    @Override
-//    protected void onReset() {
-//        super.onReset();
-//
-////        // Ensure the loader is stopped
-////        onStopLoading();
-//
-////        if (mGames != null) {
-////            mGames = null;
-////        }
-//    }
-
-    private static class InterestingConfigChanges {
-        final Configuration mLastConfiguration = new Configuration();
-        int mLastDensity;
-
-        boolean applyNewConfig(Resources res) {
-            int configChanges = mLastConfiguration.updateFrom(res.getConfiguration());
-            boolean densityChanged = mLastDensity != res.getDisplayMetrics().densityDpi;
-            if (densityChanged || (configChanges&(ActivityInfo.CONFIG_LOCALE
-                    |ActivityInfo.CONFIG_UI_MODE|ActivityInfo.CONFIG_SCREEN_LAYOUT)) != 0) {
-                mLastDensity = res.getDisplayMetrics().densityDpi;
-                return true;
-            }
-            return false;
-        }
-    }
 }
