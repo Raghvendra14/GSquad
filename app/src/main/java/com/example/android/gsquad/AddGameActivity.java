@@ -6,8 +6,9 @@ import android.content.Context;
 import android.content.Loader;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.view.ActionMode;
 import android.support.v7.widget.DividerItemDecoration;
-import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
@@ -19,6 +20,9 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 
+import com.example.android.gsquad.listener.RecyclerClickListener;
+import com.example.android.gsquad.listener.RecyclerTouchListener;
+import com.example.android.gsquad.menu.ToolbarActionModeCallback;
 import com.example.android.gsquad.model.Game;
 
 import java.util.List;
@@ -33,6 +37,8 @@ public class AddGameActivity extends AppCompatActivity implements
     private RecyclerView mRecyclerView;
     private GameListAdapter mGameListAdapter;
     private Context context;
+    private ActionMode mActionMode = null;
+    private List<Game> mGameList;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -42,14 +48,8 @@ public class AddGameActivity extends AppCompatActivity implements
         context = AddGameActivity.this;
         mAddGameEditText = (EditText) findViewById(R.id.add_game_text);
         mSearchButton = (Button) findViewById(R.id.search_game_button);
-        mRecyclerView = (RecyclerView) findViewById(R.id.recycler_view);
-        int spanCount = getResources().getInteger(R.integer.list_column_count);
-        GridLayoutManager gridLayoutManager = new GridLayoutManager(this, spanCount);
-        mRecyclerView.setLayoutManager(gridLayoutManager);
-        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(mRecyclerView.getContext(),
-                gridLayoutManager.getOrientation());
-        mRecyclerView.addItemDecoration(dividerItemDecoration);
-
+        setupRecyclerView();
+        implementRecyclerViewClickListeners();
         mAddGameEditText.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -104,7 +104,8 @@ public class AddGameActivity extends AppCompatActivity implements
 
     @Override
     public void onLoadFinished(Loader<List<Game>> loader, List<Game> data) {
-        mGameListAdapter = new GameListAdapter(data, context);
+        mGameList = data;
+        mGameListAdapter = new GameListAdapter(mGameList, context);
         mRecyclerView.setAdapter(mGameListAdapter);
     }
 
@@ -124,9 +125,66 @@ public class AddGameActivity extends AppCompatActivity implements
         super.onResume();
     }
 
+    private void setupRecyclerView() {
+        mRecyclerView = (RecyclerView) findViewById(R.id.recycler_view);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
+        mRecyclerView.setLayoutManager(linearLayoutManager);
+        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(mRecyclerView.getContext(),
+                linearLayoutManager.getOrientation());
+        mRecyclerView.addItemDecoration(dividerItemDecoration);
+    }
+
     private void hideSoftKeyboard(View view) {
         InputMethodManager inputMethodManager =
                 (InputMethodManager) context.getSystemService(Activity.INPUT_METHOD_SERVICE);
         inputMethodManager.hideSoftInputFromWindow(view.getWindowToken(), 0);
+    }
+
+    // Implement item click and long click over recycler view
+    private void implementRecyclerViewClickListeners() {
+        mRecyclerView.addOnItemTouchListener(new RecyclerTouchListener(context, mRecyclerView,
+                new RecyclerClickListener() {
+                    @Override
+                    public void onClick(View view, int position) {
+                        // if ActionMode not null select item
+//                        if (mActionMode != null) {
+                        onListItemSelect(position);
+//                        }
+                    }
+
+                    @Override
+                    public void onLongClick(View view, int position) {
+                        // Select item on long click
+                        onListItemSelect(position);
+                    }
+                }));
+    }
+
+    // List item select method
+    public void onListItemSelect(int position) {
+        mGameListAdapter.toggleSelection(position);
+
+        boolean hasCheckedItems = mGameListAdapter.getSelectedCount() > 0; // Check if any items are already selected or not.
+        if (hasCheckedItems && mActionMode == null && mGameList != null) {
+            // there are some selected items, start the actionMode
+            mActionMode = ((AppCompatActivity) context).startSupportActionMode(
+                    new ToolbarActionModeCallback(AddGameActivity.this, mGameListAdapter, mGameList));
+        } else if (!hasCheckedItems && mActionMode != null) {
+            // there are no selected items, finish the actionmode
+            mActionMode.finish();
+        }
+
+        if (mActionMode != null) {
+            // set action mode title on item selection
+            mActionMode.setTitle(String.valueOf(mGameListAdapter.getSelectedCount()) + " selected");
+        }
+    }
+
+    // Set action mode null after use
+    public void setNullToActionMode() {
+        if (mActionMode != null) {
+            mActionMode = null;
+        }
+//        finish(); // Want to reselect items
     }
 }

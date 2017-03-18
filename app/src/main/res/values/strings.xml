@@ -20,4 +20,5 @@
     <string name="search_placeholder">Enter title or keyword of game</string>
     <string name="thumbnail_label">Game Thumbnail</string>
     <string name="selected_label">Selected Game</string>
+    <string name="submit">Submit</string>
 </resources>
