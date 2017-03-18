@@ -9,19 +9,23 @@
     android:layout_marginTop="@dimen/recycler_padding_left_right"
     android:layout_marginBottom="@dimen/recycler_padding_left_right">
 
-    <FrameLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
-        <ImageView
-            android:id="@+id/game_thumbnail"
-            android:layout_width="80dp"
-            android:layout_height="80dp"
-            android:src="@drawable/no_image"
-            android:contentDescription="@string/thumbnail_label"/>
-    </FrameLayout>
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/game_thumbnail"
+        android:layout_width="72dp"
+        android:layout_height="72dp"
+        android:src="@drawable/no_image"
+        android:paddingTop="@dimen/image_padding_top_bottom"
+        android:paddingBottom="@dimen/image_padding_top_bottom"
+        android:contentDescription="@string/thumbnail_label"/>
     <TextView
         android:id="@+id/game_title"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_weight="1"/>
+        android:layout_weight="1"
+        android:layout_gravity="center_vertical"
+        android:textAppearance="?android:textAppearanceMedium"
+        android:fontFamily="sans-serif"
+        android:paddingStart="@dimen/title_padding_left_right"
+        android:paddingEnd="@dimen/title_padding_left_right"/>
 </LinearLayout>

@@ -7,7 +7,6 @@ import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -16,6 +15,8 @@ import com.example.android.gsquad.model.Cover;
 import com.example.android.gsquad.model.Game;
 
 import java.util.List;
+
+import de.hdodenhof.circleimageview.CircleImageView;
 
 /**
  * Created by Raghvendra on 18-03-2017.
@@ -114,12 +115,12 @@ public class GameListAdapter extends RecyclerView.Adapter<GameListAdapter.ViewHo
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        ImageView mThumbnailView;
+        CircleImageView mThumbnailView;
         TextView mTitleView;
 
         public ViewHolder(View view) {
             super(view);
-            mThumbnailView = (ImageView) view.findViewById(R.id.game_thumbnail);
+            mThumbnailView = (CircleImageView) view.findViewById(R.id.game_thumbnail);
             mTitleView = (TextView) view.findViewById(R.id.game_title);
         }
     }
