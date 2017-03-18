@@ -1,6 +1,7 @@
 package com.example.android.gsquad.adapter;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
 import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
@@ -65,6 +66,11 @@ public class GameListAdapter extends RecyclerView.Adapter<GameListAdapter.ViewHo
                     .into(holder.mThumbnailView);
         }
         holder.mTitleView.setText(gamesList.get(position).getName());
+        if (mSelectedItemsIds.get(position)) {
+            holder.itemView.setBackgroundColor(mContext.getResources().getColor(R.color.grey));
+        } else {
+            holder.itemView.setBackgroundColor(Color.TRANSPARENT);
+        }
     }
 
     @Override
