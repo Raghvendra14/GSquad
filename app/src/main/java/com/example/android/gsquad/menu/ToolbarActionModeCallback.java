@@ -5,6 +5,7 @@ import android.util.Log;
 import android.util.SparseBooleanArray;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.example.android.gsquad.AddGameActivity;
 import com.example.android.gsquad.GameListAdapter;
@@ -69,7 +70,18 @@ public class ToolbarActionModeCallback implements ActionMode.Callback {
                 if (!mGameIdList.isEmpty()) {
                     SubmitGameDetails submitGameDetails = new SubmitGameDetails(mGameIdList);
                     submitGameDetails.submitData();
+                    int size = mGameIdList.size();
+                    String message = "";
+                    if (size > 1) {
+                        message = String.valueOf(size) + " " + addGameActivity.getResources().getString(R.string.multiple_game_string);
+                    } else if (size == 1) {
+                        message = String.valueOf(size) + " " + addGameActivity.getResources().getString(R.string.single_game_string);
+                    }
+                    Toast.makeText(addGameActivity, message,
+                            Toast.LENGTH_SHORT).show();
                 }
+
+                addGameActivity.finish();
                 mode.finish();
                 break;
             }
