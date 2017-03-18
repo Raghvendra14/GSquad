@@ -37,19 +37,21 @@ public class SearchGameTask extends AsyncTaskLoader<List<Game>> {
     }
     @Override
     public List<Game> loadInBackground() {
-        ApiInterface apiService =
-                ApiClient.getClient().create(ApiInterface.class);
+        if (mGameTitle != null) {
+            ApiInterface apiService =
+                    ApiClient.getClient().create(ApiInterface.class);
 
-        Call<List<Game>> call = apiService.getGameList(field, 20, 0, mGameTitle);
-        try {
-            Response<List<Game>> response = call.execute();
-            List<Game> entries = response.body();
-            Log.d(TAG, entries.get(0).getName());
-            if (!entries.isEmpty()) {
-                return entries;
+            Call<List<Game>> call = apiService.getGameList(field, 20, 0, mGameTitle);
+            try {
+                Response<List<Game>> response = call.execute();
+                List<Game> entries = response.body();
+                Log.d(TAG, entries.get(0).getName());
+                if (!entries.isEmpty()) {
+                    return entries;
+                }
+            } catch (IOException e) {
+                Log.e(TAG, e.getMessage());
             }
-        } catch (IOException e) {
-            Log.e(TAG, e.getMessage());
         }
         return null;
     }
@@ -80,11 +82,11 @@ public class SearchGameTask extends AsyncTaskLoader<List<Game>> {
         // last fetched the game list?
         boolean configChange = mLastConfig.applyNewConfig(getContext().getResources());
 
-        if (takeContentChanged() || mGames == null || configChange) {
-            // If the data has changed since the last time it was loaded
-            // or is not currently available, start a load.
-            forceLoad();
-        }
+//        if (takeContentChanged() || mGames == null || configChange) {
+//            // If the data has changed since the last time it was loaded
+//            // or is not currently available, start a load.
+//            forceLoad();
+//        }
     }
 
     /**
@@ -104,20 +106,20 @@ public class SearchGameTask extends AsyncTaskLoader<List<Game>> {
         super.onCanceled(data);
     }
 
-    /**
-     * Handles a request to completely reset the Loader.
-     */
-    @Override
-    protected void onReset() {
-        super.onReset();
-
-        // Ensure the loader is stopped
-        onStopLoading();
-
-        if (mGames != null) {
-            mGames = null;
-        }
-    }
+//    /**
+//     * Handles a request to completely reset the Loader.
+//     */
+//    @Override
+//    protected void onReset() {
+//        super.onReset();
+//
+////        // Ensure the loader is stopped
+////        onStopLoading();
+//
+////        if (mGames != null) {
+////            mGames = null;
+////        }
+//    }
 
     private static class InterestingConfigChanges {
         final Configuration mLastConfiguration = new Configuration();

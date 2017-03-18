@@ -8,20 +8,33 @@
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context="com.example.android.gsquad.AddGameActivity"
     tools:showIn="@layout/activity_add_game"
-    android:padding="@dimen/activity_horizontal_margin">
+    android:padding="@dimen/add_friends_padding"
+    android:clickable="true"
+    android:focusableInTouchMode="true">
 
     <EditText
         android:id="@+id/add_game_text"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
-        android:hint="@string/search_placeholder"/>
+        android:hint="@string/search_placeholder" />
+
     <Button
         android:id="@+id/search_game_button"
         android:text="@string/search_button_label"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="bottom|center_horizontal"
-        android:enabled="false"/>
+        android:layout_gravity="center_horizontal"
+        android:enabled="false" />
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recycler_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:scrollbarStyle="outsideOverlay"
+        android:paddingStart="@dimen/recycler_padding_left_right"
+        android:paddingEnd="@dimen/recycler_padding_left_right"
+        android:paddingBottom="@dimen/recycler_padding_bottom" />
+
 
 </LinearLayout>

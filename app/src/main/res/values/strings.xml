@@ -18,4 +18,6 @@
     <string name="title_activity_add_game">Add Games</string>
     <string name="search_button_label">Search</string>
     <string name="search_placeholder">Enter title or keyword of game</string>
+    <string name="thumbnail_label">Game Thumbnail</string>
+    <string name="selected_label">Selected Game</string>
 </resources>
