@@ -38,7 +38,8 @@
         <activity
             android:name=".AddGameActivity"
             android:label="@string/title_activity_add_game"
-            android:theme="@style/AppBarThemeCustom"></activity>
+            android:theme="@style/AppBarThemeCustom"
+            android:windowSoftInputMode="stateUnchanged|adjustResize"/>
     </application>
 
 </manifest>

@@ -15,6 +15,7 @@ import android.text.Editable;
 import android.text.InputFilter;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.util.SparseBooleanArray;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
@@ -39,6 +40,7 @@ public class AddGameActivity extends AppCompatActivity implements
     private Context context;
     private ActionMode mActionMode = null;
     private List<Game> mGameList;
+    private Bundle mSavedInstanceState;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -50,6 +52,9 @@ public class AddGameActivity extends AppCompatActivity implements
         mSearchButton = (Button) findViewById(R.id.search_game_button);
         setupRecyclerView();
         implementRecyclerViewClickListeners();
+        if (savedInstanceState != null) {
+            mSavedInstanceState = savedInstanceState;
+        }
         mAddGameEditText.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -107,6 +112,12 @@ public class AddGameActivity extends AppCompatActivity implements
         mGameList = data;
         mGameListAdapter = new GameListAdapter(mGameList, context);
         mRecyclerView.setAdapter(mGameListAdapter);
+        if (mSavedInstanceState != null) {
+            int size = mSavedInstanceState.getInt("size");
+            for(int i = (size - 1); i >= 0; i--) {
+                onListItemSelect(mSavedInstanceState.getInt(String.valueOf(i)));
+            }
+        }
     }
 
     @Override
@@ -185,6 +196,18 @@ public class AddGameActivity extends AppCompatActivity implements
         if (mActionMode != null) {
             mActionMode = null;
         }
-//        finish(); // Want to reselect items
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        SparseBooleanArray array = mGameListAdapter.getSelectedIds();
+        int size = array.size();
+        outState.putInt("size", size);
+        for(int i = (size - 1); i >= 0; i--) {
+            if (array.valueAt(i)) {
+                outState.putInt(String.valueOf(i), array.keyAt(i));
+            }
+        }
     }
 }
