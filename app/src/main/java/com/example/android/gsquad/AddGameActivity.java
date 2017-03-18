@@ -112,12 +112,7 @@ public class AddGameActivity extends AppCompatActivity implements
         mGameList = data;
         mGameListAdapter = new GameListAdapter(mGameList, context);
         mRecyclerView.setAdapter(mGameListAdapter);
-        if (mSavedInstanceState != null) {
-            int size = mSavedInstanceState.getInt("size");
-            for(int i = (size - 1); i >= 0; i--) {
-                onListItemSelect(mSavedInstanceState.getInt(String.valueOf(i)));
-            }
-        }
+        retainSavedInstanceState();
     }
 
     @Override
@@ -129,6 +124,15 @@ public class AddGameActivity extends AppCompatActivity implements
         Loader loader = getLoaderManager().restartLoader(0, null, this);
         loader.forceLoad();
 
+    }
+
+    protected void retainSavedInstanceState() {
+        if (mSavedInstanceState != null) {
+            int size = mSavedInstanceState.getInt("size");
+            for(int i = (size - 1); i >= 0; i--) {
+                onListItemSelect(mSavedInstanceState.getInt(String.valueOf(i)));
+            }
+        }
     }
 
     @Override
