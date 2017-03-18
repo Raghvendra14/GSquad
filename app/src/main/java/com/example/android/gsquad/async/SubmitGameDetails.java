@@ -22,7 +22,7 @@ public class SubmitGameDetails {
     public static final String TAG = SubmitGameDetails.class.getSimpleName();
 
     private List<com.example.android.gsquad.model.Game> mGameIdList;
-    private final static String fields = "name,cover.url,summary,aggregated_rating,publishers,genres,release_dates.human";
+    private final static String fields = "name,cover.url,summary,aggregated_rating";
 
     public SubmitGameDetails(List<com.example.android.gsquad.model.Game> gameList) {
         this.mGameIdList = gameList;
@@ -42,6 +42,8 @@ public class SubmitGameDetails {
                     if (gameDetails != null) {
                         FirebaseAddGameData firebaseAddGameData = new FirebaseAddGameData(gameDetails.get(0));
                         firebaseAddGameData.addGameData();
+                        FirebaseAddGameData addUserIntoGame = new FirebaseAddGameData();
+                        addUserIntoGame.addUserData(gameDetails.get(0).getId());
                     }
                 }
 
@@ -50,12 +52,6 @@ public class SubmitGameDetails {
                     Log.e(TAG, t.getMessage());
                 }
             });
-//            try {
-//                Response<GameDetails> response = call.execute();
-//                Log.d(TAG, response.body().getName());
-//            } catch (IOException e) {
-//                Log.e(TAG, e.toString());
-//            }
         }
     }
 }
