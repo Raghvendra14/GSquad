@@ -21,7 +21,9 @@
         android:id="@+id/empty_textview"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
+        android:layout_centerInParent="true"
+        android:textAppearance="?android:textAppearanceSmall"
+        android:fontFamily="sans-serif"
         android:text="@string/no_games_found"
         android:visibility="gone"/>
 

@@ -97,6 +97,7 @@ public class MainActivityFragment extends Fragment implements GoogleApiClient.Co
         DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(mRecyclerView.getContext(),
                 linearLayoutManager.getOrientation());
         mRecyclerView.addItemDecoration(dividerItemDecoration);
+        // Add empty array list into adapter
         gameDetailsList = new ArrayList<>();
         mGameDetailsListAdapter = new GameDetailsListAdapter(gameDetailsList, getActivity());
         mRecyclerView.setAdapter(mGameDetailsListAdapter);
