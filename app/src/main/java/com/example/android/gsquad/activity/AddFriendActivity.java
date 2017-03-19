@@ -3,7 +3,6 @@ package com.example.android.gsquad.activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.view.ActionMode;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -32,9 +31,7 @@ public class AddFriendActivity extends AppCompatActivity {
     private RecyclerView mRecyclerView;
     private SingleGameSelectAdapter mSingleGameSelectAdapter;
     private Context context;
-    private ActionMode mActionMode = null;
     private List<Game> mGameList;
-    private Bundle mSavedInstanceState;
 
     private DatabaseReference mUserGamesReference;
     private DatabaseReference mGameDataReference;

@@ -42,6 +42,10 @@
             android:name=".activity.AddFriendActivity"
             android:label="@string/title_activity_add_friend"
             android:theme="@style/AppBarThemeCustom" />
+        <activity
+            android:name=".activity.FindFriendsActivity"
+            android:label="@string/title_activity_find_friends"
+            android:theme="@style/AppBarThemeCustom" />
     </application>
 
 </manifest>
