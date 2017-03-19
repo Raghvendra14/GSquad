@@ -12,10 +12,14 @@
     tools:context="com.example.android.gsquad.fragment.MainActivityFragment"
     tools:showIn="@layout/activity_main">
 
-    <TextView
-        android:layout_width="wrap_content"
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/games_recycler_view"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Hello World!" />
+        android:scrollbarStyle="outsideOverlay"
+        android:paddingStart="@dimen/recycler_padding_left_right"
+        android:paddingEnd="@dimen/recycler_padding_left_right"
+        android:paddingBottom="@dimen/recycler_padding_bottom"/>
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fab"

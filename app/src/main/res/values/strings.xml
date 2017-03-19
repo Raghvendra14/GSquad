@@ -23,4 +23,5 @@
     <string name="submit">Submit</string>
     <string name="single_game_string">Game added to your library.</string>
     <string name="multiple_game_string">Games added to your library.</string>
+    <string name="no_connection_available">No internet connection available.</string>
 </resources>

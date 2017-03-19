@@ -7,9 +7,11 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,6 +20,7 @@ import android.widget.Toast;
 
 import com.example.android.gsquad.R;
 import com.example.android.gsquad.activity.AddGameActivity;
+import com.example.android.gsquad.utils.Utils;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -54,6 +57,8 @@ public class MainActivityFragment extends Fragment implements GoogleApiClient.Co
     protected GoogleApiClient mGoogleApiClient;
     protected Location mLastLocation;
 
+    private RecyclerView mRecyclerView;
+
     private String mUsername;
     private String mUserEmailId;
     private String mUserLastLongitude;
@@ -65,14 +70,22 @@ public class MainActivityFragment extends Fragment implements GoogleApiClient.Co
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_main, container, false);
+        final View rootView = inflater.inflate(R.layout.fragment_main, container, false);
+
+        // Initiate references to views
+        mRecyclerView = (RecyclerView) rootView.findViewById(R.id.games_recycler_view);
+
 
         final FloatingActionButton fab = (FloatingActionButton) rootView.findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //TODO: Check network availability before starting add game activity
-                startActivity(new Intent(getActivity(), AddGameActivity.class));
+                if (Utils.isNetworkAvailable(getActivity())) {
+                    startActivity(new Intent(getActivity(), AddGameActivity.class));
+                } else {
+                    Snackbar.make(rootView, getString(R.string.no_connection_available),
+                            Snackbar.LENGTH_LONG).show();
+                }
             }
         });
 
