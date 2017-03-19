@@ -256,6 +256,9 @@ public class MainActivityFragment extends Fragment implements GoogleApiClient.Co
             mUserGamesReference.removeEventListener(mFirebaseValueEventListener);
             mFirebaseValueEventListener = null;
         }
+        List<GameDetails> emptyList = new ArrayList<>();
+        mGameDetailsListAdapter = new GameDetailsListAdapter(emptyList, getActivity());
+        mRecyclerView.setAdapter(mGameDetailsListAdapter);
     }
 
     @Override
