@@ -11,15 +11,20 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.widget.DividerItemDecoration;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.android.gsquad.R;
 import com.example.android.gsquad.activity.AddGameActivity;
+import com.example.android.gsquad.adapter.GameDetailsListAdapter;
+import com.example.android.gsquad.model.GameDetails;
 import com.example.android.gsquad.utils.Utils;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
@@ -32,6 +37,9 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * A placeholder fragment containing a simple view.
@@ -50,6 +58,8 @@ public class MainActivityFragment extends Fragment implements GoogleApiClient.Co
     private FirebaseUser mFirebaseUser;
     private DatabaseReference mUserDatabaseReference;
     private ValueEventListener mFirebaseValueEventListener;
+    private DatabaseReference mUserGamesReference;
+    private DatabaseReference mGameDataReference;
 
     /*
     *  All the location related module level variable declared here
@@ -58,6 +68,9 @@ public class MainActivityFragment extends Fragment implements GoogleApiClient.Co
     protected Location mLastLocation;
 
     private RecyclerView mRecyclerView;
+    private GameDetailsListAdapter mGameDetailsListAdapter;
+    private TextView mEmptyTextView;
+    private List<GameDetails> gameDetailsList;
 
     private String mUsername;
     private String mUserEmailId;
@@ -73,7 +86,16 @@ public class MainActivityFragment extends Fragment implements GoogleApiClient.Co
         final View rootView = inflater.inflate(R.layout.fragment_main, container, false);
 
         // Initiate references to views
+        mEmptyTextView = (TextView) rootView.findViewById(R.id.empty_textview);
         mRecyclerView = (RecyclerView) rootView.findViewById(R.id.games_recycler_view);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
+        mRecyclerView.setLayoutManager(linearLayoutManager);
+        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(mRecyclerView.getContext(),
+                linearLayoutManager.getOrientation());
+        mRecyclerView.addItemDecoration(dividerItemDecoration);
+        gameDetailsList = new ArrayList<>();
+        mGameDetailsListAdapter = new GameDetailsListAdapter(gameDetailsList, getActivity());
+        mRecyclerView.setAdapter(mGameDetailsListAdapter);
 
 
         final FloatingActionButton fab = (FloatingActionButton) rootView.findViewById(R.id.fab);
@@ -156,6 +178,7 @@ public class MainActivityFragment extends Fragment implements GoogleApiClient.Co
     private void onSignedInIntialize() {
         mUserDatabaseReference = FirebaseDatabase.getInstance().getReference()
                 .child("users").child(mFirebaseUser.getUid());
+        mUserGamesReference = mUserDatabaseReference.child("games_owned");
 
         if (mFirebaseUser.getDisplayName() != null && mFirebaseUser.getEmail() != null) {
             mUsername = mFirebaseUser.getDisplayName();
@@ -180,9 +203,36 @@ public class MainActivityFragment extends Fragment implements GoogleApiClient.Co
             mFirebaseValueEventListener = new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
-                    for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                        String Username = snapshot.getValue().toString();
-                        Log.d("Hello", Username);
+                    gameDetailsList.clear();
+                    for (final DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                        String gameId = snapshot.getKey();
+
+                        if (gameId != null) {
+                            mGameDataReference = FirebaseDatabase.getInstance()
+                                    .getReference().child("games").child(gameId);
+
+                            mGameDataReference.addListenerForSingleValueEvent(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(DataSnapshot dataSnapshot) {
+                                    GameDetails gameDetails = dataSnapshot.getValue(GameDetails.class);
+                                    Log.d("Hello", gameDetails.getName());
+                                    gameDetailsList.add(gameDetails);
+                                    mGameDetailsListAdapter = new GameDetailsListAdapter(gameDetailsList, getActivity());
+                                    mRecyclerView.setAdapter(mGameDetailsListAdapter);
+//                                    Log.d("Hellolist", gameDetailsList.toString());
+                                    if (mGameDetailsListAdapter.getItemCount() != 0) {
+                                        mEmptyTextView.setVisibility(View.GONE);
+                                    }
+                                }
+                                @Override
+                                public void onCancelled(DatabaseError databaseError) {
+
+                                }
+                            });
+                        }
+                    }
+                    if (mGameDetailsListAdapter.getItemCount() == 0 && dataSnapshot.getChildrenCount() == 0) {
+                        mEmptyTextView.setVisibility(View.VISIBLE);
                     }
                 }
 
@@ -191,13 +241,13 @@ public class MainActivityFragment extends Fragment implements GoogleApiClient.Co
 
                 }
             };
-            mUserDatabaseReference.addValueEventListener(mFirebaseValueEventListener);
+            mUserGamesReference.addValueEventListener(mFirebaseValueEventListener);
         }
     }
 
     private void detachDatabaseReadListener() {
         if (mFirebaseValueEventListener != null) {
-            mUserDatabaseReference.removeEventListener(mFirebaseValueEventListener);
+            mUserGamesReference.removeEventListener(mFirebaseValueEventListener);
             mFirebaseValueEventListener = null;
         }
     }
