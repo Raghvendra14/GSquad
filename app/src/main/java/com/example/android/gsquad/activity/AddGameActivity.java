@@ -5,6 +5,7 @@ import android.app.LoaderManager;
 import android.content.Context;
 import android.content.Loader;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.view.ActionMode;
 import android.support.v7.widget.DividerItemDecoration;
@@ -20,6 +21,7 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 
 import com.example.android.gsquad.adapter.GameListAdapter;
 import com.example.android.gsquad.R;
@@ -28,6 +30,7 @@ import com.example.android.gsquad.listener.RecyclerClickListener;
 import com.example.android.gsquad.listener.RecyclerTouchListener;
 import com.example.android.gsquad.menu.ToolbarActionModeCallback;
 import com.example.android.gsquad.model.Game;
+import com.example.android.gsquad.utils.Utils;
 
 import java.util.List;
 
@@ -38,12 +41,14 @@ public class AddGameActivity extends AppCompatActivity implements
 
     private EditText mAddGameEditText;
     private Button mSearchButton;
+    private ProgressBar mProgressBar;
     private RecyclerView mRecyclerView;
     private GameListAdapter mGameListAdapter;
     private Context context;
     private ActionMode mActionMode = null;
     private List<Game> mGameList;
     private Bundle mSavedInstanceState;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -53,6 +58,7 @@ public class AddGameActivity extends AppCompatActivity implements
         context = AddGameActivity.this;
         mAddGameEditText = (EditText) findViewById(R.id.add_game_text);
         mSearchButton = (Button) findViewById(R.id.search_game_button);
+        mProgressBar = (ProgressBar) findViewById(R.id.game_list_progressBar);
         setupRecyclerView();
         implementRecyclerViewClickListeners();
         if (savedInstanceState != null) {
@@ -94,7 +100,13 @@ public class AddGameActivity extends AppCompatActivity implements
             @Override
             public void onClick(View v) {
 //                SearchGameTask searchGameTask = new SearchGameTask(context, mAddGameEditText.getText().toString());
-                useLoader();
+                if (Utils.isNetworkAvailable(context)) {
+                    mProgressBar.setVisibility(View.VISIBLE);
+                    useLoader();
+                } else {
+                    Snackbar.make(v, getString(R.string.no_connection_available),
+                            Snackbar.LENGTH_LONG).show();
+                }
                 mAddGameEditText.setText("");
                 hideSoftKeyboard(v);
             }
@@ -116,6 +128,7 @@ public class AddGameActivity extends AppCompatActivity implements
         mGameListAdapter = new GameListAdapter(mGameList, context);
         mRecyclerView.setAdapter(mGameListAdapter);
         retainSavedInstanceState();
+        mProgressBar.setVisibility(View.GONE);
     }
 
     @Override
@@ -208,12 +221,14 @@ public class AddGameActivity extends AppCompatActivity implements
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        SparseBooleanArray array = mGameListAdapter.getSelectedIds();
-        int size = array.size();
-        outState.putInt("size", size);
-        for(int i = (size - 1); i >= 0; i--) {
-            if (array.valueAt(i)) {
-                outState.putInt(String.valueOf(i), array.keyAt(i));
+        if (mGameListAdapter != null) {
+            SparseBooleanArray array = mGameListAdapter.getSelectedIds();
+            int size = array.size();
+            outState.putInt("size", size);
+            for (int i = (size - 1); i >= 0; i--) {
+                if (array.valueAt(i)) {
+                    outState.putInt(String.valueOf(i), array.keyAt(i));
+                }
             }
         }
     }

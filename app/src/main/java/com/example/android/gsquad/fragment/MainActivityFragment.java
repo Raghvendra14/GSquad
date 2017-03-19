@@ -18,6 +18,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -69,6 +70,7 @@ public class MainActivityFragment extends Fragment implements GoogleApiClient.Co
 
     private RecyclerView mRecyclerView;
     private GameDetailsListAdapter mGameDetailsListAdapter;
+    private ProgressBar mProgressBar;
     private TextView mEmptyTextView;
     private List<GameDetails> gameDetailsList;
 
@@ -87,6 +89,8 @@ public class MainActivityFragment extends Fragment implements GoogleApiClient.Co
 
         // Initiate references to views
         mEmptyTextView = (TextView) rootView.findViewById(R.id.empty_textview);
+        mProgressBar = (ProgressBar) rootView.findViewById(R.id.game_detail_progressBar);
+        mProgressBar.setVisibility(View.VISIBLE);
         mRecyclerView = (RecyclerView) rootView.findViewById(R.id.games_recycler_view);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
         mRecyclerView.setLayoutManager(linearLayoutManager);
@@ -222,6 +226,7 @@ public class MainActivityFragment extends Fragment implements GoogleApiClient.Co
 //                                    Log.d("Hellolist", gameDetailsList.toString());
                                     if (mGameDetailsListAdapter.getItemCount() != 0) {
                                         mEmptyTextView.setVisibility(View.GONE);
+                                        mProgressBar.setVisibility(View.GONE);
                                     }
                                 }
                                 @Override
@@ -233,6 +238,7 @@ public class MainActivityFragment extends Fragment implements GoogleApiClient.Co
                     }
                     if (mGameDetailsListAdapter.getItemCount() == 0 && dataSnapshot.getChildrenCount() == 0) {
                         mEmptyTextView.setVisibility(View.VISIBLE);
+                        mProgressBar.setVisibility(View.GONE);
                     }
                 }
 

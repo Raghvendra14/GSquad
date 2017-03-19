@@ -27,14 +27,26 @@
         android:layout_gravity="center_horizontal"
         android:enabled="false" />
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/recycler_view"
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:scrollbarStyle="outsideOverlay"
-        android:paddingStart="@dimen/recycler_padding_left_right"
-        android:paddingEnd="@dimen/recycler_padding_left_right"
-        android:paddingBottom="@dimen/recycler_padding_bottom" />
+        android:layout_height="match_parent">
 
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/recycler_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:scrollbarStyle="outsideOverlay"
+            android:layout_alignParentTop="true"
+            android:paddingBottom="@dimen/recycler_padding_bottom" />
+
+        <ProgressBar
+            android:id="@+id/game_list_progressBar"
+            style="?android:attr/progressBarStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:visibility="gone"/>
+
+    </RelativeLayout>
 
 </LinearLayout>
