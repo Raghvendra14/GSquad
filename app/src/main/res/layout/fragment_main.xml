@@ -5,10 +5,8 @@
     android:id="@+id/content_main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/recycler_padding_left_right"
+    android:paddingRight="@dimen/recycler_padding_left_right"
     tools:context="com.example.android.gsquad.fragment.MainActivityFragment"
     tools:showIn="@layout/activity_main">
 
@@ -17,9 +15,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:scrollbarStyle="outsideOverlay"
-        android:paddingStart="@dimen/recycler_padding_left_right"
-        android:paddingEnd="@dimen/recycler_padding_left_right"
-        android:paddingBottom="@dimen/recycler_padding_bottom"/>
+        android:layout_alignParentTop="true" />
 
     <TextView
         android:id="@+id/empty_textview"
