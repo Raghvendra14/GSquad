@@ -99,7 +99,6 @@ public class AddGameActivity extends AppCompatActivity implements
         mSearchButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                SearchGameTask searchGameTask = new SearchGameTask(context, mAddGameEditText.getText().toString());
                 if (Utils.isNetworkAvailable(context)) {
                     mProgressBar.setVisibility(View.VISIBLE);
                     useLoader();
@@ -174,10 +173,8 @@ public class AddGameActivity extends AppCompatActivity implements
                 new RecyclerClickListener() {
                     @Override
                     public void onClick(View view, int position) {
-                        // if ActionMode not null select item
-//                        if (mActionMode != null) {
+                        // Select item on normal click
                         onListItemSelect(position);
-//                        }
                     }
 
                     @Override
