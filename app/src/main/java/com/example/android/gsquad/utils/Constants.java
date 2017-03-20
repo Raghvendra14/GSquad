@@ -5,6 +5,7 @@ package com.example.android.gsquad.utils;
  */
 
 public class Constants {
+    public static final int SPLASH_DISPLAY_LENGTH = 1000;
     public static final String GAME_ID = "gameId";
     public static final double RANGE = 10000.00;
     public static final long LOCATION_REQUEST_INTERVAL = 3600000;

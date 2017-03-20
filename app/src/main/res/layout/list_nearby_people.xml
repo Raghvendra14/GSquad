@@ -29,8 +29,7 @@
             android:layout_gravity="center|bottom"
             android:textAppearance="?android:textAppearance"
             android:textSize="@dimen/username_size"
-            android:fontFamily="sans-serif"
-          />
+            android:fontFamily="sans-serif" />
 
     </LinearLayout>
 </android.support.v7.widget.CardView>

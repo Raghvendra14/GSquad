@@ -41,7 +41,6 @@ public class SearchGameTask extends AsyncTaskLoader<List<Game>> {
             try {
                 Response<List<Game>> response = call.execute();
                 List<Game> entries = response.body();
-//                Log.d(TAG, entries.get(0).getName());
                 if (!entries.isEmpty()) {
                     return entries;
                 }

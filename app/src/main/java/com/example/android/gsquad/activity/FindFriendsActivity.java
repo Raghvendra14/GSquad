@@ -97,7 +97,6 @@ public class FindFriendsActivity extends AppCompatActivity {
                         mEmptyTextView.setVisibility(View.VISIBLE);
                         mProgressBar.setVisibility(View.GONE);
                     }
-                    // TODO: still have to fix the background threads issue of firebase data listeners
                     String user = FirebaseAuth.getInstance().getCurrentUser().getUid();
                     if (userIds != null && userIds.contains(user)) {
                         if (userIds.size() != 1) {
@@ -105,8 +104,6 @@ public class FindFriendsActivity extends AppCompatActivity {
                             SearchNearbyPeople searchNearbyPeople = new SearchNearbyPeople(userIds, user,
                                     mFindFriendsAdapter, mRecyclerView, mContext, mProgressBar);
                             searchNearbyPeople.search();
-//                        mFindFriendsAdapter = new FindFriendsAdapter(mUserBasicInfoList, mContext);
-//                        mRecyclerView.setAdapter(mFindFriendsAdapter);
                         } else {
                             mEmptyTextView.setVisibility(View.VISIBLE);
                             mProgressBar.setVisibility(View.GONE);
@@ -151,10 +148,7 @@ public class FindFriendsActivity extends AppCompatActivity {
                 new RecyclerClickListener() {
                     @Override
                     public void onClick(View view, int position) {
-                        // if ActionMode not null select item
-//                        if (mActionMode != null) {
-//                        onListItemSelect(position);
-//                        }
+//                      onListItemSelect(position);
                     }
 
                     @Override

@@ -87,11 +87,10 @@ public class MainActivity extends AppCompatActivity
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
                 FirebaseUser user = firebaseAuth.getCurrentUser();
                 if (user != null) {
+                    // User is signed in
                     Log.d(TAG, "User Connected");
                     setupProfilePicInNavDrawer(user);
                     mNavigationView.getMenu().getItem(mSize-1).setChecked(false);
-                    // User is signed in
-//                    Toast.makeText(MainActivity.this, "You're now signed in.", Toast.LENGTH_SHORT).show();
                 } else {
                     // User is signed out
                     startActivityForResult(
@@ -177,7 +176,6 @@ public class MainActivity extends AppCompatActivity
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
-//            AuthUI.getInstance().signOut(this);
             return true;
         }
 

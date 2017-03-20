@@ -36,22 +36,6 @@ public class GameListAdapter extends RecyclerView.Adapter<GameListAdapter.ViewHo
     public GameListAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_games, parent, false);
         final ViewHolder vh = new ViewHolder(view);
-//        view.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                // TODO: Add code to select the game
-//                // Select item on single click
-//                new AddGameActivity().onListItemSelect(vh.getAdapterPosition());
-//            }
-//        });
-//        view.setOnLongClickListener(new View.OnLongClickListener() {
-//            @Override
-//            public boolean onLongClick(View v) {
-//                // Select item on long click
-//                new AddGameActivity().onListItemSelect(vh.getAdapterPosition());
-//                return true;
-//            }
-//        });
         return vh;
     }
 

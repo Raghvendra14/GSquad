@@ -38,7 +38,6 @@ public class SubmitGameDetails {
             @Override
             public void onResponse(Call<List<GameDetails>> call, Response<List<GameDetails>> response) {
                 List<GameDetails> gameDetails = response.body();
-//                   Log.d(TAG, gameDetails.get(0).getName());
                 if (gameDetails != null) {
                     FirebaseAddGameData firebaseAddGameData = new FirebaseAddGameData(gameDetails.get(0));
                     firebaseAddGameData.addGameData();

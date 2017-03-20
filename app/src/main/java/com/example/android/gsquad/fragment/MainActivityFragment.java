@@ -204,11 +204,6 @@ public class MainActivityFragment extends Fragment implements GoogleApiClient.Co
             mUserBasicInfo.setCoordinates(null);
             mUserBasicInfo.setGamesOwned(null);
             storeUserBasicDataInDatabase();
-
-//            mUserDatabaseReference.child("name").setValue(mUsername);
-//            mUserDatabaseReference.child("email").setValue(mUserEmailId);
-//            mUserDatabaseReference.child("photoUrl")
-//                    .setValue(Utils.getProfilePicUrl(mFirebaseUser, getActivity()));
         }
         attachDatabaseReadListener();
 
@@ -227,8 +222,6 @@ public class MainActivityFragment extends Fragment implements GoogleApiClient.Co
             mFirebaseValueEventListener = new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
-                    // TODO: check for mutiple entries of data for first time
-
                     gameDetailsList.clear();
 
                     UserBasicInfo userInfo = dataSnapshot.getValue(UserBasicInfo.class);
@@ -264,36 +257,6 @@ public class MainActivityFragment extends Fragment implements GoogleApiClient.Co
                             }
                         }
                     }
-
-
-//                        if (gameId != null) {
-//                            mGameDataReference = FirebaseDatabase.getInstance()
-//                                    .getReference().child("games").child(gameId);
-//
-//                            mGameDataReference.addListenerForSingleValueEvent(new ValueEventListener() {
-//                                @Override
-//                                public void onDataChange(DataSnapshot dataSnapshot) {
-//                                    GameDetails gameDetails = dataSnapshot.getValue(GameDetails.class);
-//                                    Log.d("Hello", gameDetails.getName());
-//                                    gameDetailsList.add(gameDetails);
-//                                    mGameDetailsListAdapter = new GameDetailsListAdapter(gameDetailsList, getActivity());
-//                                    mRecyclerView.setAdapter(mGameDetailsListAdapter);
-////                                    Log.d("Hellolist", gameDetailsList.toString());
-//                                    if (mGameDetailsListAdapter.getItemCount() != 0) {
-//                                        mEmptyTextView.setVisibility(View.GONE);
-//                                        mProgressBar.setVisibility(View.GONE);
-//                                    }
-//                                }
-//                                @Override
-//                                public void onCancelled(DatabaseError databaseError) {
-//
-//                                }
-//                            });
-//                        }
-//                    }
-//                    if (mGameDetailsListAdapter.getItemCount() == 0 && dataSnapshot.getChildrenCount() == 0) {
-//                        mEmptyTextView.setVisibility(View.VISIBLE);
-//                        mProgressBar.setVisibility(View.GONE);
                 }
 
                 @Override

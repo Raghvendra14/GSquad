@@ -6,6 +6,7 @@ import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 
 import com.example.android.gsquad.R;
+import com.example.android.gsquad.utils.Constants;
 
 /**
  * Created by Raghvendra on 26-02-2017.
@@ -13,8 +14,6 @@ import com.example.android.gsquad.R;
 
 public class SplashActivity extends AppCompatActivity {
 
-    /* Duration of displaying Splash screen */
-    private final int SPLASH_DISPLAY_LENGTH = 1000;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -29,7 +28,7 @@ public class SplashActivity extends AppCompatActivity {
                 startActivity(intent);
                 finish();
             }
-        }, SPLASH_DISPLAY_LENGTH);
+        }, Constants.SPLASH_DISPLAY_LENGTH);
 
     }
 }
