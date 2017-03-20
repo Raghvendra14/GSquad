@@ -17,7 +17,9 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.maps.android.SphericalUtil;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by Raghvendra on 19-03-2017.
@@ -48,6 +50,7 @@ public class SearchNearbyPeople {
 
     public void search() {
         final List<String> nearbyUserIds = new ArrayList<>();
+        final Map<String, Double> nearbyUserDistance = new HashMap<>();
         mUserBasicDataReference = FirebaseDatabase.getInstance().getReference().child("users");
         mUserBasicDataReference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -71,10 +74,11 @@ public class SearchNearbyPeople {
                         if (Double.compare(distanceInMeters, Constants.RANGE) <= 0) {
                             int nearbyUserIdIndex = mLatLngsList.indexOf(userLatLng);
                             nearbyUserIds.add(mUserIds.get(nearbyUserIdIndex));
+                            nearbyUserDistance.put(mUserIds.get(nearbyUserIdIndex), distanceInMeters);
                         }
                     }
                 }
-                getNearbyPeopleInfo(nearbyUserIds);
+                getNearbyPeopleInfo(nearbyUserIds, nearbyUserDistance);
             }
 
             @Override
@@ -84,7 +88,7 @@ public class SearchNearbyPeople {
         });
     }
 
-    private void getNearbyPeopleInfo(final List<String> nearbyUserIds) {
+    private void getNearbyPeopleInfo(final List<String> nearbyUserIds, final Map<String, Double> nearbyUserDistance) {
         final List<UserBasicInfo> userBasicInfoList = new ArrayList<>();
             mUserBasicDataReference.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
@@ -95,7 +99,7 @@ public class SearchNearbyPeople {
                             userBasicInfoList.add(userBasicInfo);
                         }
                     }
-                    mFindFriendsAdapter = new FindFriendsAdapter(userBasicInfoList, mContext);
+                    mFindFriendsAdapter = new FindFriendsAdapter(userBasicInfoList, nearbyUserDistance, mContext);
                     mRecyclerView.setAdapter(mFindFriendsAdapter);
                     if (mFindFriendsAdapter.getItemCount() != 0) {
                         mProgressBar.setVisibility(View.GONE);
@@ -107,36 +111,6 @@ public class SearchNearbyPeople {
 
                 }
             });
-//            final UserBasicInfo userBasicInfo = new UserBasicInfo();
-//            mUserBasicDataReference = buildDatabaseReference(userId, "name");
-//            mUserBasicDataReference.addListenerForSingleValueEvent(new ValueEventListener() {
-//                @Override
-//                public void onDataChange(DataSnapshot dataSnapshot) {
-//                    userBasicInfo.setName((String) dataSnapshot.getValue());
-//                }
-//
-//                @Override
-//                public void onCancelled(DatabaseError databaseError) {
-//
-//                }
-//            });
-//            mUserBasicDataReference = buildDatabaseReference(userId, "photoUrl");
-//            mUserBasicDataReference.addListenerForSingleValueEvent(new ValueEventListener() {
-//                @Override
-//                public void onDataChange(DataSnapshot dataSnapshot) {
-//                    userBasicInfo.setPhotoUrl((String) dataSnapshot.getValue());
-//                }
-//
-//                @Override
-//                public void onCancelled(DatabaseError databaseError) {
-//
-//                }
-//            });
-//            userBasicInfoList.add(userBasicInfo);
-//        if (!userBasicInfoList.isEmpty()) {
-//            return userBasicInfoList;
-//        }
-//        return null;
     }
 
 }

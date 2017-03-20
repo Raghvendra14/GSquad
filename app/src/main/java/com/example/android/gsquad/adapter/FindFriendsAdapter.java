@@ -10,8 +10,11 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.example.android.gsquad.R;
 import com.example.android.gsquad.model.UserBasicInfo;
+import com.example.android.gsquad.utils.Utils;
 
 import java.util.List;
+import java.util.Locale;
+import java.util.Map;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -21,10 +24,13 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 public class FindFriendsAdapter extends RecyclerView.Adapter<FindFriendsAdapter.ViewHolder> {
     private List<UserBasicInfo> mUserBasicInfoList;
+    private Map<String, Double> mNearbyUserDistance;
     private Context mContext;
 
-    public FindFriendsAdapter (List<UserBasicInfo> userBasicInfoList, Context context) {
+    public FindFriendsAdapter (List<UserBasicInfo> userBasicInfoList, Map<String, Double> nearbyUserDistance,
+                               Context context) {
         this.mUserBasicInfoList = userBasicInfoList;
+        this.mNearbyUserDistance = nearbyUserDistance;
         this.mContext = context;
     }
 
@@ -47,6 +53,11 @@ public class FindFriendsAdapter extends RecyclerView.Adapter<FindFriendsAdapter.
                 .into(holder.mCircularImageView);
 
         holder.mTextView.setText(mUserBasicInfoList.get(position).getName());
+        double distanceInKilometers = Utils.getDistanceInKilometers(mNearbyUserDistance.get(mUserBasicInfoList
+                .get(position).getId()));
+        String distanceString = String.format(Locale.ENGLISH, "%.2f %s", distanceInKilometers,
+                mContext.getResources().getString(R.string.distance_label));
+        holder.mDistanceTextView.setText(distanceString);
     }
 
     @Override
@@ -57,10 +68,12 @@ public class FindFriendsAdapter extends RecyclerView.Adapter<FindFriendsAdapter.
     public static class ViewHolder extends RecyclerView.ViewHolder {
         CircleImageView mCircularImageView;
         TextView mTextView;
+        TextView mDistanceTextView;
         public ViewHolder(View view) {
             super(view);
             mCircularImageView = (CircleImageView) view.findViewById(R.id.nearby_people_image_view);
             mTextView = (TextView) view.findViewById(R.id.nearby_people_text_view);
+            mDistanceTextView = (TextView) view.findViewById(R.id.distance_text_view);
         }
     }
 }

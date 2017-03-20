@@ -35,4 +35,8 @@ public class Utils {
         }
         return null;
     }
+
+    public static double getDistanceInKilometers(double distanceInMeters) {
+       return distanceInMeters / 1000.0;
+    }
 }

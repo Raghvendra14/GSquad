@@ -31,4 +31,5 @@
     <string name="user_pic_label">User Profile Picture</string>
     <string name="no_games_available">No games are available in your library. Go back to Games tab to add games first.</string>
     <string name="no_nearby_users_available">Sorry, No nearby gamers available for this game.</string>
+    <string name="distance_label">km away</string>
 </resources>

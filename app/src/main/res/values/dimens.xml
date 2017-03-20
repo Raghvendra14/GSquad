@@ -15,5 +15,6 @@
     <dimen name="cardview_margin_top_bottom">4dp</dimen>
     <dimen name="add_friends_profile_pic">104dp</dimen>
     <dimen name="username_size">16sp</dimen>
+    <dimen name="distance_size">12sp</dimen>
     <integer name="column_count">2</integer>
 </resources>

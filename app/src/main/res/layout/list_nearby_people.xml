@@ -31,5 +31,14 @@
             android:textSize="@dimen/username_size"
             android:fontFamily="sans-serif" />
 
+        <TextView
+            android:id="@+id/distance_text_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center|bottom"
+            android:textAppearance="?android:textAppearanceSmall"
+            android:textSize="@dimen/distance_size"
+            android:fontFamily="sans-serif" />
+
     </LinearLayout>
 </android.support.v7.widget.CardView>
