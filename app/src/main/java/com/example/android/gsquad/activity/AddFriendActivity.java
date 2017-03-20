@@ -10,11 +10,13 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import com.example.android.gsquad.R;
 import com.example.android.gsquad.adapter.SingleGameSelectAdapter;
 import com.example.android.gsquad.model.Game;
 import com.example.android.gsquad.model.GameDetails;
+import com.example.android.gsquad.model.UserBasicInfo;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -32,6 +34,7 @@ public class AddFriendActivity extends AppCompatActivity {
     private SingleGameSelectAdapter mSingleGameSelectAdapter;
     private Context context;
     private List<Game> mGameList;
+    private TextView mEmptyTextView;
 
     private DatabaseReference mUserGamesReference;
     private DatabaseReference mGameDataReference;
@@ -45,9 +48,10 @@ public class AddFriendActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         context = AddFriendActivity.this;
         mProgressBar = (ProgressBar) findViewById(R.id.game_list_progressBar);
+        mEmptyTextView = (TextView) findViewById(R.id.add_friend_empty_view);
         setupRecyclerView();
         mUserGamesReference = FirebaseDatabase.getInstance().getReference().child("users")
-                .child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child("games_owned");
+                .child(FirebaseAuth.getInstance().getCurrentUser().getUid());
         mProgressBar.setVisibility(View.VISIBLE);
     }
 
@@ -82,18 +86,20 @@ public class AddFriendActivity extends AppCompatActivity {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
                     mGameList.clear();
-                    for (final DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                        String gameId = snapshot.getKey();
-
-                        if (gameId != null) {
+                    UserBasicInfo userBasicInfo = dataSnapshot.getValue(UserBasicInfo.class);
+                    if (userBasicInfo.getGamesOwned() == null) {
+                        mEmptyTextView.setVisibility(View.VISIBLE);
+                        mProgressBar.setVisibility(View.GONE);
+                    } else {
+                        List<Integer> gamesOwnedList = userBasicInfo.getGamesOwned();
+                        for (int gameId : gamesOwnedList) {
                             mGameDataReference = FirebaseDatabase.getInstance().getReference()
-                                    .child("games").child(gameId);
-
+                                    .child("games").child(String.valueOf(gameId));
                             mGameDataReference.addListenerForSingleValueEvent(new ValueEventListener() {
                                 @Override
                                 public void onDataChange(DataSnapshot dataSnapshot) {
                                     GameDetails gameDetails = dataSnapshot.getValue(GameDetails.class);
-                                    Log.d("Hello add friend", gameDetails.getName());
+                                    Log.d("Hello from add friend: ", gameDetails.getName());
                                     Game game = new Game();
                                     game.setId(gameDetails.getId());
                                     game.setName(gameDetails.getName());
@@ -112,9 +118,6 @@ public class AddFriendActivity extends AppCompatActivity {
                                 }
                             });
                         }
-                    }
-                    if (mSingleGameSelectAdapter.getItemCount() == 0 && dataSnapshot.getChildrenCount() == 0) {
-                        mProgressBar.setVisibility(View.GONE);
                     }
                 }
 

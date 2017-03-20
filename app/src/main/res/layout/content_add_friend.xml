@@ -18,6 +18,17 @@
         android:scrollbarStyle="outsideOverlay"
         android:layout_alignParentTop="true" />
 
+    <TextView
+        android:id="@+id/add_friend_empty_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:textAppearance="?android:textAppearanceSmall"
+        android:fontFamily="sans-serif"
+        android:padding="@dimen/title_padding_left_right"
+        android:text="@string/no_games_available"
+        android:visibility="gone"/>
+
     <ProgressBar
         android:id="@+id/game_list_progressBar"
         style="?android:attr/progressBarStyle"

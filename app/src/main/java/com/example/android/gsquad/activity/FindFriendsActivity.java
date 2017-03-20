@@ -10,6 +10,7 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import com.example.android.gsquad.R;
 import com.example.android.gsquad.adapter.FindFriendsAdapter;
@@ -38,6 +39,7 @@ public class FindFriendsActivity extends AppCompatActivity {
     private ActionMode mActionMode = null;
     private Bundle mSavedInstanceState;
     private List<UserBasicInfo> mUserBasicInfoList;
+    private TextView mEmptyTextView;
 
 
     private DatabaseReference mGameUserDataReference;
@@ -57,6 +59,7 @@ public class FindFriendsActivity extends AppCompatActivity {
         if (mGameId != 0) {
             mContext = FindFriendsActivity.this;
             mProgressBar = (ProgressBar) findViewById(R.id.nearby_people_progressBar);
+            mEmptyTextView = (TextView) findViewById(R.id.find_friend_empty_view);
             setupRecyclerView();
             implementRecyclerViewClickListener();
             mGameUserDataReference = FirebaseDatabase.getInstance().getReference().child("games");
@@ -85,22 +88,27 @@ public class FindFriendsActivity extends AppCompatActivity {
                     List<String> userIds = null;
                     for (final DataSnapshot snapshot : dataSnapshot.getChildren()) {
                         GameDetails gameDetails = snapshot.getValue(GameDetails.class);
-                        if (gameDetails.getId() == mGameId && !gameDetails.getUsers().isEmpty()) {
+                        if (gameDetails.getId() == mGameId && gameDetails.getUsers() != null) {
                             userIds = gameDetails.getUsers();
                             break;
                         }
                     }
-                    if (mFindFriendsAdapter.getItemCount() == 0 && userIds != null) {
+                    if (mFindFriendsAdapter.getItemCount() == 0 && userIds == null) {
+                        mEmptyTextView.setVisibility(View.VISIBLE);
                         mProgressBar.setVisibility(View.GONE);
                     }
                     // TODO: still have to fix the background threads issue of firebase data listeners
                     String user = FirebaseAuth.getInstance().getCurrentUser().getUid();
                     if (userIds != null && userIds.contains(user)) {
-                        userIds.remove(user);
-                        SearchNearbyPeople searchNearbyPeople = new SearchNearbyPeople(userIds, user);
-                        mUserBasicInfoList =  searchNearbyPeople.search();
-                        mFindFriendsAdapter = new FindFriendsAdapter(mUserBasicInfoList, mContext);
-                        if (mFindFriendsAdapter.getItemCount() != 0) {
+                        if (userIds.size() != 1) {
+                            userIds.remove(user);
+                            SearchNearbyPeople searchNearbyPeople = new SearchNearbyPeople(userIds, user,
+                                    mFindFriendsAdapter, mRecyclerView, mContext, mProgressBar);
+                            searchNearbyPeople.search();
+//                        mFindFriendsAdapter = new FindFriendsAdapter(mUserBasicInfoList, mContext);
+//                        mRecyclerView.setAdapter(mFindFriendsAdapter);
+                        } else {
+                            mEmptyTextView.setVisibility(View.VISIBLE);
                             mProgressBar.setVisibility(View.GONE);
                         }
                     }

@@ -27,10 +27,14 @@ import com.example.android.gsquad.activity.AddGameActivity;
 import com.example.android.gsquad.adapter.GameDetailsListAdapter;
 import com.example.android.gsquad.model.Coordinates;
 import com.example.android.gsquad.model.GameDetails;
+import com.example.android.gsquad.model.UserBasicInfo;
+import com.example.android.gsquad.utils.Constants;
 import com.example.android.gsquad.utils.Utils;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.location.LocationListener;
+import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -47,7 +51,7 @@ import java.util.List;
  * A placeholder fragment containing a simple view.
  */
 public class MainActivityFragment extends Fragment implements GoogleApiClient.ConnectionCallbacks,
-        GoogleApiClient.OnConnectionFailedListener  {
+        GoogleApiClient.OnConnectionFailedListener, LocationListener {
 
     private final static int PLAY_SERVICES_RESOLUTION_REQUEST = 1000;
     public static final String TAG = MainActivityFragment.class.getSimpleName();
@@ -67,13 +71,15 @@ public class MainActivityFragment extends Fragment implements GoogleApiClient.Co
     *  All the location related module level variable declared here
     */
     protected GoogleApiClient mGoogleApiClient;
-    protected Location mLastLocation;
+    protected LocationRequest mLocationRequest;
+//    protected Location mLastLocation;
 
     private RecyclerView mRecyclerView;
     private GameDetailsListAdapter mGameDetailsListAdapter;
     private ProgressBar mProgressBar;
     private TextView mEmptyTextView;
     private List<GameDetails> gameDetailsList;
+    private UserBasicInfo mUserBasicInfo;
 
     private String mUsername;
     private String mUserEmailId;
@@ -184,15 +190,25 @@ public class MainActivityFragment extends Fragment implements GoogleApiClient.Co
     private void onSignedInIntialize() {
         mUserDatabaseReference = FirebaseDatabase.getInstance().getReference()
                 .child("users").child(mFirebaseUser.getUid());
-        mUserGamesReference = mUserDatabaseReference.child("games_owned");
+        mUserGamesReference = mUserDatabaseReference;
 
         if (mFirebaseUser.getDisplayName() != null && mFirebaseUser.getEmail() != null) {
+            mUserBasicInfo = new UserBasicInfo();
             mUsername = mFirebaseUser.getDisplayName();
             mUserEmailId = mFirebaseUser.getEmail();
-            mUserDatabaseReference.child("name").setValue(mUsername);
-            mUserDatabaseReference.child("email").setValue(mUserEmailId);
-            mUserDatabaseReference.child("photoUrl")
-                    .setValue(Utils.getProfilePicUrl(mFirebaseUser, getActivity()));
+
+            mUserBasicInfo.setId(mFirebaseUser.getUid());
+            mUserBasicInfo.setName(mUsername);
+            mUserBasicInfo.setEmail(mUserEmailId);
+            mUserBasicInfo.setPhotoUrl(Utils.getProfilePicUrl(mFirebaseUser, getActivity()));
+            mUserBasicInfo.setCoordinates(null);
+            mUserBasicInfo.setGamesOwned(null);
+            storeUserBasicDataInDatabase();
+
+//            mUserDatabaseReference.child("name").setValue(mUsername);
+//            mUserDatabaseReference.child("email").setValue(mUserEmailId);
+//            mUserDatabaseReference.child("photoUrl")
+//                    .setValue(Utils.getProfilePicUrl(mFirebaseUser, getActivity()));
         }
         attachDatabaseReadListener();
 
@@ -212,39 +228,72 @@ public class MainActivityFragment extends Fragment implements GoogleApiClient.Co
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
                     // TODO: check for mutiple entries of data for first time
+
                     gameDetailsList.clear();
-                    for (final DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                        String gameId = snapshot.getKey();
 
-                        if (gameId != null) {
-                            mGameDataReference = FirebaseDatabase.getInstance()
-                                    .getReference().child("games").child(gameId);
-
-                            mGameDataReference.addListenerForSingleValueEvent(new ValueEventListener() {
-                                @Override
-                                public void onDataChange(DataSnapshot dataSnapshot) {
-                                    GameDetails gameDetails = dataSnapshot.getValue(GameDetails.class);
-                                    Log.d("Hello", gameDetails.getName());
-                                    gameDetailsList.add(gameDetails);
-                                    mGameDetailsListAdapter = new GameDetailsListAdapter(gameDetailsList, getActivity());
-                                    mRecyclerView.setAdapter(mGameDetailsListAdapter);
-//                                    Log.d("Hellolist", gameDetailsList.toString());
-                                    if (mGameDetailsListAdapter.getItemCount() != 0) {
-                                        mEmptyTextView.setVisibility(View.GONE);
-                                        mProgressBar.setVisibility(View.GONE);
+                    UserBasicInfo userInfo = dataSnapshot.getValue(UserBasicInfo.class);
+                    if (userInfo != null) {
+                        if (userInfo.getGamesOwned() == null) {
+                            mEmptyTextView.setVisibility(View.VISIBLE);
+                            mProgressBar.setVisibility(View.GONE);
+                        } else {
+                            List<Integer> gamesOwnedList = userInfo.getGamesOwned();
+                            for (int gameId : gamesOwnedList) {
+                                mGameDataReference = FirebaseDatabase.getInstance().getReference()
+                                        .child("games").child(String.valueOf(gameId));
+                                mGameDataReference.addListenerForSingleValueEvent(new ValueEventListener() {
+                                    @Override
+                                    public void onDataChange(DataSnapshot dataSnapshot) {
+                                        GameDetails gameDetails = dataSnapshot.getValue(GameDetails.class);
+                                        Log.d(TAG, gameDetails.getName());
+                                        gameDetailsList.add(gameDetails);
+                                        mGameDetailsListAdapter = new GameDetailsListAdapter(gameDetailsList, getActivity());
+                                        mRecyclerView.setAdapter(mGameDetailsListAdapter);
+                                        Log.d(TAG, gameDetailsList.toString());
+                                        if (mGameDetailsListAdapter.getItemCount() != 0) {
+                                            mEmptyTextView.setVisibility(View.GONE);
+                                            mProgressBar.setVisibility(View.GONE);
+                                        }
                                     }
-                                }
-                                @Override
-                                public void onCancelled(DatabaseError databaseError) {
 
-                                }
-                            });
+                                    @Override
+                                    public void onCancelled(DatabaseError databaseError) {
+
+                                    }
+                                });
+                            }
                         }
                     }
-                    if (mGameDetailsListAdapter.getItemCount() == 0 && dataSnapshot.getChildrenCount() == 0) {
-                        mEmptyTextView.setVisibility(View.VISIBLE);
-                        mProgressBar.setVisibility(View.GONE);
-                    }
+
+
+//                        if (gameId != null) {
+//                            mGameDataReference = FirebaseDatabase.getInstance()
+//                                    .getReference().child("games").child(gameId);
+//
+//                            mGameDataReference.addListenerForSingleValueEvent(new ValueEventListener() {
+//                                @Override
+//                                public void onDataChange(DataSnapshot dataSnapshot) {
+//                                    GameDetails gameDetails = dataSnapshot.getValue(GameDetails.class);
+//                                    Log.d("Hello", gameDetails.getName());
+//                                    gameDetailsList.add(gameDetails);
+//                                    mGameDetailsListAdapter = new GameDetailsListAdapter(gameDetailsList, getActivity());
+//                                    mRecyclerView.setAdapter(mGameDetailsListAdapter);
+////                                    Log.d("Hellolist", gameDetailsList.toString());
+//                                    if (mGameDetailsListAdapter.getItemCount() != 0) {
+//                                        mEmptyTextView.setVisibility(View.GONE);
+//                                        mProgressBar.setVisibility(View.GONE);
+//                                    }
+//                                }
+//                                @Override
+//                                public void onCancelled(DatabaseError databaseError) {
+//
+//                                }
+//                            });
+//                        }
+//                    }
+//                    if (mGameDetailsListAdapter.getItemCount() == 0 && dataSnapshot.getChildrenCount() == 0) {
+//                        mEmptyTextView.setVisibility(View.VISIBLE);
+//                        mProgressBar.setVisibility(View.GONE);
                 }
 
                 @Override
@@ -270,16 +319,6 @@ public class MainActivityFragment extends Fragment implements GoogleApiClient.Co
     public void onConnected(@Nullable Bundle bundle) {
         Log.d(TAG, "In onConnected");
         requestForRequiredPermissions();
-        if (mUserDatabaseReference != null && mLastLocation != null) {
-            mUserLastLatitude = mLastLocation.getLatitude();
-            mUserLastLongitude = mLastLocation.getLongitude();
-            Coordinates coordinates = new Coordinates(mUserLastLatitude, mUserLastLongitude);
-            mUserDatabaseReference.child("coordinates").setValue(coordinates);
-        }
-//        if (mLastLocation != null) {
-//            Log.d(TAG, "Last Location from onConnected is " + String.valueOf(mLastLocation.getLatitude()) + " and "
-//                    + String.valueOf(mLastLocation.getLongitude()));
-//        }
 
     }
 
@@ -300,7 +339,20 @@ public class MainActivityFragment extends Fragment implements GoogleApiClient.Co
                     new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION},
                     RC_PERMISSION);
         } else {
-            mLastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
+            mLocationRequest = LocationRequest.create();
+            mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+            mLocationRequest.setInterval(Constants.LOCATION_REQUEST_INTERVAL);
+            LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, this);
+        }
+    }
+
+    @Override
+    public void onLocationChanged(Location location) {
+        if (mUserBasicInfo != null) {
+            mUserLastLatitude = location.getLatitude();
+            mUserLastLongitude = location.getLongitude();
+            Coordinates coordinates = new Coordinates(mUserLastLatitude, mUserLastLongitude);
+            storeUserCoordinates(coordinates);
         }
     }
 
@@ -319,5 +371,37 @@ public class MainActivityFragment extends Fragment implements GoogleApiClient.Co
             return false;
         }
         return true;
+    }
+
+    private void storeUserBasicDataInDatabase() {
+        mUserDatabaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if (!dataSnapshot.exists()) {
+                    mUserDatabaseReference.setValue(mUserBasicInfo);
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+    }
+
+    private void storeUserCoordinates(final Coordinates coordinates) {
+        mUserDatabaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()) {
+                    mUserDatabaseReference.child("coordinates").setValue(coordinates);
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
     }
 }

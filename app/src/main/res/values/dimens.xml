@@ -13,5 +13,7 @@
     <dimen name="title_padding_left_right">8dp</dimen>
     <dimen name="image_padding_top_bottom">8dp</dimen>
     <dimen name="cardview_margin_top_bottom">4dp</dimen>
+    <dimen name="add_friends_profile_pic">104dp</dimen>
+    <dimen name="username_size">16sp</dimen>
     <integer name="column_count">2</integer>
 </resources>

@@ -1,6 +1,9 @@
 package com.example.android.gsquad.database;
 
+import android.util.Log;
+
 import com.example.android.gsquad.model.GameDetails;
+import com.example.android.gsquad.model.UserBasicInfo;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -52,8 +55,8 @@ public class FirebaseAddGameData {
                     mGameDetails.setUsers(null);
                     mGameDatabaseReference.child(String.valueOf(mGameDetails.getId())).setValue(mGameDetails);
                 }
-                addGameDataInUser();
                 addUserDataInGame();
+                addGameDataInUser();
             }
 
             @Override
@@ -66,10 +69,35 @@ public class FirebaseAddGameData {
     }
 
     public void addGameDataInUser() {
-        mUserDatabaseReference = mFirebaseDatabase.getReference().child("users").child(mFirebaseUser.getUid())
-                .child("games_owned").child(String.valueOf(mGameDetails.getId()));
-        mUserDatabaseReference.setValue(true);
+        Log.d("From outside : ", String.valueOf(mGameDetails.getId()));
+        mUserDatabaseReference = mFirebaseDatabase.getReference().child("users")
+            .child(mFirebaseUser.getUid());
+        mUserDatabaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                UserBasicInfo userBasicInfo = dataSnapshot.getValue(UserBasicInfo.class);
+                List<Integer> gameIdList = new ArrayList<Integer>();
+                Log.d("From inside : ", String.valueOf(mGameDetails.getId()));
+                if (userBasicInfo.getGamesOwned() == null) {
+                    gameIdList = new ArrayList<Integer>();
+                    gameIdList.add(mGameDetails.getId());
+                } else {
+                    gameIdList = userBasicInfo.getGamesOwned();
+                    if (!gameIdList.contains(mGameDetails.getId())) {
+                        gameIdList.add(mGameDetails.getId());
+                    }
+                }
+
+                mUserDatabaseReference.child("gamesOwned").setValue(gameIdList);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
     }
+
     public void addUserDataInGame() {
         mCountDataReference = mFirebaseDatabase.getReference().child("games");
         mCountDataReference.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -90,28 +118,19 @@ public class FirebaseAddGameData {
                         break;
                     }
                 }
+                List<String> userIdList = new ArrayList<String>();
                 if (isNoGamersAvailable) {
-                    List<String> userIdList = new ArrayList<String>();
+                    userIdList = new ArrayList<String>();
                     userIdList.add(mFirebaseUser.getUid());
-                    mCountDataReference.child(String.valueOf(mGameDetails.getId())).child("users")
-                            .setValue(userIdList);
                 } else if (gamerAvailabilityDetail != null) {
-                    List<String> userIdList = gamerAvailabilityDetail.getUsers();
-                    userIdList.add(mFirebaseUser.getUid());
-                    mCountDataReference.child(String.valueOf(mGameDetails.getId())).child("users")
-                            .setValue(userIdList);
+                    userIdList = gamerAvailabilityDetail.getUsers();
+                    if (!userIdList.contains(mFirebaseUser.getUid())) {
+                        userIdList.add(mFirebaseUser.getUid());
+                    }
                 }
 
-//                if (!dataSnapshot.exists()) {
-//                    mCount = 0;
-//                } else {
-//                    mCount = dataSnapshot.getChildrenCount();
-//                }
-//                mCount = mCount + 1;
-//                mGameDatabaseReference = mGameDatabaseReference.child("users");
-//                Map<String, Object> data = new HashMap<String, Object>();
-//                data.put(String.valueOf(mCount), mFirebaseUser.getUid());
-//                mGameDatabaseReference.updateChildren(data);
+                mCountDataReference.child(String.valueOf(mGameDetails.getId())).child("users")
+                        .setValue(userIdList);
             }
 
             @Override
@@ -120,6 +139,4 @@ public class FirebaseAddGameData {
             }
         });
     }
-
-
 }

@@ -1,5 +1,11 @@
 package com.example.android.gsquad.utils;
 
+import android.content.Context;
+import android.support.v7.widget.RecyclerView;
+import android.view.View;
+import android.widget.ProgressBar;
+
+import com.example.android.gsquad.adapter.FindFriendsAdapter;
 import com.example.android.gsquad.model.Coordinates;
 import com.example.android.gsquad.model.UserBasicInfo;
 import com.google.android.gms.maps.model.LatLng;
@@ -18,43 +24,57 @@ import java.util.List;
  */
 
 public class SearchNearbyPeople {
-    private List<String> mRestUserIds;
+    private List<String> mUserIds;
     private String mCurrentUserId;
     private LatLng mCurrentUserLatLng;
     private List<LatLng> mLatLngsList;
+    private FindFriendsAdapter mFindFriendsAdapter;
+    private RecyclerView mRecyclerView;
+    private Context mContext;
+    private ProgressBar mProgressBar;
 
-    private DatabaseReference mUserLatLngReference;
     private DatabaseReference mUserBasicDataReference;
 
-    public SearchNearbyPeople(List<String> restUserIds, String currentUserId) {
-        this.mRestUserIds = restUserIds;
+    public SearchNearbyPeople(List<String> UserIds, String currentUserId, FindFriendsAdapter adapter,
+                              RecyclerView recyclerView, Context context, ProgressBar progressBar) {
+        this.mUserIds = UserIds;
         this.mCurrentUserId = currentUserId;
+        this.mLatLngsList = new ArrayList<>();
+        this.mFindFriendsAdapter = adapter;
+        this.mRecyclerView = recyclerView;
+        this.mContext = context;
+        this.mProgressBar = progressBar;
     }
 
-    public List<UserBasicInfo> search() {
-        List<String> nearbyUserIds = new ArrayList<>();
-
-        findCurrentUserCoordinates();
-        findUsersCoordinates();
-        if (mCurrentUserLatLng != null && !mLatLngsList.isEmpty()) {
-            for (LatLng userLatLng : mLatLngsList) {
-                double distanceInMeters = SphericalUtil.computeDistanceBetween(mCurrentUserLatLng, userLatLng);
-                if (Double.compare(distanceInMeters, Constants.RANGE) <= 0) {
-                    int nearbyUserIndex = mLatLngsList.indexOf(userLatLng);
-                    nearbyUserIds.add(mRestUserIds.get(nearbyUserIndex));
-                }
-            }
-        }
-       return getNearbyPeopleInfo(nearbyUserIds);
-    }
-
-    private void findCurrentUserCoordinates() {
-        mUserLatLngReference = buildDatabaseReference(mCurrentUserId, "coordinates");
-        mUserLatLngReference.addListenerForSingleValueEvent(new ValueEventListener() {
+    public void search() {
+        final List<String> nearbyUserIds = new ArrayList<>();
+        mUserBasicDataReference = FirebaseDatabase.getInstance().getReference().child("users");
+        mUserBasicDataReference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                Coordinates coordinates = dataSnapshot.getValue(Coordinates.class);
-                mCurrentUserLatLng = new LatLng(coordinates.getLat(), coordinates.getLng());
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                    UserBasicInfo userInfo = snapshot.getValue(UserBasicInfo.class);
+                    if (mUserIds.contains(userInfo.getId()) || userInfo.getId().equals(mCurrentUserId)) {
+                        Coordinates coordinates = userInfo.getCoordinates();
+                        if (userInfo.getId().equals(mCurrentUserId)) {
+                            mCurrentUserLatLng = new LatLng(coordinates.getLat(), coordinates.getLng());
+                        } else {
+                            LatLng latLng = new LatLng(coordinates.getLat(), coordinates.getLng());
+                            mLatLngsList.add(latLng);
+                        }
+                    }
+                }
+                if (mCurrentUserLatLng != null && !mLatLngsList.isEmpty()) {
+                    for (LatLng userLatLng : mLatLngsList) {
+                        double distanceInMeters = SphericalUtil.computeDistanceBetween(mCurrentUserLatLng,
+                                userLatLng);
+                        if (Double.compare(distanceInMeters, Constants.RANGE) <= 0) {
+                            int nearbyUserIdIndex = mLatLngsList.indexOf(userLatLng);
+                            nearbyUserIds.add(mUserIds.get(nearbyUserIdIndex));
+                        }
+                    }
+                }
+                getNearbyPeopleInfo(nearbyUserIds);
             }
 
             @Override
@@ -64,40 +84,22 @@ public class SearchNearbyPeople {
         });
     }
 
-    private void findUsersCoordinates() {
-        mLatLngsList = new ArrayList<>();
-        for(String user : mRestUserIds) {
-            mUserLatLngReference = buildDatabaseReference(user, "coordinates");
-            mUserLatLngReference.addListenerForSingleValueEvent(new ValueEventListener() {
-                @Override
-                public void onDataChange(DataSnapshot dataSnapshot) {
-                    Coordinates coordinates = dataSnapshot.getValue(Coordinates.class);
-                    LatLng latLng = new LatLng(coordinates.getLat(), coordinates.getLng());
-                    mLatLngsList.add(latLng);
-                }
-
-                @Override
-                public void onCancelled(DatabaseError databaseError) {
-
-                }
-            });
-        }
-    }
-
-    private DatabaseReference buildDatabaseReference(String userId, String child) {
-        return FirebaseDatabase.getInstance().getReference().child("users").child(userId)
-                .child(child);
-    }
-
-    private List<UserBasicInfo> getNearbyPeopleInfo(List<String> nearbyUserIds) {
-        List<UserBasicInfo> userBasicInfoList = new ArrayList<>();
-        for (String userId : nearbyUserIds) {
-            final UserBasicInfo userBasicInfo = new UserBasicInfo();
-            mUserBasicDataReference = buildDatabaseReference(userId, "name");
+    private void getNearbyPeopleInfo(final List<String> nearbyUserIds) {
+        final List<UserBasicInfo> userBasicInfoList = new ArrayList<>();
             mUserBasicDataReference.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
-                    userBasicInfo.setName((String) dataSnapshot.getValue());
+                    for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                        UserBasicInfo userBasicInfo = snapshot.getValue(UserBasicInfo.class);
+                        if (nearbyUserIds.contains(userBasicInfo.getId())) {
+                            userBasicInfoList.add(userBasicInfo);
+                        }
+                    }
+                    mFindFriendsAdapter = new FindFriendsAdapter(userBasicInfoList, mContext);
+                    mRecyclerView.setAdapter(mFindFriendsAdapter);
+                    if (mFindFriendsAdapter.getItemCount() != 0) {
+                        mProgressBar.setVisibility(View.GONE);
+                    }
                 }
 
                 @Override
@@ -105,24 +107,36 @@ public class SearchNearbyPeople {
 
                 }
             });
-            mUserBasicDataReference = buildDatabaseReference(userId, "photoUrl");
-            mUserBasicDataReference.addListenerForSingleValueEvent(new ValueEventListener() {
-                @Override
-                public void onDataChange(DataSnapshot dataSnapshot) {
-                    userBasicInfo.setPhotoUrl((String) dataSnapshot.getValue());
-                }
-
-                @Override
-                public void onCancelled(DatabaseError databaseError) {
-
-                }
-            });
-            userBasicInfoList.add(userBasicInfo);
-        }
-        if (!userBasicInfoList.isEmpty()) {
-            return userBasicInfoList;
-        }
-        return null;
+//            final UserBasicInfo userBasicInfo = new UserBasicInfo();
+//            mUserBasicDataReference = buildDatabaseReference(userId, "name");
+//            mUserBasicDataReference.addListenerForSingleValueEvent(new ValueEventListener() {
+//                @Override
+//                public void onDataChange(DataSnapshot dataSnapshot) {
+//                    userBasicInfo.setName((String) dataSnapshot.getValue());
+//                }
+//
+//                @Override
+//                public void onCancelled(DatabaseError databaseError) {
+//
+//                }
+//            });
+//            mUserBasicDataReference = buildDatabaseReference(userId, "photoUrl");
+//            mUserBasicDataReference.addListenerForSingleValueEvent(new ValueEventListener() {
+//                @Override
+//                public void onDataChange(DataSnapshot dataSnapshot) {
+//                    userBasicInfo.setPhotoUrl((String) dataSnapshot.getValue());
+//                }
+//
+//                @Override
+//                public void onCancelled(DatabaseError databaseError) {
+//
+//                }
+//            });
+//            userBasicInfoList.add(userBasicInfo);
+//        if (!userBasicInfoList.isEmpty()) {
+//            return userBasicInfoList;
+//        }
+//        return null;
     }
 
 }
