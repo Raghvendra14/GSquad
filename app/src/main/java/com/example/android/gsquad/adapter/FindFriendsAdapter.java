@@ -55,7 +55,7 @@ public class FindFriendsAdapter extends RecyclerView.Adapter<FindFriendsAdapter.
         holder.mTextView.setText(mUserBasicInfoList.get(position).getName());
         double distanceInKilometers = Utils.getDistanceInKilometers(mNearbyUserDistance.get(mUserBasicInfoList
                 .get(position).getId()));
-        String distanceString = String.format(Locale.ENGLISH, "%.2f %s", distanceInKilometers,
+        String distanceString = String.format(Locale.ENGLISH, "%.1f %s", distanceInKilometers,
                 mContext.getResources().getString(R.string.distance_label));
         holder.mDistanceTextView.setText(distanceString);
     }
