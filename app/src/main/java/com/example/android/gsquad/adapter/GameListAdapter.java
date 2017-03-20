@@ -3,7 +3,6 @@ package com.example.android.gsquad.adapter;
 import android.content.Context;
 import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
-import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,12 +24,12 @@ import de.hdodenhof.circleimageview.CircleImageView;
 public class GameListAdapter extends RecyclerView.Adapter<GameListAdapter.ViewHolder> {
     private List<Game> gamesList;
     private Context mContext;
-    private SparseBooleanArray mSelectedItemsIds;
+    private int mSelectedItemsId;
 
     public GameListAdapter(List<Game> data, Context context) {
         this.gamesList = data;
         this.mContext = context;
-        mSelectedItemsIds = new SparseBooleanArray();
+        mSelectedItemsId = -1;
     }
 
     @Override
@@ -67,7 +66,7 @@ public class GameListAdapter extends RecyclerView.Adapter<GameListAdapter.ViewHo
                     .into(holder.mThumbnailView);
         }
         holder.mTitleView.setText(gamesList.get(position).getName());
-        if (mSelectedItemsIds.get(position)) {
+        if (mSelectedItemsId == position) {
             holder.itemView.setBackgroundColor(mContext.getResources().getColor(R.color.grey));
         } else {
             holder.itemView.setBackgroundColor(Color.TRANSPARENT);
@@ -85,33 +84,33 @@ public class GameListAdapter extends RecyclerView.Adapter<GameListAdapter.ViewHo
 
     // Toggle selection methods
     public void toggleSelection(int position) {
-        selectView(position, !mSelectedItemsIds.get(position));
+        selectView(position);
     }
 
     // Remove selected selections
     public void removeSelections() {
-        mSelectedItemsIds = new SparseBooleanArray();
+        mSelectedItemsId = -1;
         notifyDataSetChanged();
     }
 
     // Put or delete selected position into SparseBooleanArray
-    public void selectView(int position, boolean value) {
-        if (value) {
-            mSelectedItemsIds.put(position, value);
+    public void selectView(int position) {
+        if (mSelectedItemsId == position) {
+            mSelectedItemsId = -1;
         } else {
-            mSelectedItemsIds.delete(position);
+            mSelectedItemsId = position;
         }
         notifyDataSetChanged();
     }
 
-    // Get total selected count
-    public int getSelectedCount() {
-        return mSelectedItemsIds.size();
-    }
+//    // Get total selected count
+//    public int getSelectedCount() {
+//        return mSelectedItemsId;
+//    }
 
     // Return all selected ids
-    public SparseBooleanArray getSelectedIds() {
-        return mSelectedItemsIds;
+    public int getSelectedId() {
+        return mSelectedItemsId;
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {

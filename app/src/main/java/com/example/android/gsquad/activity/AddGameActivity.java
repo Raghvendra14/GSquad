@@ -16,20 +16,20 @@ import android.text.Editable;
 import android.text.InputFilter;
 import android.text.TextWatcher;
 import android.util.Log;
-import android.util.SparseBooleanArray;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 
-import com.example.android.gsquad.adapter.GameListAdapter;
 import com.example.android.gsquad.R;
+import com.example.android.gsquad.adapter.GameListAdapter;
 import com.example.android.gsquad.async.SearchGameTask;
 import com.example.android.gsquad.listener.RecyclerClickListener;
 import com.example.android.gsquad.listener.RecyclerTouchListener;
 import com.example.android.gsquad.menu.ToolbarActionModeCallback;
 import com.example.android.gsquad.model.Game;
+import com.example.android.gsquad.utils.Constants;
 import com.example.android.gsquad.utils.Utils;
 
 import java.util.List;
@@ -144,10 +144,7 @@ public class AddGameActivity extends AppCompatActivity implements
 
     protected void retainSavedInstanceState() {
         if (mSavedInstanceState != null) {
-            int size = mSavedInstanceState.getInt("size");
-            for(int i = (size - 1); i >= 0; i--) {
-                onListItemSelect(mSavedInstanceState.getInt(String.valueOf(i)));
-            }
+                onListItemSelect(mSavedInstanceState.getInt(Constants.SELECTED_KEY));
         }
     }
 
@@ -195,7 +192,7 @@ public class AddGameActivity extends AppCompatActivity implements
     public void onListItemSelect(int position) {
         mGameListAdapter.toggleSelection(position);
 
-        boolean hasCheckedItems = mGameListAdapter.getSelectedCount() > 0; // Check if any items are already selected or not.
+        boolean hasCheckedItems = mGameListAdapter.getSelectedId() > -1; // Check if any items are already selected or not.
         if (hasCheckedItems && mActionMode == null && mGameList != null) {
             // there are some selected items, start the actionMode
             mActionMode = ((AppCompatActivity) context).startSupportActionMode(
@@ -207,7 +204,7 @@ public class AddGameActivity extends AppCompatActivity implements
 
         if (mActionMode != null) {
             // set action mode title on item selection
-            mActionMode.setTitle(String.valueOf(mGameListAdapter.getSelectedCount()) + " selected");
+            mActionMode.setTitle("1 selected");
         }
     }
 
@@ -222,14 +219,8 @@ public class AddGameActivity extends AppCompatActivity implements
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         if (mGameListAdapter != null) {
-            SparseBooleanArray array = mGameListAdapter.getSelectedIds();
-            int size = array.size();
-            outState.putInt("size", size);
-            for (int i = (size - 1); i >= 0; i--) {
-                if (array.valueAt(i)) {
-                    outState.putInt(String.valueOf(i), array.keyAt(i));
-                }
-            }
+            int position = mGameListAdapter.getSelectedId();
+            outState.putInt(Constants.SELECTED_KEY, position);
         }
     }
 }

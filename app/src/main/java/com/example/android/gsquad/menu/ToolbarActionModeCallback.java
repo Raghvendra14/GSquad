@@ -2,18 +2,16 @@ package com.example.android.gsquad.menu;
 
 import android.support.v7.view.ActionMode;
 import android.util.Log;
-import android.util.SparseBooleanArray;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import com.example.android.gsquad.R;
 import com.example.android.gsquad.activity.AddGameActivity;
 import com.example.android.gsquad.adapter.GameListAdapter;
-import com.example.android.gsquad.R;
 import com.example.android.gsquad.async.SubmitGameDetails;
 import com.example.android.gsquad.model.Game;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -51,35 +49,16 @@ public class ToolbarActionModeCallback implements ActionMode.Callback {
     public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
         switch (item.getItemId()) {
             case R.id.submit: {
-                List<Game> mGameIdList = new ArrayList<Game>();
-                SparseBooleanArray selected = mGameListAdapter.getSelectedIds();
+                int selected = mGameListAdapter.getSelectedId();
 
-                int selectedMessageSize = selected.size();
-
-                // Loop to all selected items
-                for (int i = (selectedMessageSize - 1); i >= 0; i--) {
-                    if (selected.valueAt(i)) {
-                        // get selected data in Model
-                        Game game = mGameList.get(selected.keyAt(i));
-                        mGameIdList.add(game);
-                        Log.d("Hello", "Selected items: Id - " + game.getId() + " Name - " + game.getName());
-
-                    }
-                }
-
-                if (!mGameIdList.isEmpty()) {
-                    SubmitGameDetails submitGameDetails = new SubmitGameDetails(mGameIdList);
-                    submitGameDetails.submitData();
-                    int size = mGameIdList.size();
-                    String message = "";
-                    if (size > 1) {
-                        message = String.valueOf(size) + " " + addGameActivity.getResources().getString(R.string.multiple_game_string);
-                    } else if (size == 1) {
-                        message = String.valueOf(size) + " " + addGameActivity.getResources().getString(R.string.single_game_string);
-                    }
-                    Toast.makeText(addGameActivity, message,
-                            Toast.LENGTH_SHORT).show();
-                }
+                // get selected data in Model
+                Game game = mGameList.get(selected);
+                SubmitGameDetails submitGameDetails = new SubmitGameDetails(game);
+                submitGameDetails.submitData();
+                String  message = game.getName() + " " + addGameActivity.getResources().getString(R.string.single_game_string);
+                Toast.makeText(addGameActivity, message,
+                        Toast.LENGTH_SHORT).show();
+                Log.d("Hello", "Selected items: Id - " + game.getId() + " Name - " + game.getName());
 
                 addGameActivity.finish();
                 mode.finish();

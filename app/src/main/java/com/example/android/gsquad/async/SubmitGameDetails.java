@@ -22,35 +22,33 @@ public class SubmitGameDetails {
 
     public static final String TAG = SubmitGameDetails.class.getSimpleName();
 
-    private List<com.example.android.gsquad.model.Game> mGameIdList;
+    private Game mGameId;
     private final static String fields = "name,cover.url,summary,aggregated_rating";
 
-    public SubmitGameDetails(List<Game> gameList) {
-        this.mGameIdList = gameList;
+    public SubmitGameDetails(Game game) {
+        this.mGameId = game;
     }
 
     public void submitData() {
         ApiInterface apiService =
                 ApiClient.getClient().create(ApiInterface.class);
-        for (int i = 0; i < mGameIdList.size(); i++) {
-            int id = mGameIdList.get(i).getId();
-            Call<List<GameDetails>> call = apiService.getGameDetailList(id, fields);
-            call.enqueue(new Callback<List<GameDetails>>() {
-                @Override
-                public void onResponse(Call<List<GameDetails>> call, Response<List<GameDetails>> response) {
-                    List<GameDetails> gameDetails = response.body();
-//                    Log.d(TAG, gameDetails.get(0).getName());
-                    if (gameDetails != null) {
-                        FirebaseAddGameData firebaseAddGameData = new FirebaseAddGameData(gameDetails.get(0));
-                        firebaseAddGameData.addGameData();
-                    }
+        int id = mGameId.getId();
+        Call<List<GameDetails>> call = apiService.getGameDetailList(id, fields);
+        call.enqueue(new Callback<List<GameDetails>>() {
+            @Override
+            public void onResponse(Call<List<GameDetails>> call, Response<List<GameDetails>> response) {
+                List<GameDetails> gameDetails = response.body();
+//                   Log.d(TAG, gameDetails.get(0).getName());
+                if (gameDetails != null) {
+                    FirebaseAddGameData firebaseAddGameData = new FirebaseAddGameData(gameDetails.get(0));
+                    firebaseAddGameData.addGameData();
                 }
+            }
 
-                @Override
-                public void onFailure(Call<List<GameDetails>> call, Throwable t) {
-                    Log.e(TAG, t.getMessage());
-                }
-            });
-        }
+            @Override
+            public void onFailure(Call<List<GameDetails>> call, Throwable t) {
+                Log.e(TAG, t.getMessage());
+            }
+        });
     }
 }
