@@ -93,6 +93,7 @@ public class FindFriendsActivity extends AppCompatActivity {
                     if (mFindFriendsAdapter.getItemCount() == 0 && userIds != null) {
                         mProgressBar.setVisibility(View.GONE);
                     }
+                    // TODO: still have to fix the background threads issue of firebase data listeners
                     String user = FirebaseAuth.getInstance().getCurrentUser().getUid();
                     if (userIds != null && userIds.contains(user)) {
                         userIds.remove(user);
