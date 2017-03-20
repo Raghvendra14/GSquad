@@ -20,15 +20,15 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
-import com.example.android.gsquad.fragment.FriendListFragment;
-import com.example.android.gsquad.fragment.MainActivityFragment;
 import com.example.android.gsquad.R;
 import com.example.android.gsquad.adapter.ViewPagerAdapter;
+import com.example.android.gsquad.fragment.FriendListFragment;
+import com.example.android.gsquad.fragment.MainActivityFragment;
+import com.example.android.gsquad.utils.Utils;
 import com.firebase.ui.auth.AuthUI;
 import com.firebase.ui.auth.IdpResponse;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.auth.UserInfo;
 
 import java.util.Arrays;
 
@@ -223,19 +223,10 @@ public class MainActivity extends AppCompatActivity
     *  imageview of Navigational Drawer
     */
     private void setupProfilePicInNavDrawer(FirebaseUser user) {
-        String facebookUserId = "";
-        String photoUrl = "";
+        String photoUrl;
         View headerLayout = mNavigationView.getHeaderView(0);
         CircleImageView profilePic = (CircleImageView) headerLayout.findViewById(R.id.user_pic);
-        for (UserInfo profile : user.getProviderData()) {
-            if (profile.getProviderId().equals(getString(R.string.facebook_provider_id))) {
-                facebookUserId = profile.getUid();
-                photoUrl = "https://graph.facebook.com/" + facebookUserId +
-                        "/picture?height=500&width=500";
-            } else if (profile.getProviderId().equals(getString(R.string.google_provider_id))) {
-                photoUrl = profile.getPhotoUrl().toString();
-            }
-        }
+        photoUrl = Utils.getProfilePicUrl(user, this);
 
         Glide.with(MainActivity.this)
                 .load(photoUrl)

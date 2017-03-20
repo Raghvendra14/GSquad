@@ -3,6 +3,8 @@ package com.example.android.gsquad.model;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import java.util.List;
+
 /**
  * Created by Raghvendra on 18-03-2017.
  */
@@ -24,6 +26,8 @@ public class GameDetails {
     @SerializedName("cover")
     @Expose
     private Cover cover;
+
+    private List<String> users;
 
     public int getId() {
         return id;
@@ -64,4 +68,8 @@ public class GameDetails {
     public void setCover(Cover cover) {
         this.cover = cover;
     }
+
+    public List<String> getUsers() { return users; }
+
+    public void setUsers(List<String> users) { this.users = users; }
 }

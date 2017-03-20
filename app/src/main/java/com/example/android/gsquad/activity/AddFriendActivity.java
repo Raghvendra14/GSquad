@@ -48,6 +48,7 @@ public class AddFriendActivity extends AppCompatActivity {
         setupRecyclerView();
         mUserGamesReference = FirebaseDatabase.getInstance().getReference().child("users")
                 .child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child("games_owned");
+        mProgressBar.setVisibility(View.VISIBLE);
     }
 
     @Override

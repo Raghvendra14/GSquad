@@ -6,8 +6,8 @@
     android:clickable="true"
     android:focusable="true"
     android:foreground="?selectableItemBackground"
-    android:layout_marginTop="@dimen/recycler_padding_left_right"
-    android:layout_marginBottom="@dimen/recycler_padding_left_right">
+    android:layout_marginTop="@dimen/linear_padding_top_bottom"
+    android:layout_marginBottom="@dimen/linear_padding_top_bottom">
 
 
     <de.hdodenhof.circleimageview.CircleImageView
@@ -18,6 +18,7 @@
         android:paddingTop="@dimen/image_padding_top_bottom"
         android:paddingBottom="@dimen/image_padding_top_bottom"
         android:contentDescription="@string/thumbnail_label"/>
+
     <TextView
         android:id="@+id/game_title"
         android:layout_width="0dp"
@@ -28,4 +29,5 @@
         android:fontFamily="sans-serif"
         android:paddingStart="@dimen/title_padding_left_right"
         android:paddingEnd="@dimen/title_padding_left_right"/>
+
 </LinearLayout>

@@ -39,7 +39,6 @@ public class SingleGameSelectAdapter extends RecyclerView.Adapter<SingleGameSele
         view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // TODO: Search for nearby friends
                 Intent intent = new Intent(mContext, FindFriendsActivity.class);
                 intent.putExtra(Constants.GAME_ID, mGameList.get(vh.getAdapterPosition()).getId());
                 mContext.startActivity(intent);

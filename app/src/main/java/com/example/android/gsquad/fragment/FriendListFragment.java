@@ -48,7 +48,7 @@ public class FriendListFragment extends Fragment {
                 linearLayoutManager.getOrientation());
         mRecyclerView.addItemDecoration(dividerItemDecoration);
         // add empty list into adapter
-       // TODO : initialize and add data into adapter and set it to recyclerview.
+       // TODO: initialize and add data into adapter and set it to recycler view.
 
         final FloatingActionButton fab = (FloatingActionButton) rootView.findViewById(R.id.fab_friend);
         fab.setOnClickListener(new View.OnClickListener() {

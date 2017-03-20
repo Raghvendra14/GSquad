@@ -3,6 +3,7 @@ package com.example.android.gsquad.async;
 import android.util.Log;
 
 import com.example.android.gsquad.database.FirebaseAddGameData;
+import com.example.android.gsquad.model.Game;
 import com.example.android.gsquad.model.GameDetails;
 import com.example.android.gsquad.rest.ApiClient;
 import com.example.android.gsquad.rest.ApiInterface;
@@ -24,7 +25,7 @@ public class SubmitGameDetails {
     private List<com.example.android.gsquad.model.Game> mGameIdList;
     private final static String fields = "name,cover.url,summary,aggregated_rating";
 
-    public SubmitGameDetails(List<com.example.android.gsquad.model.Game> gameList) {
+    public SubmitGameDetails(List<Game> gameList) {
         this.mGameIdList = gameList;
     }
 
@@ -42,8 +43,6 @@ public class SubmitGameDetails {
                     if (gameDetails != null) {
                         FirebaseAddGameData firebaseAddGameData = new FirebaseAddGameData(gameDetails.get(0));
                         firebaseAddGameData.addGameData();
-                        FirebaseAddGameData addUserIntoGame = new FirebaseAddGameData();
-                        addUserIntoGame.addUserData(gameDetails.get(0).getId());
                     }
                 }
 

@@ -60,7 +60,7 @@ public class AddGameActivity extends AppCompatActivity implements
         mSearchButton = (Button) findViewById(R.id.search_game_button);
         mProgressBar = (ProgressBar) findViewById(R.id.game_list_progressBar);
         setupRecyclerView();
-        implementRecyclerViewClickListeners();
+        implementRecyclerViewClickListener();
         if (savedInstanceState != null) {
             mSavedInstanceState = savedInstanceState;
         }
@@ -172,7 +172,7 @@ public class AddGameActivity extends AppCompatActivity implements
     }
 
     // Implement item click and long click over recycler view
-    private void implementRecyclerViewClickListeners() {
+    private void implementRecyclerViewClickListener() {
         mRecyclerView.addOnItemTouchListener(new RecyclerTouchListener(context, mRecyclerView,
                 new RecyclerClickListener() {
                     @Override

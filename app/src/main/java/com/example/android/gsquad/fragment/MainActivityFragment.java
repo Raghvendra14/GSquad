@@ -25,6 +25,7 @@ import android.widget.Toast;
 import com.example.android.gsquad.R;
 import com.example.android.gsquad.activity.AddGameActivity;
 import com.example.android.gsquad.adapter.GameDetailsListAdapter;
+import com.example.android.gsquad.model.Coordinates;
 import com.example.android.gsquad.model.GameDetails;
 import com.example.android.gsquad.utils.Utils;
 import com.google.android.gms.common.ConnectionResult;
@@ -76,8 +77,8 @@ public class MainActivityFragment extends Fragment implements GoogleApiClient.Co
 
     private String mUsername;
     private String mUserEmailId;
-    private String mUserLastLongitude;
-    private String mUserLastLatitude;
+    private double mUserLastLongitude;
+    private double mUserLastLatitude;
 
     public MainActivityFragment() {
     }
@@ -190,6 +191,8 @@ public class MainActivityFragment extends Fragment implements GoogleApiClient.Co
             mUserEmailId = mFirebaseUser.getEmail();
             mUserDatabaseReference.child("name").setValue(mUsername);
             mUserDatabaseReference.child("email").setValue(mUserEmailId);
+            mUserDatabaseReference.child("photoUrl")
+                    .setValue(Utils.getProfilePicUrl(mFirebaseUser, getActivity()));
         }
         attachDatabaseReadListener();
 
@@ -198,8 +201,8 @@ public class MainActivityFragment extends Fragment implements GoogleApiClient.Co
     private void onSignedOutCleanup() {
         mUsername = ANONYMOUS;
         mUserEmailId = null;
-        mUserLastLongitude = null;
-        mUserLastLatitude = null;
+        mUserLastLongitude = 0;
+        mUserLastLatitude = 0;
         detachDatabaseReadListener();
     }
 
@@ -208,6 +211,7 @@ public class MainActivityFragment extends Fragment implements GoogleApiClient.Co
             mFirebaseValueEventListener = new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
+                    // TODO: check for mutiple entries of data for first time
                     gameDetailsList.clear();
                     for (final DataSnapshot snapshot : dataSnapshot.getChildren()) {
                         String gameId = snapshot.getKey();
@@ -267,10 +271,10 @@ public class MainActivityFragment extends Fragment implements GoogleApiClient.Co
         Log.d(TAG, "In onConnected");
         requestForRequiredPermissions();
         if (mUserDatabaseReference != null && mLastLocation != null) {
-            mUserLastLongitude = String.valueOf(mLastLocation.getLongitude());
-            mUserLastLatitude = String.valueOf(mLastLocation.getLatitude());
-            mUserDatabaseReference.child("long").setValue(mUserLastLongitude);
-            mUserDatabaseReference.child("lat").setValue(mUserLastLatitude);
+            mUserLastLatitude = mLastLocation.getLatitude();
+            mUserLastLongitude = mLastLocation.getLongitude();
+            Coordinates coordinates = new Coordinates(mUserLastLatitude, mUserLastLongitude);
+            mUserDatabaseReference.child("coordinates").setValue(coordinates);
         }
 //        if (mLastLocation != null) {
 //            Log.d(TAG, "Last Location from onConnected is " + String.valueOf(mLastLocation.getLatitude()) + " and "

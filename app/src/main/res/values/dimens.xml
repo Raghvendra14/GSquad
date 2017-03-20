@@ -7,8 +7,11 @@
     <dimen name="profile_pic_width">120dp</dimen>
     <dimen name="profile_pic_height">120dp</dimen>
     <dimen name="recycler_padding_left_right">4dp</dimen>
+    <dimen name="linear_padding_top_bottom">4dp</dimen>
     <dimen name="recycler_padding_bottom">2dp</dimen>
     <dimen name="add_games_friends_padding">8dp</dimen>
     <dimen name="title_padding_left_right">8dp</dimen>
     <dimen name="image_padding_top_bottom">8dp</dimen>
+    <dimen name="cardview_margin_top_bottom">4dp</dimen>
+    <integer name="column_count">2</integer>
 </resources>
