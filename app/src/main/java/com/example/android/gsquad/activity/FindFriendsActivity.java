@@ -45,6 +45,8 @@ public class FindFriendsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_find_friends);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
         Intent intent = getIntent();
         if (intent.hasExtra(Constants.GAME_ID)) {
             mGameId = intent.getIntExtra(Constants.GAME_ID, 0);
@@ -58,6 +60,12 @@ public class FindFriendsActivity extends AppCompatActivity {
                     .child(String.valueOf(mGameId)).child("users");
             mProgressBar.setVisibility(View.VISIBLE);
         }
+    }
+
+    @Override
+    public boolean onSupportNavigateUp() {
+        onBackPressed();
+        return true;
     }
 
     @Override

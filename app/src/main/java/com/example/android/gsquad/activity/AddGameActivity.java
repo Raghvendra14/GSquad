@@ -55,6 +55,8 @@ public class AddGameActivity extends AppCompatActivity implements
         setContentView(R.layout.activity_add_game);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
         context = AddGameActivity.this;
         mAddGameEditText = (EditText) findViewById(R.id.add_game_text);
         mSearchButton = (Button) findViewById(R.id.search_game_button);
@@ -114,6 +116,11 @@ public class AddGameActivity extends AppCompatActivity implements
         getLoaderManager().initLoader(0, null, this);
     }
 
+    @Override
+    public boolean onSupportNavigateUp() {
+        onBackPressed();
+        return true;
+    }
 
     @Override
     public Loader<List<Game>> onCreateLoader(int id, Bundle args) {

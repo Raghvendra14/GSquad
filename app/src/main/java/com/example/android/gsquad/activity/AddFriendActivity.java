@@ -46,6 +46,8 @@ public class AddFriendActivity extends AppCompatActivity {
         setContentView(R.layout.activity_add_friend);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
         context = AddFriendActivity.this;
         mProgressBar = (ProgressBar) findViewById(R.id.game_list_progressBar);
         mEmptyTextView = (TextView) findViewById(R.id.add_friend_empty_view);
@@ -53,6 +55,12 @@ public class AddFriendActivity extends AppCompatActivity {
         mUserGamesReference = FirebaseDatabase.getInstance().getReference().child("users")
                 .child(FirebaseAuth.getInstance().getCurrentUser().getUid());
         mProgressBar.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public boolean onSupportNavigateUp() {
+        onBackPressed();
+        return true;
     }
 
     @Override

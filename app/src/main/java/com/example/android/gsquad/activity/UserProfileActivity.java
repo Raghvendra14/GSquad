@@ -62,6 +62,8 @@ public class UserProfileActivity extends AppCompatActivity {
         }
         if (mIsCalledByFindFriends) {
             setSupportActionBar(toolbar);
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setDisplayShowHomeEnabled(true);
         } else {
             toolbar.setVisibility(View.GONE);
         }
@@ -87,6 +89,12 @@ public class UserProfileActivity extends AppCompatActivity {
             mUserDataReference = FirebaseDatabase.getInstance().getReference().child("users")
                     .child(mUserId);
         }
+    }
+
+    @Override
+    public boolean onSupportNavigateUp() {
+        onBackPressed();
+        return true;
     }
 
     @Override
