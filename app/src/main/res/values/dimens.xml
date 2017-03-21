@@ -16,11 +16,12 @@
     <dimen name="cardview_margin_top_bottom">4dp</dimen>
     <dimen name="add_friends_profile_pic">104dp</dimen>
     <dimen name="game_title_padding_start">16dp</dimen>
+    <dimen name="game_image_view">72dp</dimen>
     <dimen name="username_size">16sp</dimen>
     <dimen name="distance_size">12sp</dimen>
     <dimen name="user_name_text_size">20sp</dimen>
     <dimen name="game_title_text_size">24sp</dimen>
+    <dimen name="games_owned_label_size">20sp</dimen>
     <integer name="column_count">2</integer>
     <integer name="profile_pic_border_width">1</integer>
-    <dimen name="game_image_view">72dp</dimen>
 </resources>

@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="CustomTextStyle">
+        <item name="android:textSize">@dimen/games_owned_label_size</item>
+    </style>
+</resources>

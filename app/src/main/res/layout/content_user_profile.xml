@@ -70,6 +70,7 @@
             android:textStyle="bold"
             android:textAppearance="?android:textAppearanceMedium"
             android:fontFamily="sans-serif"
+            style="@style/CustomTextStyle"
             android:text="@string/games_owned_label"
             android:paddingStart="@dimen/title_padding_left_right"
             android:paddingEnd="@dimen/title_padding_left_right" />
