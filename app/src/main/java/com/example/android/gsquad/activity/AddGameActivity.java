@@ -189,9 +189,9 @@ public class AddGameActivity extends AppCompatActivity implements
     public void onListItemSelect(int position) {
         mGameListAdapter.toggleSelection(position);
 
-        boolean hasCheckedItems = mGameListAdapter.getSelectedId() > -1; // Check if any items are already selected or not.
+        boolean hasCheckedItems = mGameListAdapter.getSelectedId() > -1; // Check if any item is already selected or not.
         if (hasCheckedItems && mActionMode == null && mGameList != null) {
-            // there are some selected items, start the actionMode
+            // there is a selected item, start the actionMode
             mActionMode = ((AppCompatActivity) context).startSupportActionMode(
                     new ToolbarActionModeCallback(AddGameActivity.this, mGameListAdapter, mGameList));
         } else if (!hasCheckedItems && mActionMode != null) {
