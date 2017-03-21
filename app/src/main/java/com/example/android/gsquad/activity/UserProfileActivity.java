@@ -21,11 +21,14 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.Locale;
+
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class UserProfileActivity extends AppCompatActivity {
 
     private String mUserId;
+    private boolean mIsCalledByFindFriends;
     private ProgressBar mProgressBar;
     private CircleImageView mCircleImageView;
     private TextView mTextView;
@@ -41,8 +44,9 @@ public class UserProfileActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         mContext = UserProfileActivity.this;
         Intent intent = getIntent();
-        if (intent.hasExtra(Constants.USER_ID)) {
+        if (intent.hasExtra(Constants.USER_ID) && intent.hasExtra(Constants.CALLING_ACTIVITY)) {
             mUserId = intent.getStringExtra(Constants.USER_ID);
+            mIsCalledByFindFriends = intent.getBooleanExtra(Constants.CALLING_ACTIVITY, false);
         }
         if (mUserId != null) {
             mCircleImageView = (CircleImageView) findViewById(R.id.profile_pic);
@@ -81,7 +85,15 @@ public class UserProfileActivity extends AppCompatActivity {
                             .error(R.drawable.no_image)
                             .into(mCircleImageView);
                     mTextView.setText(userBasicInfo.getName());
-                    mCircleImageView.setContentDescription(mTextView.getText() + " Profile Picture");
+                    String contentDescription = String.format(Locale.ENGLISH, "%s %s", mTextView.getText(), getResources()
+                            .getString(R.string.profile_content_label));
+                    mCircleImageView.setContentDescription(contentDescription);
+                    String profileLabel = getResources().getString(R.string.profile);
+                    if (mIsCalledByFindFriends) {
+                        setTitle(userBasicInfo.getName() + "'s " + profileLabel);
+                    } else {
+                        setTitle(profileLabel);
+                    }
                 }
 
                 @Override
@@ -102,8 +114,12 @@ public class UserProfileActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_main, menu);
-        return true;
+        if (mIsCalledByFindFriends) {
+            getMenuInflater().inflate(R.menu.menu_main, menu);
+            return true;
+        } else {
+            return false;
+        }
     }
 
     @Override

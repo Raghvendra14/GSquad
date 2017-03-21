@@ -200,6 +200,7 @@ public class MainActivity extends AppCompatActivity
             case R.id.profile:
                 Intent intent = new Intent(this, UserProfileActivity.class);
                 intent.putExtra(Constants.USER_ID, mFirebaseAuth.getCurrentUser().getUid());
+                intent.putExtra(Constants.CALLING_ACTIVITY, false);
                 startActivity(intent);
                 break;
             case R.id.settings:

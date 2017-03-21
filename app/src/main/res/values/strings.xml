@@ -34,4 +34,6 @@
     <string name="distance_label">km away</string>
     <string name="title_activity_user_profile">User Profile</string>
     <string name="background_label">Background Picture</string>
+    <string name="profile_content_label">Profile Picture</string>
+    <string name="profile">Profile</string>
 </resources>

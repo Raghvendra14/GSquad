@@ -47,6 +47,7 @@ public class FindFriendsAdapter extends RecyclerView.Adapter<FindFriendsAdapter.
             public void onClick(View v) {
                 Intent intent = new Intent(mContext, UserProfileActivity.class);
                 intent.putExtra(Constants.USER_ID, mUserBasicInfoList.get(vh.getAdapterPosition()).getId());
+                intent.putExtra(Constants.CALLING_ACTIVITY, true);
                 mContext.startActivity(intent);
             }
         });
