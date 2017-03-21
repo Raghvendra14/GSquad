@@ -52,7 +52,6 @@ public class FirebaseAddGameData {
                     }
                 }
                 if (!isGameAlreadyAdded) {
-                    mGameDetails.setUsers(null);
                     mGameDatabaseReference.child(String.valueOf(mGameDetails.getId())).setValue(mGameDetails);
                 }
                 addUserDataInGame();
@@ -76,7 +75,7 @@ public class FirebaseAddGameData {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 UserBasicInfo userBasicInfo = dataSnapshot.getValue(UserBasicInfo.class);
-                List<Integer> gameIdList = new ArrayList<Integer>();
+                List<Integer> gameIdList;
                 Log.d("From inside : ", String.valueOf(mGameDetails.getId()));
                 if (userBasicInfo.getGamesOwned() == null) {
                     gameIdList = new ArrayList<Integer>();
@@ -99,38 +98,22 @@ public class FirebaseAddGameData {
     }
 
     public void addUserDataInGame() {
-        mCountDataReference = mFirebaseDatabase.getReference().child("games");
+        mCountDataReference = mFirebaseDatabase.getReference().child("games")
+                .child(String.valueOf(mGameDetails.getId())).child("users");
         mCountDataReference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                Iterator<DataSnapshot> dataSnapshots = dataSnapshot.getChildren().iterator();
-                boolean isNoGamersAvailable = false;
-                GameDetails gamerAvailabilityDetail = null;
-                while (dataSnapshots.hasNext()) {
-                    DataSnapshot dataSnapshotChild = dataSnapshots.next();
-                    GameDetails gameDetail = dataSnapshotChild.getValue(GameDetails.class);
-                    if (gameDetail.getId() == mGameDetails.getId()) {
-                        if (gameDetail.getUsers() == null) {
-                            isNoGamersAvailable = true;
-                        } else {
-                            gamerAvailabilityDetail = gameDetail;
-                        }
+                boolean isUserAlreadyAddedInGameList = false;
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                    String gameUser = (String) snapshot.getValue();
+                    if (gameUser.equals(mFirebaseUser.getUid())) {
+                        isUserAlreadyAddedInGameList = true;
                         break;
                     }
                 }
-                List<String> userIdList = new ArrayList<String>();
-                if (isNoGamersAvailable) {
-                    userIdList = new ArrayList<String>();
-                    userIdList.add(mFirebaseUser.getUid());
-                } else if (gamerAvailabilityDetail != null) {
-                    userIdList = gamerAvailabilityDetail.getUsers();
-                    if (!userIdList.contains(mFirebaseUser.getUid())) {
-                        userIdList.add(mFirebaseUser.getUid());
-                    }
+                if (!isUserAlreadyAddedInGameList) {
+                    mCountDataReference.push().setValue(mFirebaseUser.getUid());
                 }
-
-                mCountDataReference.child(String.valueOf(mGameDetails.getId())).child("users")
-                        .setValue(userIdList);
             }
 
             @Override

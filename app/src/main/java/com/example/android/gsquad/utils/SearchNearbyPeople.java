@@ -2,6 +2,7 @@ package com.example.android.gsquad.utils;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.widget.ProgressBar;
 
@@ -19,6 +20,7 @@ import com.google.maps.android.SphericalUtil;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.ListIterator;
 import java.util.Map;
 
 /**
@@ -68,11 +70,13 @@ public class SearchNearbyPeople {
                     }
                 }
                 if (mCurrentUserLatLng != null && !mLatLngsList.isEmpty()) {
-                    for (LatLng userLatLng : mLatLngsList) {
+                    ListIterator<LatLng> latLngListIterator = mLatLngsList.listIterator();
+                    while(latLngListIterator.hasNext()) {
                         double distanceInMeters = SphericalUtil.computeDistanceBetween(mCurrentUserLatLng,
-                                userLatLng);
+                                latLngListIterator.next());
                         if (Double.compare(distanceInMeters, Constants.RANGE) <= 0) {
-                            int nearbyUserIdIndex = mLatLngsList.indexOf(userLatLng);
+                            int nearbyUserIdIndex = latLngListIterator.previousIndex();
+                            Log.d("Index ", String.valueOf(nearbyUserIdIndex));
                             nearbyUserIds.add(mUserIds.get(nearbyUserIdIndex));
                             nearbyUserDistance.put(mUserIds.get(nearbyUserIdIndex), distanceInMeters);
                         }

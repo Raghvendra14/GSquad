@@ -16,7 +16,6 @@ import com.example.android.gsquad.R;
 import com.example.android.gsquad.adapter.FindFriendsAdapter;
 import com.example.android.gsquad.listener.RecyclerClickListener;
 import com.example.android.gsquad.listener.RecyclerTouchListener;
-import com.example.android.gsquad.model.GameDetails;
 import com.example.android.gsquad.model.UserBasicInfo;
 import com.example.android.gsquad.utils.Constants;
 import com.example.android.gsquad.utils.SearchNearbyPeople;
@@ -62,7 +61,8 @@ public class FindFriendsActivity extends AppCompatActivity {
             mEmptyTextView = (TextView) findViewById(R.id.find_friend_empty_view);
             setupRecyclerView();
             implementRecyclerViewClickListener();
-            mGameUserDataReference = FirebaseDatabase.getInstance().getReference().child("games");
+            mGameUserDataReference = FirebaseDatabase.getInstance().getReference().child("games")
+                    .child(String.valueOf(mGameId)).child("users");
             mProgressBar.setVisibility(View.VISIBLE);
         }
     }
@@ -85,20 +85,19 @@ public class FindFriendsActivity extends AppCompatActivity {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
                     mUserBasicInfoList.clear();
-                    List<String> userIds = null;
-                    for (final DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                        GameDetails gameDetails = snapshot.getValue(GameDetails.class);
-                        if (gameDetails.getId() == mGameId && gameDetails.getUsers() != null) {
-                            userIds = gameDetails.getUsers();
-                            break;
+                    List<String> userIds = new ArrayList<>();
+                    for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                        String gameUser = (String) snapshot.getValue();
+                        if (gameUser != null) {
+                            userIds.add(gameUser);
                         }
                     }
-                    if (mFindFriendsAdapter.getItemCount() == 0 && userIds == null) {
+                    if (mFindFriendsAdapter.getItemCount() == 0 && userIds.isEmpty()) {
                         mEmptyTextView.setVisibility(View.VISIBLE);
                         mProgressBar.setVisibility(View.GONE);
                     }
                     String user = FirebaseAuth.getInstance().getCurrentUser().getUid();
-                    if (userIds != null && userIds.contains(user)) {
+                    if (!userIds.isEmpty() && userIds.contains(user)) {
                         if (userIds.size() != 1) {
                             userIds.remove(user);
                             SearchNearbyPeople searchNearbyPeople = new SearchNearbyPeople(userIds, user,
