@@ -2,7 +2,6 @@ package com.example.android.gsquad.utils;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.View;
 import android.widget.ProgressBar;
 
@@ -20,7 +19,6 @@ import com.google.maps.android.SphericalUtil;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.ListIterator;
 import java.util.Map;
 
 /**
@@ -31,7 +29,7 @@ public class SearchNearbyPeople {
     private List<String> mUserIds;
     private String mCurrentUserId;
     private LatLng mCurrentUserLatLng;
-    private List<LatLng> mLatLngsList;
+    private Map<String, LatLng> mLatLngsList;
     private FindFriendsAdapter mFindFriendsAdapter;
     private RecyclerView mRecyclerView;
     private Context mContext;
@@ -43,7 +41,7 @@ public class SearchNearbyPeople {
                               RecyclerView recyclerView, Context context, ProgressBar progressBar) {
         this.mUserIds = UserIds;
         this.mCurrentUserId = currentUserId;
-        this.mLatLngsList = new ArrayList<>();
+        this.mLatLngsList = new HashMap<>();
         this.mFindFriendsAdapter = adapter;
         this.mRecyclerView = recyclerView;
         this.mContext = context;
@@ -65,20 +63,17 @@ public class SearchNearbyPeople {
                             mCurrentUserLatLng = new LatLng(coordinates.getLat(), coordinates.getLng());
                         } else {
                             LatLng latLng = new LatLng(coordinates.getLat(), coordinates.getLng());
-                            mLatLngsList.add(latLng);
+                            mLatLngsList.put(userInfo.getId(), latLng);
                         }
                     }
                 }
                 if (mCurrentUserLatLng != null && !mLatLngsList.isEmpty()) {
-                    ListIterator<LatLng> latLngListIterator = mLatLngsList.listIterator();
-                    while(latLngListIterator.hasNext()) {
+                    for (int i = 0; i < mLatLngsList.size(); i++) {
                         double distanceInMeters = SphericalUtil.computeDistanceBetween(mCurrentUserLatLng,
-                                latLngListIterator.next());
+                                mLatLngsList.get(mUserIds.get(i)));
                         if (Double.compare(distanceInMeters, Constants.RANGE) <= 0) {
-                            int nearbyUserIdIndex = latLngListIterator.previousIndex();
-                            Log.d("Index ", String.valueOf(nearbyUserIdIndex));
-                            nearbyUserIds.add(mUserIds.get(nearbyUserIdIndex));
-                            nearbyUserDistance.put(mUserIds.get(nearbyUserIdIndex), distanceInMeters);
+                            nearbyUserIds.add(mUserIds.get(i));
+                            nearbyUserDistance.put(mUserIds.get(i), distanceInMeters);
                         }
                     }
                 }
