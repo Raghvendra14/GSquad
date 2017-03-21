@@ -60,19 +60,45 @@
     <LinearLayout
         android:layout_width="0dp"
         android:layout_height="match_parent"
-        android:layout_weight="2">
+        android:layout_weight="2"
+        android:orientation="vertical">
+
         <TextView
-            android:text="User Friends will be displayed here"
+            android:id="@+id/games_owned_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textStyle="bold"
+            android:textAppearance="?android:textAppearanceMedium"
+            android:fontFamily="sans-serif"
+            android:text="@string/games_owned_label"
+            android:paddingStart="@dimen/title_padding_left_right"
+            android:paddingEnd="@dimen/title_padding_left_right" />
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/user_profile_games_recycler_view"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:scrollbarStyle="outsideOverlay" />
+
+        <TextView
+            android:id="@+id/empty_user_profile_textview"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:textAppearance="?android:textAppearanceSmall"
+            android:fontFamily="sans-serif"
+            android:padding="@dimen/title_padding_left_right"
+            android:text="@string/user_no_game_available"
+            android:visibility="gone"/>
+
+        <ProgressBar
+            android:id="@+id/progress_bar_profile"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            style="?android:attr/progressBarStyle"
+            android:visibility="gone"/>
+
     </LinearLayout>
 
-    <ProgressBar
-        android:id="@+id/progress_bar_profile"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_weight="2"
-        style="?android:attr/progressBarStyle"
-        android:visibility="gone"/>
 </LinearLayout>

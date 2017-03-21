@@ -4,6 +4,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.DividerItemDecoration;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -13,6 +16,8 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.example.android.gsquad.R;
+import com.example.android.gsquad.adapter.GameDetailsListAdapter;
+import com.example.android.gsquad.model.GameDetails;
 import com.example.android.gsquad.model.UserBasicInfo;
 import com.example.android.gsquad.utils.Constants;
 import com.google.firebase.database.DataSnapshot;
@@ -21,6 +26,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -32,7 +39,13 @@ public class UserProfileActivity extends AppCompatActivity {
     private ProgressBar mProgressBar;
     private CircleImageView mCircleImageView;
     private TextView mTextView;
+    private RecyclerView mRecyclerView;
+    private TextView mEmptyTextView;
+    private List<GameDetails> mGameDetailsList;
+    private GameDetailsListAdapter mGameDetailsListAdapter;
+
     private DatabaseReference mUserDataReference;
+    private DatabaseReference mGameDataReference;
     private ValueEventListener mFirebaseValueEventListener;
     private Context mContext;
 
@@ -53,6 +66,18 @@ public class UserProfileActivity extends AppCompatActivity {
             toolbar.setVisibility(View.GONE);
         }
         if (mUserId != null) {
+            mRecyclerView = (RecyclerView) findViewById(R.id.user_profile_games_recycler_view);
+            LinearLayoutManager linearLayoutManager = new LinearLayoutManager(mContext);
+            mRecyclerView.setLayoutManager(linearLayoutManager);
+            DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(mRecyclerView.getContext(),
+                    linearLayoutManager.getOrientation());
+            mRecyclerView.addItemDecoration(dividerItemDecoration);
+            // Add empty array list into adapter
+            mGameDetailsList = new ArrayList<>();
+            mGameDetailsListAdapter = new GameDetailsListAdapter(mGameDetailsList, mContext, false);
+            mRecyclerView.setAdapter(mGameDetailsListAdapter);
+
+            mEmptyTextView = (TextView) findViewById(R.id.empty_user_profile_textview);
             mCircleImageView = (CircleImageView) findViewById(R.id.profile_pic);
             mCircleImageView.setBorderColor(getResources().getColor(android.R.color.white));
             mCircleImageView.setBorderWidth(getResources().getInteger(R.integer.profile_pic_border_width));
@@ -81,6 +106,7 @@ public class UserProfileActivity extends AppCompatActivity {
             mFirebaseValueEventListener = new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
+                    mGameDetailsList.clear();
                     UserBasicInfo userBasicInfo = dataSnapshot.getValue(UserBasicInfo.class);
                     mProgressBar.setVisibility(View.GONE);
                     Glide.with(mContext)
@@ -95,6 +121,33 @@ public class UserProfileActivity extends AppCompatActivity {
                     String profileLabel = getResources().getString(R.string.profile);
                     if (mIsCalledByFindFriends) {
                         setTitle(userBasicInfo.getName() + "'s " + profileLabel);
+                    }
+
+                    if (userBasicInfo.getGamesOwned() == null) {
+                        mEmptyTextView.setVisibility(View.VISIBLE);
+                    } else {
+                        List<Integer> gamesOwnedList = userBasicInfo.getGamesOwned();
+                        for (int gameId : gamesOwnedList) {
+                            mGameDataReference = FirebaseDatabase.getInstance().getReference()
+                                    .child("games").child(String.valueOf(gameId));
+                            mGameDataReference.addListenerForSingleValueEvent(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(DataSnapshot dataSnapshot) {
+                                    GameDetails gameDetails = dataSnapshot.getValue(GameDetails.class);
+                                    mGameDetailsList.add(gameDetails);
+                                    mGameDetailsListAdapter = new GameDetailsListAdapter(mGameDetailsList, mContext, false);
+                                    mRecyclerView.setAdapter(mGameDetailsListAdapter);
+                                    if (mGameDetailsListAdapter.getItemCount() != 0) {
+                                        mEmptyTextView.setVisibility(View.GONE);
+                                    }
+                                }
+
+                                @Override
+                                public void onCancelled(DatabaseError databaseError) {
+
+                                }
+                            });
+                        }
                     }
                 }
 
@@ -112,6 +165,9 @@ public class UserProfileActivity extends AppCompatActivity {
             mUserDataReference.removeEventListener(mFirebaseValueEventListener);
             mFirebaseValueEventListener = null;
         }
+        List<GameDetails> emptyList = new ArrayList<>();
+        mGameDetailsListAdapter = new GameDetailsListAdapter(emptyList, mContext, false);
+        mRecyclerView.setAdapter(mGameDetailsListAdapter);
     }
 
     @Override

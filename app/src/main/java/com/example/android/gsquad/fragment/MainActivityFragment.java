@@ -106,7 +106,7 @@ public class MainActivityFragment extends Fragment implements GoogleApiClient.Co
         mRecyclerView.addItemDecoration(dividerItemDecoration);
         // Add empty array list into adapter
         gameDetailsList = new ArrayList<>();
-        mGameDetailsListAdapter = new GameDetailsListAdapter(gameDetailsList, getActivity());
+        mGameDetailsListAdapter = new GameDetailsListAdapter(gameDetailsList, getActivity(), true);
         mRecyclerView.setAdapter(mGameDetailsListAdapter);
 
 
@@ -240,7 +240,7 @@ public class MainActivityFragment extends Fragment implements GoogleApiClient.Co
                                         GameDetails gameDetails = dataSnapshot.getValue(GameDetails.class);
                                         Log.d(TAG, gameDetails.getName());
                                         gameDetailsList.add(gameDetails);
-                                        mGameDetailsListAdapter = new GameDetailsListAdapter(gameDetailsList, getActivity());
+                                        mGameDetailsListAdapter = new GameDetailsListAdapter(gameDetailsList, getActivity(), true);
                                         mRecyclerView.setAdapter(mGameDetailsListAdapter);
                                         Log.d(TAG, gameDetailsList.toString());
                                         if (mGameDetailsListAdapter.getItemCount() != 0) {
@@ -274,7 +274,7 @@ public class MainActivityFragment extends Fragment implements GoogleApiClient.Co
             mFirebaseValueEventListener = null;
         }
         List<GameDetails> emptyList = new ArrayList<>();
-        mGameDetailsListAdapter = new GameDetailsListAdapter(emptyList, getActivity());
+        mGameDetailsListAdapter = new GameDetailsListAdapter(emptyList, getActivity(), true);
         mRecyclerView.setAdapter(mGameDetailsListAdapter);
     }
 

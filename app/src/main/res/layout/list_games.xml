@@ -12,8 +12,8 @@
 
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/game_thumbnail"
-        android:layout_width="72dp"
-        android:layout_height="72dp"
+        android:layout_width="@dimen/game_image_view"
+        android:layout_height="@dimen/game_image_view"
         android:src="@drawable/no_image"
         android:paddingTop="@dimen/image_padding_top_bottom"
         android:paddingBottom="@dimen/image_padding_top_bottom"

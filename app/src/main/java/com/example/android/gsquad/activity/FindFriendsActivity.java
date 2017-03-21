@@ -131,6 +131,5 @@ public class FindFriendsActivity extends AppCompatActivity {
         mUserBasicInfoList = new ArrayList<>();
         mFindFriendsAdapter = new FindFriendsAdapter(mUserBasicInfoList, null, mContext);
         mRecyclerView.setAdapter(mFindFriendsAdapter);
-
     }
 }

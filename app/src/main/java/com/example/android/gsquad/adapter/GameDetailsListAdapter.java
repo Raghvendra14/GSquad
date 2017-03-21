@@ -26,10 +26,12 @@ import de.hdodenhof.circleimageview.CircleImageView;
 public class GameDetailsListAdapter extends RecyclerView.Adapter<GameDetailsListAdapter.ViewHolder> {
     private Context mContext;
     private List<GameDetails> mGameDetails;
+    private boolean mIsCalledByMainActivityFragment;
 
-    public GameDetailsListAdapter(List<GameDetails> gameDetails, Context context) {
+    public GameDetailsListAdapter(List<GameDetails> gameDetails, Context context, boolean isCalledByMainActivityFragment) {
         this.mGameDetails = gameDetails;
         this.mContext = context;
+        this.mIsCalledByMainActivityFragment = isCalledByMainActivityFragment;
     }
 
     @Override
@@ -39,9 +41,11 @@ public class GameDetailsListAdapter extends RecyclerView.Adapter<GameDetailsList
         view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(mContext, GameDetailsActivity.class);
-                intent.putExtra(Constants.GAME_ID, mGameDetails.get(vh.getAdapterPosition()).getId());
-                mContext.startActivity(intent);
+                if (mIsCalledByMainActivityFragment) {
+                    Intent intent = new Intent(mContext, GameDetailsActivity.class);
+                    intent.putExtra(Constants.GAME_ID, mGameDetails.get(vh.getAdapterPosition()).getId());
+                    mContext.startActivity(intent);
+                }
             }
         });
         return vh;

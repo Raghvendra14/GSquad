@@ -22,4 +22,5 @@
     <dimen name="game_title_text_size">24sp</dimen>
     <integer name="column_count">2</integer>
     <integer name="profile_pic_border_width">1</integer>
+    <dimen name="game_image_view">72dp</dimen>
 </resources>
