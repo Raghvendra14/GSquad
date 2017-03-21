@@ -37,7 +37,6 @@ public class FindFriendsActivity extends AppCompatActivity {
 
 
     private DatabaseReference mGameUserDataReference;
-    private DatabaseReference mUserDetailsDataReference;
     private ValueEventListener mFirebaseValueEventListener;
 
     @Override
@@ -63,7 +62,7 @@ public class FindFriendsActivity extends AppCompatActivity {
 
     @Override
     protected void onPause() {
-        detachDatabaseReadListener();
+        detachDatabaseReadReference();
         super.onPause();
     }
 
@@ -113,7 +112,7 @@ public class FindFriendsActivity extends AppCompatActivity {
         }
     }
 
-    private void detachDatabaseReadListener() {
+    private void detachDatabaseReadReference() {
         if (mFirebaseValueEventListener != null) {
             mGameUserDataReference.removeEventListener(mFirebaseValueEventListener);
             mFirebaseValueEventListener = null;

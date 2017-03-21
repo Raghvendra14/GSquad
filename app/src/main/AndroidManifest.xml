@@ -53,6 +53,10 @@
             android:name=".activity.UserProfileActivity"
             android:label="@string/title_activity_user_profile"
             android:theme="@style/AppBarThemeCustom" />
+        <activity
+            android:name=".activity.GameDetailsActivity"
+            android:label="@string/title_activity_game_details"
+            android:theme="@style/AppBarThemeCustom" />
     </application>
 
 </manifest>

@@ -1,6 +1,7 @@
 package com.example.android.gsquad.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,8 +10,10 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.example.android.gsquad.R;
+import com.example.android.gsquad.activity.GameDetailsActivity;
 import com.example.android.gsquad.model.Cover;
 import com.example.android.gsquad.model.GameDetails;
+import com.example.android.gsquad.utils.Constants;
 
 import java.util.List;
 
@@ -36,7 +39,9 @@ public class GameDetailsListAdapter extends RecyclerView.Adapter<GameDetailsList
         view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // TODO : Add details game activity
+                Intent intent = new Intent(mContext, GameDetailsActivity.class);
+                intent.putExtra(Constants.GAME_ID, mGameDetails.get(vh.getAdapterPosition()).getId());
+                mContext.startActivity(intent);
             }
         });
         return vh;

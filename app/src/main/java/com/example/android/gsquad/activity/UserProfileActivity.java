@@ -41,12 +41,16 @@ public class UserProfileActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_profile);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
         mContext = UserProfileActivity.this;
         Intent intent = getIntent();
         if (intent.hasExtra(Constants.USER_ID) && intent.hasExtra(Constants.CALLING_ACTIVITY)) {
             mUserId = intent.getStringExtra(Constants.USER_ID);
             mIsCalledByFindFriends = intent.getBooleanExtra(Constants.CALLING_ACTIVITY, false);
+        }
+        if (mIsCalledByFindFriends) {
+            setSupportActionBar(toolbar);
+        } else {
+            toolbar.setVisibility(View.GONE);
         }
         if (mUserId != null) {
             mCircleImageView = (CircleImageView) findViewById(R.id.profile_pic);
@@ -91,8 +95,6 @@ public class UserProfileActivity extends AppCompatActivity {
                     String profileLabel = getResources().getString(R.string.profile);
                     if (mIsCalledByFindFriends) {
                         setTitle(userBasicInfo.getName() + "'s " + profileLabel);
-                    } else {
-                        setTitle(profileLabel);
                     }
                 }
 

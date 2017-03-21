@@ -34,6 +34,12 @@
     <string name="distance_label">km away</string>
     <string name="title_activity_user_profile">User Profile</string>
     <string name="background_label">Background Picture</string>
+    <string name="cover_pic">Game Cover</string>
     <string name="profile_content_label">Profile Picture</string>
     <string name="profile">Profile</string>
+    <string name="title_activity_game_details">GameDetailsActivity</string>
+    <string name="rating_label">Ratings :</string>
+    <string name="summary_label">Summary :</string>
+    <string name="no_rating_available">No Rating Available</string>
+    <string name="no_summary_available">No Summary Available</string>
 </resources>

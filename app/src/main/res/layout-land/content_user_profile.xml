@@ -4,15 +4,15 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
+    android:orientation="horizontal"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context="com.example.android.gsquad.activity.UserProfileActivity"
     tools:showIn="@layout/activity_user_profile">
 
     <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1">
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1.5">
 
         <ImageView
             android:id="@+id/profile_pic_background"
@@ -58,9 +58,9 @@
 
 
     <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1">
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="2">
         <TextView
             android:text="User Friends will be displayed here"
             android:layout_width="match_parent"
@@ -72,6 +72,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
+        android:layout_weight="2"
         style="?android:attr/progressBarStyle"
         android:visibility="gone"/>
 </LinearLayout>
