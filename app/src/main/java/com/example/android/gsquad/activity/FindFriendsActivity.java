@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.view.ActionMode;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -14,8 +13,6 @@ import android.widget.TextView;
 
 import com.example.android.gsquad.R;
 import com.example.android.gsquad.adapter.FindFriendsAdapter;
-import com.example.android.gsquad.listener.RecyclerClickListener;
-import com.example.android.gsquad.listener.RecyclerTouchListener;
 import com.example.android.gsquad.model.UserBasicInfo;
 import com.example.android.gsquad.utils.Constants;
 import com.example.android.gsquad.utils.SearchNearbyPeople;
@@ -35,8 +32,6 @@ public class FindFriendsActivity extends AppCompatActivity {
     private RecyclerView mRecyclerView;
     private FindFriendsAdapter mFindFriendsAdapter;
     private Context mContext;
-    private ActionMode mActionMode = null;
-    private Bundle mSavedInstanceState;
     private List<UserBasicInfo> mUserBasicInfoList;
     private TextView mEmptyTextView;
 
@@ -60,7 +55,6 @@ public class FindFriendsActivity extends AppCompatActivity {
             mProgressBar = (ProgressBar) findViewById(R.id.nearby_people_progressBar);
             mEmptyTextView = (TextView) findViewById(R.id.find_friend_empty_view);
             setupRecyclerView();
-            implementRecyclerViewClickListener();
             mGameUserDataReference = FirebaseDatabase.getInstance().getReference().child("games")
                     .child(String.valueOf(mGameId)).child("users");
             mProgressBar.setVisibility(View.VISIBLE);
@@ -140,25 +134,4 @@ public class FindFriendsActivity extends AppCompatActivity {
         mRecyclerView.setAdapter(mFindFriendsAdapter);
 
     }
-
-    // Implement item click and long click over recycler view
-    private void implementRecyclerViewClickListener() {
-        mRecyclerView.addOnItemTouchListener(new RecyclerTouchListener(mContext, mRecyclerView,
-                new RecyclerClickListener() {
-                    @Override
-                    public void onClick(View view, int position) {
-//                      onListItemSelect(position);
-                    }
-
-                    @Override
-                    public void onLongClick(View view, int position) {
-                        // Select item on long click
-//                        onListItemSelect(position);
-                    }
-                }));
-    }
-
-
-
-
 }

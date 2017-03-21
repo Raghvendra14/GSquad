@@ -1,6 +1,7 @@
 package com.example.android.gsquad.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,7 +10,9 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.example.android.gsquad.R;
+import com.example.android.gsquad.activity.UserProfileActivity;
 import com.example.android.gsquad.model.UserBasicInfo;
+import com.example.android.gsquad.utils.Constants;
 import com.example.android.gsquad.utils.Utils;
 
 import java.util.List;
@@ -39,7 +42,14 @@ public class FindFriendsAdapter extends RecyclerView.Adapter<FindFriendsAdapter.
     public FindFriendsAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_nearby_people, parent, false);
         final ViewHolder vh = new ViewHolder(view);
-
+        view.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(mContext, UserProfileActivity.class);
+                intent.putExtra(Constants.USER_ID, mUserBasicInfoList.get(vh.getAdapterPosition()).getId());
+                mContext.startActivity(intent);
+            }
+        });
         return vh;
     }
 

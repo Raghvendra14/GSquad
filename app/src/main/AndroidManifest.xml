@@ -18,7 +18,8 @@
         <meta-data
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
-        <meta-data android:name="com.google.android.geo.API_KEY"
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyA3feEvHELB1uq7Xr3K0Ib2lJf0dxY-8aQ" />
 
         <activity
@@ -47,6 +48,10 @@
         <activity
             android:name=".activity.FindFriendsActivity"
             android:label="@string/title_activity_find_friends"
+            android:theme="@style/AppBarThemeCustom" />
+        <activity
+            android:name=".activity.UserProfileActivity"
+            android:label="@string/title_activity_user_profile"
             android:theme="@style/AppBarThemeCustom" />
     </application>
 

@@ -12,9 +12,12 @@
     <dimen name="add_games_friends_padding">8dp</dimen>
     <dimen name="title_padding_left_right">8dp</dimen>
     <dimen name="image_padding_top_bottom">8dp</dimen>
+    <dimen name="profile_padding_bottom">16dp</dimen>
     <dimen name="cardview_margin_top_bottom">4dp</dimen>
     <dimen name="add_friends_profile_pic">104dp</dimen>
     <dimen name="username_size">16sp</dimen>
     <dimen name="distance_size">12sp</dimen>
+    <dimen name="user_name_text_size">20sp</dimen>
     <integer name="column_count">2</integer>
+    <integer name="profile_pic_border_width">1</integer>
 </resources>
