@@ -38,6 +38,7 @@ public class SearchNearbyPeople {
     private TextView mEmptyTextView;
 
     private DatabaseReference mUserBasicDataReference;
+    private DatabaseReference mUserFriendListDataReference;
 
     public SearchNearbyPeople(List<String> UserIds, String currentUserId, FindFriendsAdapter adapter,
                               RecyclerView recyclerView, Context context, ProgressBar progressBar,
@@ -86,7 +87,7 @@ public class SearchNearbyPeople {
                     mProgressBar.setVisibility(View.GONE);
                     mEmptyTextView.setVisibility(View.VISIBLE);
                 } else {
-                    getNearbyPeopleInfo(nearbyUserIds, nearbyUserDistance);
+                    filterFriendsAlreadyAvailable(nearbyUserIds, nearbyUserDistance);
                 }
             }
 
@@ -120,6 +121,33 @@ public class SearchNearbyPeople {
 
                 }
             });
+    }
+
+    private void filterFriendsAlreadyAvailable(final List<String> nearbyUserIds, final Map<String, Double> nearbyUserDistance) {
+        mUserFriendListDataReference = mUserBasicDataReference.child(mCurrentUserId).child("friends");
+        mUserFriendListDataReference.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                    String userFriendInList = snapshot.getKey();
+                    if (nearbyUserIds.contains(userFriendInList)) {
+                        nearbyUserIds.remove(userFriendInList);
+                        nearbyUserDistance.remove(userFriendInList);
+                    }
+                }
+                if (nearbyUserIds.isEmpty()) {
+                    mProgressBar.setVisibility(View.GONE);
+                    mEmptyTextView.setVisibility(View.VISIBLE);
+                } else {
+                    getNearbyPeopleInfo(nearbyUserIds, nearbyUserDistance);
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
     }
 
 }
