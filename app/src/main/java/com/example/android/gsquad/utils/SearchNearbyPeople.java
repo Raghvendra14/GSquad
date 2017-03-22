@@ -4,6 +4,7 @@ import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import com.example.android.gsquad.adapter.FindFriendsAdapter;
 import com.example.android.gsquad.model.Coordinates;
@@ -34,11 +35,13 @@ public class SearchNearbyPeople {
     private RecyclerView mRecyclerView;
     private Context mContext;
     private ProgressBar mProgressBar;
+    private TextView mEmptyTextView;
 
     private DatabaseReference mUserBasicDataReference;
 
     public SearchNearbyPeople(List<String> UserIds, String currentUserId, FindFriendsAdapter adapter,
-                              RecyclerView recyclerView, Context context, ProgressBar progressBar) {
+                              RecyclerView recyclerView, Context context, ProgressBar progressBar,
+                              TextView emptyTextView) {
         this.mUserIds = UserIds;
         this.mCurrentUserId = currentUserId;
         this.mLatLngsList = new HashMap<>();
@@ -46,6 +49,7 @@ public class SearchNearbyPeople {
         this.mRecyclerView = recyclerView;
         this.mContext = context;
         this.mProgressBar = progressBar;
+        this.mEmptyTextView = emptyTextView;
     }
 
     public void search() {
@@ -77,7 +81,13 @@ public class SearchNearbyPeople {
                         }
                     }
                 }
-                getNearbyPeopleInfo(nearbyUserIds, nearbyUserDistance);
+
+                if (nearbyUserIds.isEmpty()) {
+                    mProgressBar.setVisibility(View.GONE);
+                    mEmptyTextView.setVisibility(View.VISIBLE);
+                } else {
+                    getNearbyPeopleInfo(nearbyUserIds, nearbyUserDistance);
+                }
             }
 
             @Override

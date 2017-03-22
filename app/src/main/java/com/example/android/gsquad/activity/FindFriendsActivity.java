@@ -102,7 +102,7 @@ public class FindFriendsActivity extends AppCompatActivity {
                         if (userIds.size() != 1) {
                             userIds.remove(user);
                             SearchNearbyPeople searchNearbyPeople = new SearchNearbyPeople(userIds, user,
-                                    mFindFriendsAdapter, mRecyclerView, mContext, mProgressBar);
+                                    mFindFriendsAdapter, mRecyclerView, mContext, mProgressBar, mEmptyTextView);
                             searchNearbyPeople.search();
                         } else {
                             mEmptyTextView.setVisibility(View.VISIBLE);
