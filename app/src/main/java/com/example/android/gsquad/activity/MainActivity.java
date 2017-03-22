@@ -102,7 +102,6 @@ public class MainActivity extends AppCompatActivity
                         mViewPager.setCurrentItem(1, true);
                         intent.putExtra(Constants.PARENT_IS_ADD_FRIENDS, false);
                     }
-
                 } else {
                     // User is signed out
                     mIsCalledByAddFriendsActivity = false;
