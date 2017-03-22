@@ -8,6 +8,7 @@ import android.widget.TextView;
 
 import com.example.android.gsquad.adapter.FindFriendsAdapter;
 import com.example.android.gsquad.model.Coordinates;
+import com.example.android.gsquad.model.Notifications;
 import com.example.android.gsquad.model.UserBasicInfo;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.firebase.database.DataSnapshot;
@@ -39,6 +40,7 @@ public class SearchNearbyPeople {
 
     private DatabaseReference mUserBasicDataReference;
     private DatabaseReference mUserFriendListDataReference;
+    private DatabaseReference mUserNotificationsDataReference;
 
     public SearchNearbyPeople(List<String> UserIds, String currentUserId, FindFriendsAdapter adapter,
                               RecyclerView recyclerView, Context context, ProgressBar progressBar,
@@ -87,7 +89,7 @@ public class SearchNearbyPeople {
                     mProgressBar.setVisibility(View.GONE);
                     mEmptyTextView.setVisibility(View.VISIBLE);
                 } else {
-                    filterFriendsAlreadyAvailable(nearbyUserIds, nearbyUserDistance);
+                    filterAlreadySentRequest(nearbyUserIds, nearbyUserDistance);
                 }
             }
 
@@ -129,7 +131,7 @@ public class SearchNearbyPeople {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                    String userFriendInList = snapshot.getKey();
+                    String userFriendInList = (String) snapshot.getValue();
                     if (nearbyUserIds.contains(userFriendInList)) {
                         nearbyUserIds.remove(userFriendInList);
                         nearbyUserDistance.remove(userFriendInList);
@@ -139,6 +141,37 @@ public class SearchNearbyPeople {
                     mProgressBar.setVisibility(View.GONE);
                     mEmptyTextView.setVisibility(View.VISIBLE);
                 } else {
+                    getNearbyPeopleInfo(nearbyUserIds, nearbyUserDistance);
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+    }
+
+    private void filterAlreadySentRequest(final List<String> nearbyUserIds, final Map<String, Double> nearbyUserDistance) {
+        mUserNotificationsDataReference = mUserBasicDataReference.child(mCurrentUserId).child("notifications");
+        mUserNotificationsDataReference.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                    Notifications notification = snapshot.getValue(Notifications.class);
+                    if (nearbyUserIds.contains(notification.getTo())) {
+                        nearbyUserIds.remove(notification.getTo());
+                        nearbyUserDistance.remove(notification.getTo());
+                    } else if (nearbyUserIds.contains(notification.getFrom())) {
+                        nearbyUserIds.remove(notification.getFrom());
+                        nearbyUserDistance.remove(notification.getFrom());
+                    }
+                }
+                if (nearbyUserIds.isEmpty()) {
+                    mProgressBar.setVisibility(View.GONE);
+                    mEmptyTextView.setVisibility(View.VISIBLE);
+                } else {
+//                    filterFriendsAlreadyAvailable(nearbyUserIds, nearbyUserDistance);
                     getNearbyPeopleInfo(nearbyUserIds, nearbyUserDistance);
                 }
             }

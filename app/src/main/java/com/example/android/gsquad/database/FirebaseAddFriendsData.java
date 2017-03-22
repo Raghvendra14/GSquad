@@ -1,12 +1,9 @@
 package com.example.android.gsquad.database;
 
-import com.example.android.gsquad.model.Friends;
+import com.example.android.gsquad.model.Notifications;
 import com.example.android.gsquad.utils.Constants;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * Created by Raghvendra on 22-03-2017.
@@ -24,17 +21,16 @@ public class FirebaseAddFriendsData {
     }
 
     public void add() {
-        Friends userFriendList = createFriendList();
-        Map<String, Object> userUpdates = new HashMap<String, Object>();
-        userUpdates.put(mCurrentUserId + "/friends/" + mUserId, userFriendList);
-        userUpdates.put(mUserId + "/friends/" + mCurrentUserId, userFriendList);
-
-        mUsersDatabaseReference.updateChildren(userUpdates);
+        Notifications notification = createFriendList(mUserId, mCurrentUserId);
+        mUsersDatabaseReference.child(mCurrentUserId).child("notifications").push().setValue(notification);
+        mUsersDatabaseReference.child(mUserId).child("notifications").push().setValue(notification);
     }
 
-    private Friends createFriendList() {
-        Friends friends = new Friends();
-        friends.setStatus(Constants.PENDING);
-        return friends;
+    private Notifications createFriendList(String to, String from) {
+        Notifications notification = new Notifications();
+        notification.setTo(to);
+        notification.setFrom(from);
+        notification.setStatus(Constants.PENDING);
+        return notification;
     }
 }
