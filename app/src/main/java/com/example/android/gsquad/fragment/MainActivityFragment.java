@@ -203,6 +203,7 @@ public class MainActivityFragment extends Fragment implements GoogleApiClient.Co
             mUserBasicInfo.setPhotoUrl(Utils.getProfilePicUrl(mFirebaseUser, getActivity()));
             mUserBasicInfo.setCoordinates(null);
             mUserBasicInfo.setGamesOwned(null);
+//            mUserBasicInfo.setNotifications(null);
             storeUserBasicDataInDatabase();
         }
         attachDatabaseReadListener();
@@ -240,7 +241,8 @@ public class MainActivityFragment extends Fragment implements GoogleApiClient.Co
                                         GameDetails gameDetails = dataSnapshot.getValue(GameDetails.class);
                                         Log.d(TAG, gameDetails.getName());
                                         gameDetailsList.add(gameDetails);
-                                        mGameDetailsListAdapter = new GameDetailsListAdapter(gameDetailsList, getActivity(), true);
+                                        mGameDetailsListAdapter = new GameDetailsListAdapter(gameDetailsList,
+                                                getActivity(), true);
                                         mRecyclerView.setAdapter(mGameDetailsListAdapter);
                                         Log.d(TAG, gameDetailsList.toString());
                                         if (mGameDetailsListAdapter.getItemCount() != 0) {

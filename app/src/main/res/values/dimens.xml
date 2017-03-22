@@ -17,6 +17,12 @@
     <dimen name="add_friends_profile_pic">104dp</dimen>
     <dimen name="game_title_padding_start">16dp</dimen>
     <dimen name="game_image_view">72dp</dimen>
+    <dimen name="user_image_view">72dp</dimen>
+    <dimen name="notification_status_padding">2dp</dimen>
+    <dimen name="user_notification_image_view">56dp</dimen>
+    <dimen name="action_image_view">36dp</dimen>
+    <dimen name="profile_pic_notification_margin_start">6dp</dimen>
+    <dimen name="profile_pic_notification_margin_end">2dp</dimen>
     <dimen name="username_size">16sp</dimen>
     <dimen name="distance_size">12sp</dimen>
     <dimen name="user_name_text_size">20sp</dimen>

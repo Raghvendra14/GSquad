@@ -12,6 +12,7 @@ public class UserBasicInfo {
     private Coordinates coordinates;
     private String email;
     private List<Integer> gamesOwned;
+//    private List<Notifications> notifications;
     private String name;
     private String photoUrl;
 
@@ -33,6 +34,12 @@ public class UserBasicInfo {
     public List<Integer> getGamesOwned() { return gamesOwned; }
 
     public void setGamesOwned(List<Integer> gamesOwned) { this.gamesOwned = gamesOwned; }
+
+//    public List<Notifications> getNotifications() { return notifications; }
+//
+//    public void setNotifications(List<Notifications> notifications) {
+//        this.notifications = notifications;
+//    }
 
     public String getName() { return name; }
 
