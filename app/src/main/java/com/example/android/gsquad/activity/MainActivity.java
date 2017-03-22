@@ -55,6 +55,7 @@ public class MainActivity extends AppCompatActivity
     private Toolbar mToolbar;
     private NavigationView mNavigationView;
     private boolean mIsCalledByAddFriendsActivity;
+    private ViewPager mViewPager;
 
     private int mSize;
     @Override
@@ -97,8 +98,14 @@ public class MainActivity extends AppCompatActivity
                     Log.d(TAG, "User Connected");
                     setupProfilePicInNavDrawer(user);
                     mNavigationView.getMenu().getItem(mSize-1).setChecked(false);
+                    if (mIsCalledByAddFriendsActivity) {
+                        mViewPager.setCurrentItem(1, true);
+                    } else {
+                        mViewPager.setCurrentItem(0, true);
+                    }
                 } else {
                     // User is signed out
+                    mIsCalledByAddFriendsActivity = false;
                     startActivityForResult(
                             AuthUI.getInstance()
                             .createSignInIntentBuilder()
@@ -244,17 +251,13 @@ public class MainActivity extends AppCompatActivity
     }
 
     private void setupTabLayoutWithViewPager() {
-        ViewPager viewPager = (ViewPager) findViewById(R.id.view_pager);
+        mViewPager = (ViewPager) findViewById(R.id.view_pager);
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
         adapter.addFragment(new MainActivityFragment(), getString(R.string.tab_title_games));
         adapter.addFragment(new FriendListFragment(), getString(R.string.tab_title_friends));
         adapter.addFragment(new NotificationListFragment(), getString(R.string.tab_title_notifications));
-        viewPager.setAdapter(adapter);
+        mViewPager.setAdapter(adapter);
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tab_layout);
-        tabLayout.setupWithViewPager(viewPager);
-        if (mIsCalledByAddFriendsActivity) {
-            viewPager.setCurrentItem(1, true);
-        }
-
+        tabLayout.setupWithViewPager(mViewPager);
     }
 }
