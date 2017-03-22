@@ -24,6 +24,7 @@ import com.example.android.gsquad.R;
 import com.example.android.gsquad.adapter.ViewPagerAdapter;
 import com.example.android.gsquad.fragment.FriendListFragment;
 import com.example.android.gsquad.fragment.MainActivityFragment;
+import com.example.android.gsquad.fragment.NotificationListFragment;
 import com.example.android.gsquad.utils.Constants;
 import com.example.android.gsquad.utils.Utils;
 import com.firebase.ui.auth.AuthUI;
@@ -247,6 +248,7 @@ public class MainActivity extends AppCompatActivity
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
         adapter.addFragment(new MainActivityFragment(), getString(R.string.tab_title_games));
         adapter.addFragment(new FriendListFragment(), getString(R.string.tab_title_friends));
+        adapter.addFragment(new NotificationListFragment(), getString(R.string.tab_title_notifications));
         viewPager.setAdapter(adapter);
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tab_layout);
         tabLayout.setupWithViewPager(viewPager);

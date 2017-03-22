@@ -5,10 +5,10 @@ import android.view.View;
 import android.view.ViewGroup;
 
 /**
- * Created by Raghvendra on 19-03-2017.
+ * Created by Raghvendra on 22-03-2017.
  */
 
-public class FriendListAdapter extends RecyclerView.Adapter<FriendListAdapter.ViewHolder> {
+public class NotificationListAdapter extends RecyclerView.Adapter<NotificationListAdapter.ViewHolder> {
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         return null;

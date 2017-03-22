@@ -5,8 +5,8 @@
     android:id="@+id/content_main_friend"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingLeft="@dimen/recycler_padding_left_right"
-    android:paddingRight="@dimen/recycler_padding_left_right"
+    android:paddingStart="@dimen/recycler_padding_left_right"
+    android:paddingEnd="@dimen/recycler_padding_left_right"
     tools:context="com.example.android.gsquad.fragment.FriendListFragment"
     tools:showIn="@layout/activity_main">
 
@@ -22,6 +22,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
         android:textAppearance="?android:textAppearanceSmall"
         android:fontFamily="sans-serif"
         android:padding="@dimen/title_padding_left_right"

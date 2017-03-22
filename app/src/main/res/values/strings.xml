@@ -15,6 +15,7 @@
     <string name="device_unsupported">This device is not supported.</string>
     <string name="tab_title_games">Games</string>
     <string name="tab_title_friends">Friends</string>
+    <string name="tab_title_notifications">Notifications</string>
     <string name="title_activity_add_game">Add Games</string>
     <string name="search_button_label">Search</string>
     <string name="search_placeholder">Enter title or keyword of game</string>
@@ -45,4 +46,5 @@
     <string name="user_no_game_available">No Games Found.</string>
     <string name="games_owned_label">Games Owned :</string>
     <string name="friend_request_sent">Friend Request Sent</string>
+    <string name="no_notification_available">No New Notification Available</string>
 </resources>

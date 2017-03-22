@@ -125,6 +125,7 @@ public class SearchNearbyPeople {
             });
     }
 
+    // TODO: finish the friend node
     private void filterFriendsAlreadyAvailable(final List<String> nearbyUserIds, final Map<String, Double> nearbyUserDistance) {
         mUserFriendListDataReference = mUserBasicDataReference.child(mCurrentUserId).child("friends");
         mUserFriendListDataReference.addListenerForSingleValueEvent(new ValueEventListener() {
