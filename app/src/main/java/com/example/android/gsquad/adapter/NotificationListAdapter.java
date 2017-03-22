@@ -14,6 +14,7 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.example.android.gsquad.R;
+import com.example.android.gsquad.database.ResponseToInvite;
 import com.example.android.gsquad.model.UserBasicInfo;
 
 import java.util.List;
@@ -29,14 +30,12 @@ public class NotificationListAdapter extends RecyclerView.Adapter<NotificationLi
     private List<UserBasicInfo> mUserBasicInfoList;
     private List<Boolean> mIsCurrentUserSender;
     private Context mContext;
-    private String mCurrentUserId;
 
     public  NotificationListAdapter(List<UserBasicInfo> userBasicInfoList, List<Boolean> isCurrentUserSenderList,
-                                    Context context, String currentUserId) {
+                                    Context context) {
         this.mUserBasicInfoList = userBasicInfoList;
         mIsCurrentUserSender = isCurrentUserSenderList;
         this.mContext = context;
-        this.mCurrentUserId = currentUserId;
 
     }
     @Override
@@ -79,7 +78,7 @@ public class NotificationListAdapter extends RecyclerView.Adapter<NotificationLi
         return (null != mUserBasicInfoList ? mUserBasicInfoList.size() : 0);
     }
 
-    public static class ViewHolder extends RecyclerView.ViewHolder {
+    public class ViewHolder extends RecyclerView.ViewHolder {
         CircleImageView mCircleImageView;
         TextView mNotificationStatus;
         LinearLayout mActionLinearLayout;
@@ -98,6 +97,10 @@ public class NotificationListAdapter extends RecyclerView.Adapter<NotificationLi
                 public void onClick(View v) {
                     // Accept the request.
                     Toast.makeText(view.getContext(), "Invite accepted", Toast.LENGTH_SHORT).show();
+                    ResponseToInvite acceptInvite = new ResponseToInvite(mUserBasicInfoList.get(getAdapterPosition()),
+                            true);
+                    acceptInvite.response();
+                    notifyDataSetChanged();
                 }
             });
 
@@ -106,6 +109,10 @@ public class NotificationListAdapter extends RecyclerView.Adapter<NotificationLi
                 public void onClick(View v) {
                     // Decline the request.
                     Toast.makeText(view.getContext(), "Invite declined", Toast.LENGTH_SHORT).show();
+                    ResponseToInvite declineInvite = new ResponseToInvite(mUserBasicInfoList.get(getAdapterPosition()),
+                            false);
+                    declineInvite.response();
+                    notifyDataSetChanged();
                 }
             });
         }

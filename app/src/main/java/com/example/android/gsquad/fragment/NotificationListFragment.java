@@ -66,7 +66,7 @@ public class NotificationListFragment extends Fragment {
         mUserBasicInfoList = new ArrayList<>();
         mIsCurrentUserSender = new ArrayList<>();
         mNotificationListAdapter = new NotificationListAdapter(mUserBasicInfoList, mIsCurrentUserSender,
-                getActivity(), mFirebaseUserId);
+                getActivity());
         mRecyclerView.setAdapter(mNotificationListAdapter);
         mNotificationDataReference = FirebaseDatabase.getInstance().getReference().child("users")
                 .child(mFirebaseUserId).child("notifications");
@@ -119,7 +119,7 @@ public class NotificationListFragment extends Fragment {
                                     mUserBasicInfoList.add(userInfo);
 
                                     mNotificationListAdapter = new NotificationListAdapter(mUserBasicInfoList,
-                                            mIsCurrentUserSender, getActivity(), mFirebaseUserId);
+                                            mIsCurrentUserSender, getActivity());
                                     mRecyclerView.setAdapter(mNotificationListAdapter);
                                     if (mNotificationListAdapter.getItemCount() != 0) {
                                         mEmptyTextView.setVisibility(View.GONE);
@@ -152,7 +152,7 @@ public class NotificationListFragment extends Fragment {
         }
         List<UserBasicInfo> emptyList = new ArrayList<>();
         List<Boolean> emptyBooleanList = new ArrayList<>();
-        mNotificationListAdapter = new NotificationListAdapter(emptyList, emptyBooleanList, getActivity(), null);
+        mNotificationListAdapter = new NotificationListAdapter(emptyList, emptyBooleanList, getActivity());
         mRecyclerView.setAdapter(mNotificationListAdapter);
         mNotificationListAdapter.notifyDataSetChanged();
     }

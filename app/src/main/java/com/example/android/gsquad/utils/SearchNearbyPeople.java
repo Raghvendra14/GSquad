@@ -132,7 +132,7 @@ public class SearchNearbyPeople {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                    String userFriendInList = (String) snapshot.getValue();
+                    String userFriendInList = snapshot.getKey();
                     if (nearbyUserIds.contains(userFriendInList)) {
                         nearbyUserIds.remove(userFriendInList);
                         nearbyUserDistance.remove(userFriendInList);
@@ -172,8 +172,7 @@ public class SearchNearbyPeople {
                     mProgressBar.setVisibility(View.GONE);
                     mEmptyTextView.setVisibility(View.VISIBLE);
                 } else {
-//                    filterFriendsAlreadyAvailable(nearbyUserIds, nearbyUserDistance);
-                    getNearbyPeopleInfo(nearbyUserIds, nearbyUserDistance);
+                    filterFriendsAlreadyAvailable(nearbyUserIds, nearbyUserDistance);
                 }
             }
 
