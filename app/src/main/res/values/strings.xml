@@ -44,4 +44,5 @@
     <string name="no_summary_available">No Summary Available</string>
     <string name="user_no_game_available">No Games Found.</string>
     <string name="games_owned_label">Games Owned :</string>
+    <string name="friend_request_sent">Friend Request Sent</string>
 </resources>

@@ -53,6 +53,7 @@ public class MainActivity extends AppCompatActivity
     private ActionBarDrawerToggle mToggle;
     private Toolbar mToolbar;
     private NavigationView mNavigationView;
+    private boolean mIsCalledByAddFriendsActivity;
 
     private int mSize;
     @Override
@@ -61,7 +62,10 @@ public class MainActivity extends AppCompatActivity
         setContentView(R.layout.activity_main);
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(mToolbar);
-
+        Intent intent = getIntent();
+        if (intent.hasExtra(Constants.PARENT_IS_ADD_FRIENDS)) {
+            mIsCalledByAddFriendsActivity = intent.getBooleanExtra(Constants.PARENT_IS_ADD_FRIENDS, false);
+        }
         // It is meant to setup the Navigational Drawer for home screen of the app.
         setUpNavigationalDrawer();
         setupTabLayoutWithViewPager();
@@ -246,7 +250,9 @@ public class MainActivity extends AppCompatActivity
         viewPager.setAdapter(adapter);
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tab_layout);
         tabLayout.setupWithViewPager(viewPager);
-
+        if (mIsCalledByAddFriendsActivity) {
+            viewPager.setCurrentItem(1, true);
+        }
 
     }
 }

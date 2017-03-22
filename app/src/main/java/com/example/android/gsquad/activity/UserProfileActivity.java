@@ -13,13 +13,16 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.example.android.gsquad.R;
 import com.example.android.gsquad.adapter.GameDetailsListAdapter;
+import com.example.android.gsquad.database.FirebaseAddFriendsData;
 import com.example.android.gsquad.model.GameDetails;
 import com.example.android.gsquad.model.UserBasicInfo;
 import com.example.android.gsquad.utils.Constants;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -193,8 +196,14 @@ public class UserProfileActivity extends AppCompatActivity {
         int id = item.getItemId();
 
         if (id == R.id.add_friend) {
-//            AddUserInFriendList addUserInFriendList = new AddUserInFriendList();
-//            addUserInFriendList.apply();
+            FirebaseAddFriendsData addUserInFriendList = new FirebaseAddFriendsData(mUserId,
+                    FirebaseAuth.getInstance().getCurrentUser().getUid());
+            addUserInFriendList.add();
+            Toast.makeText(this, getResources().getString(R.string.friend_request_sent), Toast.LENGTH_SHORT).show();
+            Intent intent = new Intent(this, MainActivity.class);
+            intent.putExtra(Constants.PARENT_IS_ADD_FRIENDS, true);
+            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(intent);
             return true;
         }
         return super.onOptionsItemSelected(item);
