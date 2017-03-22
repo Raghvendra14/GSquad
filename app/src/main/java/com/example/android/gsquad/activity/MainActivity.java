@@ -64,7 +64,7 @@ public class MainActivity extends AppCompatActivity
         setContentView(R.layout.activity_main);
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(mToolbar);
-        Intent intent = getIntent();
+        final Intent intent = getIntent();
         if (intent.hasExtra(Constants.PARENT_IS_ADD_FRIENDS)) {
             mIsCalledByAddFriendsActivity = intent.getBooleanExtra(Constants.PARENT_IS_ADD_FRIENDS, false);
         }
@@ -100,9 +100,9 @@ public class MainActivity extends AppCompatActivity
                     mNavigationView.getMenu().getItem(mSize-1).setChecked(false);
                     if (mIsCalledByAddFriendsActivity) {
                         mViewPager.setCurrentItem(1, true);
-                    } else {
-                        mViewPager.setCurrentItem(0, true);
+                        intent.putExtra(Constants.PARENT_IS_ADD_FRIENDS, false);
                     }
+
                 } else {
                     // User is signed out
                     mIsCalledByAddFriendsActivity = false;

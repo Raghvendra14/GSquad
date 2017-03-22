@@ -46,7 +46,7 @@
     <string name="user_no_game_available">No Games Found.</string>
     <string name="games_owned_label">Games Owned :</string>
     <string name="friend_request_sent">Friend Request Sent</string>
-    <string name="no_notification_available">No New Notifications Available</string>
+    <string name="no_notification_available">No new notifications are available</string>
     <string name="accept_icon_label">Accept Request Button</string>
     <string name="decline_icon_label">Decline Request Button</string>
     <string name="send_invite_label">has been invited to your friend list.</string>
