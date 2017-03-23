@@ -12,6 +12,9 @@
             android:id="@+id/feedback"
             android:title="@string/menu_help_and_feedback" />
         <item
+            android:id="@+id/share"
+            android:title="@string/menu_share" />
+        <item
             android:id="@+id/logout"
             android:title="@string/menu_logout" />
     </group>

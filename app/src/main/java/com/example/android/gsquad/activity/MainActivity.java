@@ -211,7 +211,23 @@ public class MainActivity extends AppCompatActivity
                 startActivity(new Intent(this, SettingsActivity.class));
                 break;
             case R.id.feedback:
-
+                Intent feedbackIntent = new Intent(Intent.ACTION_SEND);
+                feedbackIntent.setType("message/rfc822");
+                feedbackIntent.putExtra(Intent.EXTRA_EMAIL, new String[]{getString(R.string.feedback_email)});
+                feedbackIntent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.feedback_subject));
+                try {
+                    startActivity(Intent.createChooser(feedbackIntent, getString(R.string.email_chooser)));
+                } catch (android.content.ActivityNotFoundException ex) {
+                    Toast.makeText(MainActivity.this, getString(R.string.no_clients_available), Toast.LENGTH_SHORT)
+                            .show();
+                }
+                break;
+            case R.id.share:
+                Intent shareIntent = new Intent(Intent.ACTION_SEND);
+                shareIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
+                shareIntent.setType("text/plain");
+                shareIntent.putExtra(Intent.EXTRA_TEXT, getString(R.string.share_app_info));
+                startActivity(shareIntent);
                 break;
             case R.id.logout:
                 AuthUI.getInstance().signOut(this);

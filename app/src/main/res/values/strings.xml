@@ -9,6 +9,7 @@
     <string name="menu_profile">Profile</string>
     <string name="menu_settings">Settings</string>
     <string name="menu_help_and_feedback">Feedback</string>
+    <string name="menu_share">Share</string>
     <string name="menu_logout">Logout</string>
     <string name="title_activity_friend_list">Find Friends</string>
     <string name="device_unsupported">This device is not supported.</string>
@@ -51,6 +52,11 @@
     <string name="send_invite_label">has been invited to your friend list.</string>
     <string name="receive_invite_label">has invited you to their friend list.</string>
     <string name="title_activity_settings">Settings</string>
+    <string name="feedback_email">feedback@gsquad.com</string>
+    <string name="feedback_subject">Regarding the feedback of GSquad</string>
+    <string name="email_chooser">Send mail via</string>
+    <string name="no_clients_available">No Email Clients are installed.</string>
+    <string name="share_app_info">Check out this app - GSQUAD. An app made exclusively for gamers</string>
 
     <!-- Strings related to Settings -->
     <string name="pref_range_label">Range To Find Gamers</string>
