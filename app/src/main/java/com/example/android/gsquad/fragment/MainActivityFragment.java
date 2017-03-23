@@ -47,9 +47,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * A placeholder fragment containing a simple view.
@@ -76,7 +74,6 @@ public class MainActivityFragment extends Fragment implements GoogleApiClient.Co
     */
     protected GoogleApiClient mGoogleApiClient;
     protected LocationRequest mLocationRequest;
-//    protected Location mLastLocation;
 
     private RecyclerView mRecyclerView;
     private GameDetailsListAdapter mGameDetailsListAdapter;
@@ -89,7 +86,6 @@ public class MainActivityFragment extends Fragment implements GoogleApiClient.Co
     private String mUserEmailId;
     private double mUserLastLongitude;
     private double mUserLastLatitude;
-    private boolean mShowLocation;
 
     public MainActivityFragment() {
     }
@@ -201,20 +197,14 @@ public class MainActivityFragment extends Fragment implements GoogleApiClient.Co
             mUserBasicInfo = new UserBasicInfo();
             mUsername = mFirebaseUser.getDisplayName();
             mUserEmailId = mFirebaseUser.getEmail();
-            SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
-            String showLocationKey = getString(R.string.pref_show_distance_key);
-            mShowLocation = prefs.getBoolean(showLocationKey,
-                    Boolean.parseBoolean(getString(R.string.pref_show_distance_default)));
 
             mUserBasicInfo.setId(mFirebaseUser.getUid());
             mUserBasicInfo.setName(mUsername);
             mUserBasicInfo.setEmail(mUserEmailId);
             mUserBasicInfo.setPhotoUrl(Utils.getProfilePicUrl(mFirebaseUser, getActivity()));
             mUserBasicInfo.setCoordinates(null);
-            mUserBasicInfo.setShowLocation(mShowLocation);
             mUserBasicInfo.setGamesOwned(null);
             storeUserBasicDataInDatabase();
-            storeOnlyShowLocationDataInDatabase();
         }
         attachDatabaseReadListener();
 
@@ -223,7 +213,6 @@ public class MainActivityFragment extends Fragment implements GoogleApiClient.Co
     private void onSignedOutCleanup() {
         mUsername = ANONYMOUS;
         mUserEmailId = null;
-        mShowLocation = true;
         mUserLastLongitude = 0;
         mUserLastLatitude = 0;
         detachDatabaseReadListener();
@@ -355,8 +344,12 @@ public class MainActivityFragment extends Fragment implements GoogleApiClient.Co
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if (!dataSnapshot.exists()) {
                     mUserBasicInfo.setShowLocation(true);
-                    resetShowLocationForNewLogin();
+                    setShowLocation(true);
                     mUserDatabaseReference.setValue(mUserBasicInfo);
+                } else {
+                    UserBasicInfo userInfo = dataSnapshot.getValue(UserBasicInfo.class);
+                    boolean isChecked = userInfo.getShowLocation();
+                    setShowLocation(isChecked);
                 }
             }
 
@@ -383,29 +376,11 @@ public class MainActivityFragment extends Fragment implements GoogleApiClient.Co
         });
     }
 
-    private void storeOnlyShowLocationDataInDatabase() {
-        mUserDatabaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                if (dataSnapshot.exists()) {
-                    Map<String, Object> updateValues = new HashMap<String, Object>();
-                    updateValues.put("/showLocation", mShowLocation);
-                    mUserDatabaseReference.updateChildren(updateValues);
-                }
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
-    }
-
-    private void resetShowLocationForNewLogin() {
+    private void setShowLocation(boolean isChecked) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
         String showLocationKey = getString(R.string.pref_show_distance_key);
         SharedPreferences.Editor editor = prefs.edit();
-        editor.putBoolean(showLocationKey, true);
+        editor.putBoolean(showLocationKey, isChecked);
         editor.apply();
     }
 }
