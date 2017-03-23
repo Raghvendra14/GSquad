@@ -1,6 +1,7 @@
 package com.example.android.gsquad.fragment;
 
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.DividerItemDecoration;
@@ -17,6 +18,7 @@ import com.example.android.gsquad.adapter.NotificationListAdapter;
 import com.example.android.gsquad.model.Notifications;
 import com.example.android.gsquad.model.UserBasicInfo;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -43,6 +45,8 @@ public class NotificationListFragment extends Fragment {
     private DatabaseReference mNotificationDataReference;
     private DatabaseReference mUserDataReference;
     private ValueEventListener mFirebaseValueEventListener;
+    private FirebaseAuth mFirebaseAuth;
+    private FirebaseAuth.AuthStateListener mAuthStateListener;
 
     public NotificationListFragment() {
     }
@@ -60,21 +64,41 @@ public class NotificationListFragment extends Fragment {
         DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(mRecyclerView.getContext(),
                 linearLayoutManager.getOrientation());
         mRecyclerView.addItemDecoration(dividerItemDecoration);
-        mFirebaseUserId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+
+        mFirebaseAuth = FirebaseAuth.getInstance();
+
+        mAuthStateListener = new FirebaseAuth.AuthStateListener() {
+            @Override
+            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
+                FirebaseUser mFirebaseUser = firebaseAuth.getCurrentUser();
+                if (mFirebaseUser != null) {
+                    mFirebaseUserId = mFirebaseUser.getUid();
+                    mNotificationDataReference = FirebaseDatabase.getInstance().getReference().child("users")
+                            .child(mFirebaseUserId).child("notifications");
+                    attachDatabaseReadListener();
+                } else {
+                    mFirebaseUserId = null;
+                    detachDatabaseReadListener();
+                }
+            }
+        };
+
         // add empty list into adapter
         mUserBasicInfoList = new ArrayList<>();
         mIsCurrentUserSender = new ArrayList<>();
         mNotificationListAdapter = new NotificationListAdapter(mUserBasicInfoList, mIsCurrentUserSender,
                 getActivity());
         mRecyclerView.setAdapter(mNotificationListAdapter);
-        mNotificationDataReference = FirebaseDatabase.getInstance().getReference().child("users")
-                .child(mFirebaseUserId).child("notifications");
+
         mProgressBar.setVisibility(View.VISIBLE);
         return rootView;
     }
 
     @Override
     public void onPause() {
+        if (mAuthStateListener != null) {
+            mFirebaseAuth.removeAuthStateListener(mAuthStateListener);
+        }
         detachDatabaseReadListener();
         super.onPause();
     }
@@ -82,7 +106,7 @@ public class NotificationListFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        attachDatabaseReadListener();
+        mFirebaseAuth.addAuthStateListener(mAuthStateListener);
     }
 
     private void attachDatabaseReadListener() {
