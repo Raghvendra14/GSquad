@@ -1,8 +1,10 @@
 package com.example.android.gsquad.utils;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.preference.PreferenceManager;
 
 import com.example.android.gsquad.R;
 import com.google.firebase.auth.FirebaseUser;
@@ -38,5 +40,11 @@ public class Utils {
 
     public static double getDistanceInKilometers(double distanceInMeters) {
        return distanceInMeters / 1000.0;
+    }
+
+    public static String getPreferredRange(Context context) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        return prefs.getString(context.getString(R.string.pref_range_key),
+                context.getString(R.string.pref_range_default));
     }
 }

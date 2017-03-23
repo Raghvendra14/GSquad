@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="pref_range_options">
+        <item>@string/pref_range_label_ten_kilometers</item>
+        <item>@string/pref_range_label_fifty_kilometers</item>
+        <item>@string/pref_range_label_hundred_kilometers</item>
+    </string-array>
+    <string-array name="pref_range_values">
+        <item>@string/pref_range_ten_kilometers</item>
+        <item>@string/pref_range_fifty_kilometers</item>
+        <item>@string/pref_range_hundred_kilometers</item>
+    </string-array>
+</resources>

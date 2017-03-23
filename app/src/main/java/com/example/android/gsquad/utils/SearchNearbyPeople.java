@@ -78,7 +78,12 @@ public class SearchNearbyPeople {
                     for (int i = 0; i < mLatLngsList.size(); i++) {
                         double distanceInMeters = SphericalUtil.computeDistanceBetween(mCurrentUserLatLng,
                                 mLatLngsList.get(mUserIds.get(i)));
-                        if (Double.compare(distanceInMeters, Constants.RANGE) <= 0) {
+                        String range = Utils.getPreferredRange(mContext);
+                        Double rangeInDouble = Double.valueOf(range);
+                        if (rangeInDouble == 0.0) {
+                            rangeInDouble = Constants.RANGE;
+                        }
+                        if (Double.compare(distanceInMeters, rangeInDouble) <= 0) {
                             nearbyUserIds.add(mUserIds.get(i));
                             nearbyUserDistance.put(mUserIds.get(i), distanceInMeters);
                         }

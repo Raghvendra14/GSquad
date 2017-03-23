@@ -215,7 +215,7 @@ public class MainActivity extends AppCompatActivity
                 startActivity(intent);
                 break;
             case R.id.settings:
-
+                startActivity(new Intent(this, SettingsActivity.class));
                 break;
             case R.id.feedback:
 

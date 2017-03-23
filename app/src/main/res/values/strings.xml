@@ -50,4 +50,17 @@
     <string name="decline_icon_label">Decline Request Button</string>
     <string name="send_invite_label">has been invited to your friend list.</string>
     <string name="receive_invite_label">has invited you to their friend list.</string>
+    <string name="title_activity_settings">Settings</string>
+
+    <!-- Strings related to Settings -->
+    <string name="pref_range_label">Range To Find Gamers</string>
+    <string name="pref_dialog_label">Range</string>
+    <string name="pref_range_label_ten_kilometers">Within 10 Kilometers</string>
+    <string name="pref_range_label_fifty_kilometers">Within 50 Kilometers</string>
+    <string name="pref_range_label_hundred_kilometers">Within 100 Kilometers</string>
+    <string name="pref_range_key" translatable="false">range</string>
+    <string name="pref_range_ten_kilometers" translatable="false">10000</string>
+    <string name="pref_range_fifty_kilometers" translatable="false">50000</string>
+    <string name="pref_range_hundred_kilometers" translatable="false">100000</string>
+    <string name="pref_range_default" translatable="false">10000</string>
 </resources>
