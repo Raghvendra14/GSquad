@@ -217,10 +217,7 @@ public class MainActivity extends AppCompatActivity
             case R.id.settings:
 
                 break;
-            case R.id.help_feedback:
-
-                break;
-            case R.id.about_us:
+            case R.id.feedback:
 
                 break;
             case R.id.logout:
