@@ -6,5 +6,12 @@
         android:dialogTitle="@string/pref_dialog_label"
         android:entries="@array/pref_range_options"
         android:entryValues="@array/pref_range_values"
-        android:defaultValue="@string/pref_range_label_ten_kilometers" />
+        android:defaultValue="@string/pref_range_ten_kilometers" />
+
+    <CheckBoxPreference
+        android:title="@string/pref_show_distance_label"
+        android:key="@string/pref_show_distance_key"
+        android:summaryOff="@string/pref_show_distance_false"
+        android:summaryOn="@string/pref_show_distance_true"
+        android:defaultValue="@string/pref_show_distance_default" />
 </PreferenceScreen>

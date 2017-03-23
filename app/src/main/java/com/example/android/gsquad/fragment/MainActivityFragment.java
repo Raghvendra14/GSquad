@@ -1,9 +1,11 @@
 package com.example.android.gsquad.fragment;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
@@ -45,7 +47,9 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * A placeholder fragment containing a simple view.
@@ -85,6 +89,7 @@ public class MainActivityFragment extends Fragment implements GoogleApiClient.Co
     private String mUserEmailId;
     private double mUserLastLongitude;
     private double mUserLastLatitude;
+    private boolean mShowLocation;
 
     public MainActivityFragment() {
     }
@@ -196,15 +201,20 @@ public class MainActivityFragment extends Fragment implements GoogleApiClient.Co
             mUserBasicInfo = new UserBasicInfo();
             mUsername = mFirebaseUser.getDisplayName();
             mUserEmailId = mFirebaseUser.getEmail();
+            SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
+            String showLocationKey = getString(R.string.pref_show_distance_key);
+            mShowLocation = prefs.getBoolean(showLocationKey,
+                    Boolean.parseBoolean(getString(R.string.pref_show_distance_default)));
 
             mUserBasicInfo.setId(mFirebaseUser.getUid());
             mUserBasicInfo.setName(mUsername);
             mUserBasicInfo.setEmail(mUserEmailId);
             mUserBasicInfo.setPhotoUrl(Utils.getProfilePicUrl(mFirebaseUser, getActivity()));
             mUserBasicInfo.setCoordinates(null);
+            mUserBasicInfo.setShowLocation(mShowLocation);
             mUserBasicInfo.setGamesOwned(null);
-//            mUserBasicInfo.setNotifications(null);
             storeUserBasicDataInDatabase();
+            storeOnlyShowLocationDataInDatabase();
         }
         attachDatabaseReadListener();
 
@@ -213,6 +223,7 @@ public class MainActivityFragment extends Fragment implements GoogleApiClient.Co
     private void onSignedOutCleanup() {
         mUsername = ANONYMOUS;
         mUserEmailId = null;
+        mShowLocation = true;
         mUserLastLongitude = 0;
         mUserLastLatitude = 0;
         detachDatabaseReadListener();
@@ -223,7 +234,7 @@ public class MainActivityFragment extends Fragment implements GoogleApiClient.Co
             mFirebaseValueEventListener = new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
-                    gameDetailsList.clear();
+                    gameDetailsList = new ArrayList<>();
 
                     UserBasicInfo userInfo = dataSnapshot.getValue(UserBasicInfo.class);
                     if (userInfo != null) {
@@ -343,6 +354,8 @@ public class MainActivityFragment extends Fragment implements GoogleApiClient.Co
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if (!dataSnapshot.exists()) {
+                    mUserBasicInfo.setShowLocation(true);
+                    resetShowLocationForNewLogin();
                     mUserDatabaseReference.setValue(mUserBasicInfo);
                 }
             }
@@ -368,5 +381,31 @@ public class MainActivityFragment extends Fragment implements GoogleApiClient.Co
 
             }
         });
+    }
+
+    private void storeOnlyShowLocationDataInDatabase() {
+        mUserDatabaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()) {
+                    Map<String, Object> updateValues = new HashMap<String, Object>();
+                    updateValues.put("/showLocation", mShowLocation);
+                    mUserDatabaseReference.updateChildren(updateValues);
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+    }
+
+    private void resetShowLocationForNewLogin() {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        String showLocationKey = getString(R.string.pref_show_distance_key);
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.putBoolean(showLocationKey, true);
+        editor.apply();
     }
 }

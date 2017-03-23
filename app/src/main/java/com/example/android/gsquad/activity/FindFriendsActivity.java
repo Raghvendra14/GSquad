@@ -126,7 +126,7 @@ public class FindFriendsActivity extends AppCompatActivity {
             mFirebaseValueEventListener = null;
         }
         List<UserBasicInfo> emptyList = new ArrayList<>();
-        mFindFriendsAdapter = new FindFriendsAdapter(emptyList, null, mContext);
+        mFindFriendsAdapter = new FindFriendsAdapter(emptyList, null, null, mContext);
         mRecyclerView.setAdapter(mFindFriendsAdapter);
     }
 
@@ -137,7 +137,7 @@ public class FindFriendsActivity extends AppCompatActivity {
         mRecyclerView.setLayoutManager(gridLayoutManager);
         // Add empty array list into adapter
         mUserBasicInfoList = new ArrayList<>();
-        mFindFriendsAdapter = new FindFriendsAdapter(mUserBasicInfoList, null, mContext);
+        mFindFriendsAdapter = new FindFriendsAdapter(mUserBasicInfoList, null, null, mContext);
         mRecyclerView.setAdapter(mFindFriendsAdapter);
     }
 }

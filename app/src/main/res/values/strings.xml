@@ -63,4 +63,11 @@
     <string name="pref_range_fifty_kilometers" translatable="false">50000</string>
     <string name="pref_range_hundred_kilometers" translatable="false">100000</string>
     <string name="pref_range_default" translatable="false">10000</string>
+
+    <!--  Strings related to Distance Shown to other user preference -->
+    <string name="pref_show_distance_key" translatable="false">show_distance</string>
+    <string name="pref_show_distance_label">Show Your Location</string>
+    <string name="pref_show_distance_true">Enabled</string>
+    <string name="pref_show_distance_false">Not Enabled</string>
+    <string name="pref_show_distance_default" translatable="false">true</string>
 </resources>

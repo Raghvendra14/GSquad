@@ -6,6 +6,7 @@ import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.example.android.gsquad.R;
 import com.example.android.gsquad.adapter.FindFriendsAdapter;
 import com.example.android.gsquad.model.Coordinates;
 import com.example.android.gsquad.model.Notifications;
@@ -75,14 +76,18 @@ public class SearchNearbyPeople {
                     }
                 }
                 if (mCurrentUserLatLng != null && !mLatLngsList.isEmpty()) {
+                    String range = Utils.getPreferredRange(mContext);
+                    Double rangeInDouble;
+                    if (range.equals(mContext.getResources().getString(R.string.pref_range_ten_kilometers)) ||
+                            range.equals(mContext.getResources().getString(R.string.pref_range_fifty_kilometers)) ||
+                            range.equals(mContext.getResources().getString(R.string.pref_range_hundred_kilometers))) {
+                        rangeInDouble = Double.valueOf(range);
+                    } else {
+                        rangeInDouble = Constants.RANGE;
+                    }
                     for (int i = 0; i < mLatLngsList.size(); i++) {
                         double distanceInMeters = SphericalUtil.computeDistanceBetween(mCurrentUserLatLng,
                                 mLatLngsList.get(mUserIds.get(i)));
-                        String range = Utils.getPreferredRange(mContext);
-                        Double rangeInDouble = Double.valueOf(range);
-                        if (rangeInDouble == 0.0) {
-                            rangeInDouble = Constants.RANGE;
-                        }
                         if (Double.compare(distanceInMeters, rangeInDouble) <= 0) {
                             nearbyUserIds.add(mUserIds.get(i));
                             nearbyUserDistance.put(mUserIds.get(i), distanceInMeters);
@@ -107,16 +112,20 @@ public class SearchNearbyPeople {
 
     private void getNearbyPeopleInfo(final List<String> nearbyUserIds, final Map<String, Double> nearbyUserDistance) {
         final List<UserBasicInfo> userBasicInfoList = new ArrayList<>();
+        final List<Boolean> userShowDistance = new ArrayList<>();
             mUserBasicDataReference.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
+                    boolean showLocation;
                     for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                         UserBasicInfo userBasicInfo = snapshot.getValue(UserBasicInfo.class);
                         if (nearbyUserIds.contains(userBasicInfo.getId())) {
                             userBasicInfoList.add(userBasicInfo);
+                            showLocation = userBasicInfo.getShowLocation();
+                            userShowDistance.add(showLocation);
                         }
                     }
-                    mFindFriendsAdapter = new FindFriendsAdapter(userBasicInfoList, nearbyUserDistance, mContext);
+                    mFindFriendsAdapter = new FindFriendsAdapter(userBasicInfoList, nearbyUserDistance, userShowDistance, mContext);
                     mRecyclerView.setAdapter(mFindFriendsAdapter);
                     if (mFindFriendsAdapter.getItemCount() != 0) {
                         mProgressBar.setVisibility(View.GONE);
@@ -130,7 +139,6 @@ public class SearchNearbyPeople {
             });
     }
 
-    // TODO: finish the friend node
     private void filterFriendsAlreadyAvailable(final List<String> nearbyUserIds, final Map<String, Double> nearbyUserDistance) {
         mUserFriendListDataReference = mUserBasicDataReference.child(mCurrentUserId).child("friends");
         mUserFriendListDataReference.addListenerForSingleValueEvent(new ValueEventListener() {

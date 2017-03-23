@@ -10,9 +10,9 @@ public class UserBasicInfo {
 
     private String id;
     private Coordinates coordinates;
+    private boolean showLocation;
     private String email;
     private List<Integer> gamesOwned;
-//    private List<Notifications> notifications;
     private String name;
     private String photoUrl;
 
@@ -27,6 +27,10 @@ public class UserBasicInfo {
 
     public void setCoordinates(Coordinates coordinates) { this.coordinates = coordinates; }
 
+    public boolean getShowLocation() { return showLocation; }
+
+    public void setShowLocation(boolean showLocation) { this.showLocation = showLocation; }
+
     public String getEmail() { return email; }
 
     public void setEmail(String email) { this.email = email; }
@@ -34,12 +38,6 @@ public class UserBasicInfo {
     public List<Integer> getGamesOwned() { return gamesOwned; }
 
     public void setGamesOwned(List<Integer> gamesOwned) { this.gamesOwned = gamesOwned; }
-
-//    public List<Notifications> getNotifications() { return notifications; }
-//
-//    public void setNotifications(List<Notifications> notifications) {
-//        this.notifications = notifications;
-//    }
 
     public String getName() { return name; }
 

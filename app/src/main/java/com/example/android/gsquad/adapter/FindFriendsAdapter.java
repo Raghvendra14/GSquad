@@ -28,12 +28,14 @@ import de.hdodenhof.circleimageview.CircleImageView;
 public class FindFriendsAdapter extends RecyclerView.Adapter<FindFriendsAdapter.ViewHolder> {
     private List<UserBasicInfo> mUserBasicInfoList;
     private Map<String, Double> mNearbyUserDistance;
+    private List<Boolean> mShowLocationList;
     private Context mContext;
 
     public FindFriendsAdapter (List<UserBasicInfo> userBasicInfoList, Map<String, Double> nearbyUserDistance,
-                               Context context) {
+                               List<Boolean> showLocationList, Context context) {
         this.mUserBasicInfoList = userBasicInfoList;
         this.mNearbyUserDistance = nearbyUserDistance;
+        this.mShowLocationList = showLocationList;
         this.mContext = context;
     }
 
@@ -64,11 +66,15 @@ public class FindFriendsAdapter extends RecyclerView.Adapter<FindFriendsAdapter.
                 .into(holder.mCircularImageView);
 
         holder.mTextView.setText(mUserBasicInfoList.get(position).getName());
-        double distanceInKilometers = Utils.getDistanceInKilometers(mNearbyUserDistance.get(mUserBasicInfoList
-                .get(position).getId()));
-        String distanceString = String.format(Locale.ENGLISH, "%.1f %s", distanceInKilometers,
-                mContext.getResources().getString(R.string.distance_label));
-        holder.mDistanceTextView.setText(distanceString);
+        if (mShowLocationList.get(position)) {
+            double distanceInKilometers = Utils.getDistanceInKilometers(mNearbyUserDistance.get(mUserBasicInfoList
+                    .get(position).getId()));
+            String distanceString = String.format(Locale.ENGLISH, "%.1f %s", distanceInKilometers,
+                    mContext.getResources().getString(R.string.distance_label));
+            holder.mDistanceTextView.setText(distanceString);
+        } else {
+            holder.mDistanceTextView.setVisibility(View.INVISIBLE);
+        }
     }
 
     @Override
