@@ -87,7 +87,6 @@ public class FriendListFragment extends Fragment {
         };
 
         // add empty list into adapter
-       // TODO: initialize and add data into adapter and set it to recycler view.
         mUserBasicInfoList = new ArrayList<>();
         mFriendListAdapter = new FriendListAdapter(mUserBasicInfoList, getActivity());
         mRecyclerView.setAdapter(mFriendListAdapter);

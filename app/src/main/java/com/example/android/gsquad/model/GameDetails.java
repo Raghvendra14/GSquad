@@ -25,7 +25,6 @@ public class GameDetails {
     @Expose
     private Cover cover;
 
-//    private List<String> users;
 
     public int getId() {
         return id;
@@ -67,7 +66,4 @@ public class GameDetails {
         this.cover = cover;
     }
 
-//    public List<String> getUsers() { return users; }
-//
-//    public void setUsers(List<String> users) { this.users = users; }
 }

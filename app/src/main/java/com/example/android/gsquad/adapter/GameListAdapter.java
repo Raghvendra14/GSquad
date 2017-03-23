@@ -50,6 +50,7 @@ public class GameListAdapter extends RecyclerView.Adapter<GameListAdapter.ViewHo
                     .into(holder.mThumbnailView);
         }
         holder.mTitleView.setText(gamesList.get(position).getName());
+        holder.mThumbnailView.setContentDescription(holder.mTitleView.getText());
         if (mSelectedItemsId == position) {
             holder.itemView.setBackgroundColor(mContext.getResources().getColor(R.color.grey));
         } else {
@@ -78,7 +79,7 @@ public class GameListAdapter extends RecyclerView.Adapter<GameListAdapter.ViewHo
     }
 
     // Put or delete selected position into SparseBooleanArray
-    public void selectView(int position) {
+    private void selectView(int position) {
         if (mSelectedItemsId == position) {
             mSelectedItemsId = -1;
         } else {
@@ -87,10 +88,6 @@ public class GameListAdapter extends RecyclerView.Adapter<GameListAdapter.ViewHo
         notifyDataSetChanged();
     }
 
-//    // Get total selected count
-//    public int getSelectedCount() {
-//        return mSelectedItemsId;
-//    }
 
     // Return all selected ids
     public int getSelectedId() {

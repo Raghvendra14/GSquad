@@ -67,7 +67,7 @@ public class FirebaseAddGameData {
 
     }
 
-    public void addGameDataInUser() {
+    private void addGameDataInUser() {
         Log.d("From outside : ", String.valueOf(mGameDetails.getId()));
         mUserDatabaseReference = mFirebaseDatabase.getReference().child("users")
             .child(mFirebaseUser.getUid());
@@ -97,7 +97,7 @@ public class FirebaseAddGameData {
         });
     }
 
-    public void addUserDataInGame() {
+    private void addUserDataInGame() {
         mCountDataReference = mFirebaseDatabase.getReference().child("games")
                 .child(String.valueOf(mGameDetails.getId())).child("users");
         mCountDataReference.addListenerForSingleValueEvent(new ValueEventListener() {

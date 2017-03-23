@@ -62,7 +62,7 @@ public class GameDetailsListAdapter extends RecyclerView.Adapter<GameDetailsList
                     .into(holder.mCircleImageView);
         }
         holder.mTextView.setText(mGameDetails.get(position).getName());
-
+        holder.mCircleImageView.setContentDescription(holder.mTextView.getText());
     }
 
     @Override

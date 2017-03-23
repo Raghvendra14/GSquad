@@ -58,6 +58,7 @@ public class SingleGameSelectAdapter extends RecyclerView.Adapter<SingleGameSele
                     .into(holder.mCircleImageView);
         }
         holder.mTextView.setText(mGameList.get(position).getName());
+        holder.mCircleImageView.setContentDescription(holder.mTextView.getText());
     }
 
     @Override

@@ -19,52 +19,52 @@
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:orientation="horizontal">
-    <TextView
-        android:id="@+id/notification_status_text_view"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="2"
-        android:layout_gravity="center"
-        android:textAppearance="?android:textAppearanceMedium"
-        android:fontFamily="sans-serif"
-        android:paddingStart="@dimen/notification_status_padding"
-        android:paddingEnd="@dimen/notification_status_padding"/>
+        <TextView
+            android:id="@+id/notification_status_text_view"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"
+            android:layout_gravity="center"
+            android:textAppearance="?android:textAppearanceMedium"
+            android:fontFamily="sans-serif"
+            android:paddingStart="@dimen/notification_status_padding"
+            android:paddingEnd="@dimen/notification_status_padding"/>
 
-    <LinearLayout
-        android:id="@+id/action_layout"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:orientation="horizontal"
-        android:layout_gravity="center_vertical"
-        android:visibility="gone">
+        <LinearLayout
+            android:id="@+id/action_layout"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="horizontal"
+            android:layout_gravity="center_vertical"
+            android:visibility="gone">
 
-        <ImageButton
-            android:id="@+id/accept_action_icon"
-            android:layout_width="@dimen/action_image_view"
-            android:layout_height="@dimen/action_image_view"
-            android:layout_marginStart="@dimen/profile_pic_notification_margin_start"
-            android:layout_marginEnd="@dimen/profile_pic_notification_margin_end"
-            android:src="@drawable/ic_check_white_36dp"
-            android:clickable="true"
-            android:focusable="true"
-            android:foreground="?selectableItemBackground"
-            android:contentDescription="@string/accept_icon_label"
-            android:background="@android:color/transparent"/>
+            <ImageButton
+                android:id="@+id/accept_action_icon"
+                android:layout_width="@dimen/action_image_view"
+                android:layout_height="@dimen/action_image_view"
+                android:layout_marginStart="@dimen/profile_pic_notification_margin_start"
+                android:layout_marginEnd="@dimen/profile_pic_notification_margin_end"
+                android:src="@drawable/ic_check_white_36dp"
+                android:clickable="true"
+                android:focusable="true"
+                android:foreground="?selectableItemBackground"
+                android:contentDescription="@string/accept_icon_label"
+                android:background="@android:color/transparent"/>
 
-        <ImageButton
-            android:id="@+id/decline_action_icon"
-            android:layout_width="@dimen/action_image_view"
-            android:layout_height="@dimen/action_image_view"
-            android:layout_marginStart="@dimen/profile_pic_notification_margin_start"
-            android:layout_marginEnd="@dimen/profile_pic_notification_margin_end"
-            android:src="@drawable/ic_close_white_36dp"
-            android:clickable="true"
-            android:focusable="true"
-            android:foreground="?selectableItemBackground"
-            android:contentDescription="@string/decline_icon_label"
-            android:background="@android:color/transparent"/>
-    </LinearLayout>
+            <ImageButton
+                android:id="@+id/decline_action_icon"
+                android:layout_width="@dimen/action_image_view"
+                android:layout_height="@dimen/action_image_view"
+                android:layout_marginStart="@dimen/profile_pic_notification_margin_start"
+                android:layout_marginEnd="@dimen/profile_pic_notification_margin_end"
+                android:src="@drawable/ic_close_white_36dp"
+                android:clickable="true"
+                android:focusable="true"
+                android:foreground="?selectableItemBackground"
+                android:contentDescription="@string/decline_icon_label"
+                android:background="@android:color/transparent"/>
+        </LinearLayout>
     </LinearLayout>
 
 </LinearLayout>
