@@ -11,6 +11,7 @@ import com.example.android.gsquad.activity.AddGameActivity;
 import com.example.android.gsquad.adapter.GameListAdapter;
 import com.example.android.gsquad.async.SubmitGameDetails;
 import com.example.android.gsquad.model.Game;
+import com.example.android.gsquad.utils.Utils;
 
 import java.util.List;
 
@@ -49,20 +50,25 @@ public class ToolbarActionModeCallback implements ActionMode.Callback {
     public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
         switch (item.getItemId()) {
             case R.id.submit: {
-                int selected = mGameListAdapter.getSelectedId();
+                if (Utils.isNetworkAvailable(addGameActivity)) {
+                    int selected = mGameListAdapter.getSelectedId();
 
-                // get selected data in Model
-                Game game = mGameList.get(selected);
-                SubmitGameDetails submitGameDetails = new SubmitGameDetails(game);
-                submitGameDetails.submitData();
-                String  message = game.getName() + " " + addGameActivity.getResources().getString(R.string.single_game_string);
-                Toast.makeText(addGameActivity, message,
-                        Toast.LENGTH_SHORT).show();
-                Log.d("Hello", "Selected items: Id - " + game.getId() + " Name - " + game.getName());
+                    // get selected data in Model
+                    Game game = mGameList.get(selected);
+                    SubmitGameDetails submitGameDetails = new SubmitGameDetails(game);
+                    submitGameDetails.submitData();
+                    String message = game.getName() + " " + addGameActivity.getResources().getString(R.string.single_game_string);
+                    Toast.makeText(addGameActivity, message,
+                            Toast.LENGTH_SHORT).show();
+                    Log.d("Hello", "Selected items: Id - " + game.getId() + " Name - " + game.getName());
 
-                addGameActivity.finish();
-                mode.finish();
-                break;
+                    addGameActivity.finish();
+                    mode.finish();
+                    break;
+                } else {
+                    Toast.makeText(addGameActivity, addGameActivity.getResources()
+                            .getString(R.string.no_connection_available), Toast.LENGTH_SHORT).show();
+                }
             }
         }
         return false;
