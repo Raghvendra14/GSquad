@@ -62,7 +62,6 @@ public class NotificationListFragment extends Fragment {
         mRecyclerView.addItemDecoration(dividerItemDecoration);
         mFirebaseUserId = FirebaseAuth.getInstance().getCurrentUser().getUid();
         // add empty list into adapter
-        // TODO: initialize and add data into adapter and set it to recycler view.
         mUserBasicInfoList = new ArrayList<>();
         mIsCurrentUserSender = new ArrayList<>();
         mNotificationListAdapter = new NotificationListAdapter(mUserBasicInfoList, mIsCurrentUserSender,

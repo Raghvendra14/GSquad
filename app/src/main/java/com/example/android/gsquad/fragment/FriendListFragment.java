@@ -15,10 +15,21 @@ import android.view.ViewGroup;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import com.example.android.gsquad.activity.AddFriendActivity;
 import com.example.android.gsquad.R;
+import com.example.android.gsquad.activity.AddFriendActivity;
 import com.example.android.gsquad.adapter.FriendListAdapter;
+import com.example.android.gsquad.adapter.NotificationListAdapter;
+import com.example.android.gsquad.model.UserBasicInfo;
 import com.example.android.gsquad.utils.Utils;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Raghvendra on 16-03-2017.
@@ -30,6 +41,12 @@ public class FriendListFragment extends Fragment {
     private FriendListAdapter mFriendListAdapter;
     private ProgressBar mProgressBar;
     private TextView mEmptyTextView;
+    private List<UserBasicInfo> mUserBasicInfoList;
+
+    private String mFirebaseId;
+    private DatabaseReference mUserDataReference;
+    private DatabaseReference mUserFriendDataReference;
+    private ValueEventListener mFirebaseValueEventListener;
 
     public FriendListFragment() {
     }
@@ -47,9 +64,16 @@ public class FriendListFragment extends Fragment {
         DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(mRecyclerView.getContext(),
                 linearLayoutManager.getOrientation());
         mRecyclerView.addItemDecoration(dividerItemDecoration);
+        mFirebaseId = FirebaseAuth.getInstance().getCurrentUser().getUid();
         // add empty list into adapter
        // TODO: initialize and add data into adapter and set it to recycler view.
+        mUserBasicInfoList = new ArrayList<>();
+        mFriendListAdapter = new FriendListAdapter(mUserBasicInfoList, getActivity());
+        mRecyclerView.setAdapter(mFriendListAdapter);
 
+        mUserDataReference = FirebaseDatabase.getInstance().getReference().child("users")
+                .child(mFirebaseId).child("friends");
+        mProgressBar.setVisibility(View.VISIBLE);
         final FloatingActionButton fab = (FloatingActionButton) rootView.findViewById(R.id.fab_friend);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -64,5 +88,73 @@ public class FriendListFragment extends Fragment {
         });
 
         return rootView;
+    }
+
+    @Override
+    public void onPause() {
+        detachDatabaseReadListener();
+        super.onPause();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        attachDatabaseReadListener();
+    }
+
+    private void attachDatabaseReadListener() {
+        if (mFirebaseValueEventListener == null) {
+            mFirebaseValueEventListener = new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    if (dataSnapshot.getValue() == null) {
+                        mEmptyTextView.setVisibility(View.VISIBLE);
+                        mProgressBar.setVisibility(View.GONE);
+                    } else {
+                        mUserBasicInfoList.clear();
+                        for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                            String userId = snapshot.getKey();
+                            mUserFriendDataReference = FirebaseDatabase.getInstance().getReference()
+                                    .child("users").child(userId);
+                            mUserFriendDataReference.addListenerForSingleValueEvent(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(DataSnapshot dataSnapshot) {
+                                    UserBasicInfo userBasicInfo = dataSnapshot.getValue(UserBasicInfo.class);
+                                    mUserBasicInfoList.add(userBasicInfo);
+
+                                    mFriendListAdapter = new FriendListAdapter(mUserBasicInfoList, getActivity());
+                                    mRecyclerView.setAdapter(mFriendListAdapter);
+                                    if (mFriendListAdapter.getItemCount() != 0) {
+                                        mEmptyTextView.setVisibility(View.GONE);
+                                        mProgressBar.setVisibility(View.GONE);
+                                    }
+                                }
+
+                                @Override
+                                public void onCancelled(DatabaseError databaseError) {
+
+                                }
+                            });
+                        }
+                    }
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
+            };
+            mUserDataReference.addValueEventListener(mFirebaseValueEventListener);
+        }
+    }
+
+    private void detachDatabaseReadListener() {
+        if (mFirebaseValueEventListener != null) {
+            mUserDataReference.removeEventListener(mFirebaseValueEventListener);
+            mFirebaseValueEventListener = null;
+        }
+        List<UserBasicInfo> emptyList = new ArrayList<>();
+        mFriendListAdapter = new FriendListAdapter(emptyList, getActivity());
+        mRecyclerView.setAdapter(mFriendListAdapter);
     }
 }
