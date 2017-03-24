@@ -6,7 +6,9 @@ import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
+import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
@@ -47,6 +49,8 @@ import java.util.Map;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
+import static com.example.android.gsquad.R.id.fab;
+
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,
         AdapterView.OnItemSelectedListener {
@@ -71,6 +75,7 @@ public class MainActivity extends AppCompatActivity
     private boolean mIsCalledByAddFriendsActivity;
     private ViewPager mViewPager;
     private Spinner mSpinner;
+    private FloatingActionButton mFab;
 
     private int mSize;
     @Override
@@ -86,6 +91,7 @@ public class MainActivity extends AppCompatActivity
         // It is meant to setup the Navigational Drawer for home screen of the app.
         setUpNavigationalDrawer();
         setupTabLayoutWithViewPager();
+        setupFabInMainActivity(MainActivityFragment.class, R.drawable.ic_game_add_white_36dp);
 
 //        try {
 //            PackageInfo info = getPackageManager().getPackageInfo(
@@ -117,6 +123,7 @@ public class MainActivity extends AppCompatActivity
                     if (mIsCalledByAddFriendsActivity) {
                         mViewPager.setCurrentItem(1, true);
                         intent.putExtra(Constants.PARENT_IS_ADD_FRIENDS, false);
+                        mIsCalledByAddFriendsActivity = false;
                     }
                     checkForStatus(user);
                 } else {
@@ -210,6 +217,23 @@ public class MainActivity extends AppCompatActivity
         // as you specify a parent activity in AndroidManifest.xml.
 
         return mToggle.onOptionsItemSelected(item) || super.onOptionsItemSelected(item);
+    }
+
+    private void setupFabInMainActivity(final Class mClass, int imageRes) {
+        mFab = (FloatingActionButton) findViewById(fab);
+        mFab.setImageResource(imageRes);
+        mFab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (Utils.isNetworkAvailable(MainActivity.this)) {
+                    startActivity(new Intent(MainActivity.this, mClass));
+                } else {
+                    Snackbar.make(view, getString(R.string.no_connection_available),
+                            Snackbar.LENGTH_LONG).show();
+                }
+            }
+        });
+        mFab.setVisibility(View.VISIBLE);
     }
 
     private void setUpNavigationalDrawer() {
@@ -326,6 +350,34 @@ public class MainActivity extends AppCompatActivity
         mViewPager.setAdapter(adapter);
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tab_layout);
         tabLayout.setupWithViewPager(mViewPager);
+        mViewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                Class mClass;
+                int imageRes;
+                if (position == 0) {
+                    mClass = AddGameActivity.class;
+                    imageRes = R.drawable.ic_game_add_white_36dp;
+                    setupFabInMainActivity(mClass, imageRes);
+                } else if (position == 1) {
+                    imageRes = R.drawable.ic_person_add_white_36dp;
+                    mClass = AddFriendActivity.class;
+                    setupFabInMainActivity(mClass, imageRes);
+                } else if (position == 2) {
+                    mFab.setVisibility(View.GONE);
+                }
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
     }
 
     @Override

@@ -69,18 +69,23 @@ public class StatusService extends IntentService {
                 views.setTextColor(R.id.online_status_text_view, getResources().getColor(R.color.green));
                 views.setTextColor(R.id.away_status_text_view, Color.BLACK);
                 views.setTextColor(R.id.offline_status_text_view, Color.BLACK);
+                views.setImageViewResource(R.id.away_image_view, R.drawable.ic_radio_button_unchecked_black_24dp);
                 break;
             }
             case "Away": {
                 views.setTextColor(R.id.away_status_text_view, getResources().getColor(R.color.orange));
                 views.setTextColor(R.id.online_status_text_view, Color.BLACK);
                 views.setTextColor(R.id.offline_status_text_view, Color.BLACK);
+                views.setImageViewResource(R.id.away_image_view, R.drawable.ic_radio_button_checked_orange_24dp);
+                views.setImageViewResource(R.id.online_image_view, R.drawable.ic_radio_button_unchecked_black_24dp);
+                views.setImageViewResource(R.id.offline_image_view, R.drawable.ic_radio_button_unchecked_black_24dp);
                 break;
             }
             case "Offline": {
                 views.setTextColor(R.id.offline_status_text_view, getResources().getColor(R.color.red));
                 views.setTextColor(R.id.away_status_text_view, Color.BLACK);
                 views.setTextColor(R.id.online_status_text_view, Color.BLACK);
+                views.setImageViewResource(R.id.away_image_view, R.drawable.ic_radio_button_unchecked_black_24dp);
                 break;
             }
         }

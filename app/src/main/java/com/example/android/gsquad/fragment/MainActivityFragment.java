@@ -1,6 +1,5 @@
 package com.example.android.gsquad.fragment;
 
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.location.Location;
@@ -8,8 +7,6 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
@@ -25,7 +22,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.android.gsquad.R;
-import com.example.android.gsquad.activity.AddGameActivity;
 import com.example.android.gsquad.adapter.GameDetailsListAdapter;
 import com.example.android.gsquad.model.Coordinates;
 import com.example.android.gsquad.model.GameDetails;
@@ -109,20 +105,6 @@ public class MainActivityFragment extends Fragment implements GoogleApiClient.Co
         gameDetailsList = new ArrayList<>();
         mGameDetailsListAdapter = new GameDetailsListAdapter(gameDetailsList, getActivity(), true);
         mRecyclerView.setAdapter(mGameDetailsListAdapter);
-
-
-        final FloatingActionButton fab = (FloatingActionButton) rootView.findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (Utils.isNetworkAvailable(getActivity())) {
-                    startActivity(new Intent(getActivity(), AddGameActivity.class));
-                } else {
-                    Snackbar.make(rootView, getString(R.string.no_connection_available),
-                            Snackbar.LENGTH_LONG).show();
-                }
-            }
-        });
 
         mUsername = ANONYMOUS;
 

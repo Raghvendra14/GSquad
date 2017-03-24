@@ -29,15 +29,6 @@
         android:text="@string/no_games_found"
         android:visibility="gone"/>
 
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/fab"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentEnd="true"
-        android:layout_margin="@dimen/fab_margin"
-        app:srcCompat="@drawable/ic_game_add_white_36dp" />
-
     <ProgressBar
         android:id="@+id/game_detail_progressBar"
         style="?android:attr/progressBarStyle"
