@@ -66,19 +66,19 @@ public class StatusService extends IntentService {
         RemoteViews views = new RemoteViews(getPackageName(), R.layout.widget_status);
         switch (string) {
             case "Online": {
-                views.setTextColor(R.id.online_status_text_view, Color.GREEN);
+                views.setTextColor(R.id.online_status_text_view, getResources().getColor(R.color.green));
                 views.setTextColor(R.id.away_status_text_view, Color.BLACK);
                 views.setTextColor(R.id.offline_status_text_view, Color.BLACK);
                 break;
             }
             case "Away": {
-                views.setTextColor(R.id.away_status_text_view, Color.YELLOW);
+                views.setTextColor(R.id.away_status_text_view, getResources().getColor(R.color.orange));
                 views.setTextColor(R.id.online_status_text_view, Color.BLACK);
                 views.setTextColor(R.id.offline_status_text_view, Color.BLACK);
                 break;
             }
             case "Offline": {
-                views.setTextColor(R.id.offline_status_text_view, Color.RED);
+                views.setTextColor(R.id.offline_status_text_view, getResources().getColor(R.color.red));
                 views.setTextColor(R.id.away_status_text_view, Color.BLACK);
                 views.setTextColor(R.id.online_status_text_view, Color.BLACK);
                 break;
@@ -88,6 +88,5 @@ public class StatusService extends IntentService {
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, launchIntent, 0);
         views.setOnClickPendingIntent(R.id.widget, pendingIntent);
         appWidgetManager.updateAppWidget(appWidgetId, views);
-
     }
 }

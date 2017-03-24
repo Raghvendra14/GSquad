@@ -19,6 +19,7 @@
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:orientation="horizontal">
+
         <TextView
             android:id="@+id/notification_status_text_view"
             android:layout_width="0dp"
@@ -50,7 +51,7 @@
                 android:focusable="true"
                 android:foreground="?selectableItemBackground"
                 android:contentDescription="@string/accept_icon_label"
-                android:background="@android:color/transparent"/>
+                android:background="@color/green"/>
 
             <ImageButton
                 android:id="@+id/decline_action_icon"
@@ -63,8 +64,10 @@
                 android:focusable="true"
                 android:foreground="?selectableItemBackground"
                 android:contentDescription="@string/decline_icon_label"
-                android:background="@android:color/transparent"/>
+                android:background="@color/red"/>
+
         </LinearLayout>
+
     </LinearLayout>
 
 </LinearLayout>

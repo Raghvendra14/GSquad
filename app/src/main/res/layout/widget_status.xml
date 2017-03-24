@@ -47,6 +47,7 @@
             android:layout_height="wrap_content"
             android:text="@string/online_status"
             android:layout_gravity="center_vertical"
+            android:textAppearance="?android:textAppearanceMedium"
             android:paddingStart="@dimen/widget_margin_start_end"
             android:paddingEnd="@dimen/widget_margin_start_end"/>
 
@@ -67,6 +68,7 @@
             android:layout_height="wrap_content"
             android:text="@string/away_status"
             android:layout_gravity="center_vertical"
+            android:textAppearance="?android:textAppearanceMedium"
             android:paddingStart="@dimen/widget_margin_start_end"
             android:paddingEnd="@dimen/widget_margin_start_end"/>
 
@@ -87,6 +89,7 @@
             android:layout_height="wrap_content"
             android:text="@string/offline_status"
             android:layout_gravity="center_vertical"
+            android:textAppearance="?android:textAppearanceMedium"
             android:paddingStart="@dimen/widget_margin_start_end"
             android:paddingEnd="@dimen/widget_margin_start_end"/>
 
