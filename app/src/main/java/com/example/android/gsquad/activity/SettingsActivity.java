@@ -34,6 +34,7 @@ public class SettingsActivity extends AppCompatActivity implements
         getFragmentManager().beginTransaction()
                 .replace(R.id.content_frame, new SettingsFragment())
                 .commit();
+
     }
 
     @Override
