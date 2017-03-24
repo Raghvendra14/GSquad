@@ -16,4 +16,7 @@ public class Constants {
     public static final String PARENT_IS_ADD_FRIENDS = "addFriends";
     public static final String ACTION_DATA_UPDATED =
             "com.example.android.gsquad.app.ACTION_DATA_UPDATED";
+    public static final String ONLINE_DATA_PUSH = "com.example.android.gsquad.app.ONLINE_DATA_PUSH";
+    public static final String AWAY_DATA_PUSH = "com.example.android.gsquad.app.AWAY_DATA_PUSH";
+    public static final String OFFLINE_DATA_PUSH = "com.example.android.gsquad.app.OFFLINE_DATA_PUSH";
 }

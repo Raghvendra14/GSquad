@@ -69,11 +69,15 @@
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
                 <action android:name="com.example.android.gsquad.app.ACTION_DATA_UPDATED" />
+                <action android:name="com.example.android.gsquad.widget.StatusWidgetProvider.ONLINE_DATA_PUSH" />
+                <action android:name="com.example.android.gsquad.widget.StatusWidgetProvider.AWAY_DATA_PUSH" />
+                <action android:name="com.example.android.gsquad.widget.StatusWidgetProvider.OFFLINE_DATA_PUSH" />
             </intent-filter>
             <meta-data android:name="android.appwidget.provider"
                 android:resource="@xml/widget_info_status" />
         </receiver>
         <service android:name=".widget.StatusService" />
+        <service android:name=".widget.DataService" />
     </application>
 
 </manifest>
