@@ -227,37 +227,7 @@ public class MainActivityFragment extends Fragment implements GoogleApiClient.Co
 
                     UserBasicInfo userInfo = dataSnapshot.getValue(UserBasicInfo.class);
                     if (userInfo != null) {
-                        if (userInfo.getGamesOwned() == null) {
-                            mEmptyTextView.setVisibility(View.VISIBLE);
-                            mProgressBar.setVisibility(View.GONE);
-                        } else {
-                            List<Integer> gamesOwnedList = userInfo.getGamesOwned();
-                            for (int gameId : gamesOwnedList) {
-                                mGameDataReference = FirebaseDatabase.getInstance().getReference()
-                                        .child("games").child(String.valueOf(gameId));
-                                mGameDataReference.addListenerForSingleValueEvent(new ValueEventListener() {
-                                    @Override
-                                    public void onDataChange(DataSnapshot dataSnapshot) {
-                                        GameDetails gameDetails = dataSnapshot.getValue(GameDetails.class);
-                                        Log.d(TAG, gameDetails.getName());
-                                        gameDetailsList.add(gameDetails);
-                                        mGameDetailsListAdapter = new GameDetailsListAdapter(gameDetailsList,
-                                                getActivity(), true);
-                                        mRecyclerView.setAdapter(mGameDetailsListAdapter);
-                                        Log.d(TAG, gameDetailsList.toString());
-                                        if (mGameDetailsListAdapter.getItemCount() != 0) {
-                                            mEmptyTextView.setVisibility(View.GONE);
-                                            mProgressBar.setVisibility(View.GONE);
-                                        }
-                                    }
-
-                                    @Override
-                                    public void onCancelled(DatabaseError databaseError) {
-
-                                    }
-                                });
-                            }
-                        }
+                        displayGameListInFragment(userInfo);
                     }
                 }
 
@@ -278,6 +248,40 @@ public class MainActivityFragment extends Fragment implements GoogleApiClient.Co
         List<GameDetails> emptyList = new ArrayList<>();
         mGameDetailsListAdapter = new GameDetailsListAdapter(emptyList, getActivity(), true);
         mRecyclerView.setAdapter(mGameDetailsListAdapter);
+    }
+
+    private void displayGameListInFragment(UserBasicInfo userInfo) {
+        if (userInfo.getGamesOwned() == null) {
+            mEmptyTextView.setVisibility(View.VISIBLE);
+            mProgressBar.setVisibility(View.GONE);
+        } else {
+            List<Integer> gamesOwnedList = userInfo.getGamesOwned();
+            for (int gameId : gamesOwnedList) {
+                mGameDataReference = FirebaseDatabase.getInstance().getReference()
+                        .child("games").child(String.valueOf(gameId));
+                mGameDataReference.addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        GameDetails gameDetails = dataSnapshot.getValue(GameDetails.class);
+                        Log.d(TAG, gameDetails.getName());
+                        gameDetailsList.add(gameDetails);
+                        mGameDetailsListAdapter = new GameDetailsListAdapter(gameDetailsList,
+                                getActivity(), true);
+                        mRecyclerView.setAdapter(mGameDetailsListAdapter);
+                        Log.d(TAG, gameDetailsList.toString());
+                        if (mGameDetailsListAdapter.getItemCount() != 0) {
+                            mEmptyTextView.setVisibility(View.GONE);
+                            mProgressBar.setVisibility(View.GONE);
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                });
+            }
+        }
     }
 
     @Override

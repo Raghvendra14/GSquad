@@ -31,4 +31,9 @@
     <dimen name="games_owned_label_size">20sp</dimen>
     <integer name="column_count">2</integer>
     <integer name="profile_pic_border_width">1</integer>
+
+    <dimen name="widget_status_default_width">180dp</dimen>
+    <dimen name="widget_status_default_height">40dp</dimen>
+    <dimen name="widget_status_min_resize_width">@dimen/widget_status_default_width</dimen>
+    <dimen name="widget_status_min_resize_height">@dimen/widget_status_default_height</dimen>
 </resources>

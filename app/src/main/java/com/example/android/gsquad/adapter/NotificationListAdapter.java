@@ -6,7 +6,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -82,16 +82,16 @@ public class NotificationListAdapter extends RecyclerView.Adapter<NotificationLi
         CircleImageView mCircleImageView;
         TextView mNotificationStatus;
         LinearLayout mActionLinearLayout;
-        ImageView mAcceptActionImageView;
-        ImageView mDeclineActionImageView;
+        ImageButton mAcceptActionImageView;
+        ImageButton mDeclineActionImageView;
 
         public ViewHolder(final View view) {
             super(view);
             mCircleImageView = (CircleImageView) view.findViewById(R.id.user_profile_pic);
             mNotificationStatus = (TextView) view.findViewById(R.id.notification_status_text_view);
             mActionLinearLayout = (LinearLayout) view.findViewById(R.id.action_layout);
-            mAcceptActionImageView = (ImageView) view.findViewById(R.id.accept_action_icon);
-            mDeclineActionImageView = (ImageView) view.findViewById(R.id.decline_action_icon);
+            mAcceptActionImageView = (ImageButton) view.findViewById(R.id.accept_action_icon);
+            mDeclineActionImageView = (ImageButton) view.findViewById(R.id.decline_action_icon);
             mAcceptActionImageView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

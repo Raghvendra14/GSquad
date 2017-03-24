@@ -17,6 +17,9 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
@@ -31,13 +34,21 @@ import com.firebase.ui.auth.AuthUI;
 import com.firebase.ui.auth.IdpResponse;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+        implements NavigationView.OnNavigationItemSelectedListener,
+        AdapterView.OnItemSelectedListener {
 
     private static final String TAG = MainActivity.class.getSimpleName();
 
@@ -49,6 +60,8 @@ public class MainActivity extends AppCompatActivity
     */
     private FirebaseAuth mFirebaseAuth;
     private FirebaseAuth.AuthStateListener mAuthStateListener;
+    private DatabaseReference mStatusDataReference;
+    private String mUserId = "";
 
     private DrawerLayout mDrawer;
     private ActionBarDrawerToggle mToggle;
@@ -56,6 +69,7 @@ public class MainActivity extends AppCompatActivity
     private NavigationView mNavigationView;
     private boolean mIsCalledByAddFriendsActivity;
     private ViewPager mViewPager;
+    private Spinner mSpinner;
 
     private int mSize;
     @Override
@@ -86,7 +100,7 @@ public class MainActivity extends AppCompatActivity
 //        } catch (NoSuchAlgorithmException e) {
 //
 //        }
-
+        mStatusDataReference = FirebaseDatabase.getInstance().getReference().child("status");
         mFirebaseAuth = FirebaseAuth.getInstance();
 
         mAuthStateListener = new FirebaseAuth.AuthStateListener() {
@@ -95,6 +109,7 @@ public class MainActivity extends AppCompatActivity
                 FirebaseUser user = firebaseAuth.getCurrentUser();
                 if (user != null) {
                     // User is signed in
+                    mUserId = user.getUid();
                     Log.d(TAG, "User Connected");
                     setupProfilePicInNavDrawer(user);
                     mNavigationView.getMenu().getItem(mSize-1).setChecked(false);
@@ -102,8 +117,10 @@ public class MainActivity extends AppCompatActivity
                         mViewPager.setCurrentItem(1, true);
                         intent.putExtra(Constants.PARENT_IS_ADD_FRIENDS, false);
                     }
+                    checkForStatus(user);
                 } else {
                     // User is signed out
+                    mUserId = "";
                     mIsCalledByAddFriendsActivity = false;
                     startActivityForResult(
                             AuthUI.getInstance()
@@ -116,6 +133,13 @@ public class MainActivity extends AppCompatActivity
                 }
             }
         };
+        mSpinner = (Spinner) findViewById(R.id.status_spinner);
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
+                R.array.status_array, R.layout.spinner_text_list);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        mSpinner.setAdapter(adapter);
+        mSpinner.setOnItemSelectedListener(this);
+
     }
 
     @Override
@@ -236,6 +260,44 @@ public class MainActivity extends AppCompatActivity
         return true;
     }
 
+    private void checkForStatus(final FirebaseUser user) {
+        mStatusDataReference.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                boolean isAvailable = false;
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                    if (snapshot.getKey().equals(user.getUid())) {
+                        String status = (String) snapshot.getValue();
+                        int selectedId = 0;
+                        switch (status) {
+                            case "Online":
+                                selectedId = 0;
+                                break;
+                            case "Away":
+                                selectedId = 1;
+                                break;
+                            case "Offline":
+                                selectedId = 2;
+                        }
+                        mSpinner.setSelection(selectedId);
+                        isAvailable = true;
+                        break;
+                    }
+                }
+                if (!isAvailable) {
+                    mSpinner.setSelection(0);
+                    String defValue = "Online";
+                    mStatusDataReference.child(mUserId).setValue(defValue);
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+    }
+
     /*
     *  Setup Profile pic from the login providers like Facebook, Google, etc. into the Profile Pic
     *  imageview of Navigational Drawer
@@ -263,5 +325,18 @@ public class MainActivity extends AppCompatActivity
         mViewPager.setAdapter(adapter);
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tab_layout);
         tabLayout.setupWithViewPager(mViewPager);
+    }
+
+    @Override
+    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+
+        Map<String, Object> updateStatus = new HashMap<String, Object>();
+        updateStatus.put("/" + mUserId, parent.getItemAtPosition(position).toString());
+        mStatusDataReference.updateChildren(updateStatus);
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> parent) {
+
     }
 }

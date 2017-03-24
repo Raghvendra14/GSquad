@@ -76,4 +76,6 @@
     <string name="pref_show_distance_true">Enabled</string>
     <string name="pref_show_distance_false">Not Enabled</string>
     <string name="pref_show_distance_default" translatable="false">true</string>
+
+    <string name="title_widget_status">GSquad User Status</string>
 </resources>

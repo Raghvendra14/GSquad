@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<appwidget-provider xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:initialLayout="@layout/widget_status"
+    android:minHeight="@dimen/widget_status_default_height"
+    android:minResizeHeight="@dimen/widget_status_min_resize_height"
+    android:minResizeWidth="@dimen/widget_status_min_resize_width"
+    android:minWidth="@dimen/widget_status_default_width"
+    android:previewImage="@android:drawable/sym_def_app_icon"
+    android:resizeMode="none"
+    android:updatePeriodMillis="0"
+    android:widgetCategory="home_screen"
+    tools:ignore="UnusedAttribute" />
