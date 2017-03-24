@@ -34,8 +34,6 @@ public class SettingsActivity extends AppCompatActivity implements
         getFragmentManager().beginTransaction()
                 .replace(R.id.content_frame, new SettingsFragment())
                 .commit();
-
-
     }
 
     @Override
@@ -78,7 +76,7 @@ public class SettingsActivity extends AppCompatActivity implements
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if (dataSnapshot.exists()) {
-                    Map<String, Object> updateValues = new HashMap<String, Object>();
+                    Map<String, Object> updateValues = new HashMap<>();
                     updateValues.put("/showLocation", isChecked);
                     userDataReference.updateChildren(updateValues);
                 }
