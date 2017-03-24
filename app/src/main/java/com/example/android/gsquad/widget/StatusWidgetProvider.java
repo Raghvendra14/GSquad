@@ -9,6 +9,7 @@ import android.widget.RemoteViews;
 
 import com.example.android.gsquad.R;
 import com.example.android.gsquad.activity.MainActivity;
+import com.example.android.gsquad.utils.Constants;
 
 /**
  * Created by Raghvendra on 24-03-2017.
@@ -41,11 +42,14 @@ public class StatusWidgetProvider extends AppWidgetProvider {
     }
 
 
-//    // TODO: We will put a hold on Broadcast Receiver for a while
-//    @Override
-//    public void onReceive(Context context, Intent intent) {
-//        super.onReceive(context, intent);
-//
-//    }
+    // TODO: We will put a hold on Broadcast Receiver for a while
+    @Override
+    public void onReceive(Context context, Intent intent) {
+        super.onReceive(context, intent);
+        if (Constants.ACTION_DATA_UPDATED.equals(intent.getAction())) {
+            context.startService(new Intent(context, StatusService.class));
+        }
+
+    }
 
 }

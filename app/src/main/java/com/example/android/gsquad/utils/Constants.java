@@ -14,4 +14,6 @@ public class Constants {
     public static final String SELECTED_KEY = "selected";
     public static final String PENDING = "PENDING";
     public static final String PARENT_IS_ADD_FRIENDS = "addFriends";
+    public static final String ACTION_DATA_UPDATED =
+            "com.example.android.gsquad.app.ACTION_DATA_UPDATED";
 }

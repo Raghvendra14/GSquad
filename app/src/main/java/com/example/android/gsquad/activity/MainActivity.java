@@ -1,5 +1,6 @@
 package com.example.android.gsquad.activity;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
@@ -333,10 +334,18 @@ public class MainActivity extends AppCompatActivity
         Map<String, Object> updateStatus = new HashMap<String, Object>();
         updateStatus.put("/" + mUserId, parent.getItemAtPosition(position).toString());
         mStatusDataReference.updateChildren(updateStatus);
+        updateWidget();
     }
 
     @Override
     public void onNothingSelected(AdapterView<?> parent) {
 
+    }
+
+    private void updateWidget() {
+        Context context = MainActivity.this;
+        Intent dataUpdatedIntent = new Intent(Constants.ACTION_DATA_UPDATED)
+                .setPackage(context.getPackageName());
+        context.sendBroadcast(dataUpdatedIntent);
     }
 }

@@ -36,7 +36,7 @@
         android:layout_alignParentBottom="true"
         android:layout_alignParentEnd="true"
         android:layout_margin="@dimen/fab_margin"
-        app:srcCompat="@drawable/ic_person_add_white_36dp" />
+        app:srcCompat="@drawable/ic_game_add_white_36dp" />
 
     <ProgressBar
         android:id="@+id/game_detail_progressBar"

@@ -78,4 +78,10 @@
     <string name="pref_show_distance_default" translatable="false">true</string>
 
     <string name="title_widget_status">GSquad User Status</string>
+    <string name="online_status_label">Online Label</string>
+    <string name="online_status">Online</string>
+    <string name="away_status_label">Away Label</string>
+    <string name="away_status">Away</string>
+    <string name="offline_status_label">Offline Label</string>
+    <string name="offline_status">Offline</string>
 </resources>
