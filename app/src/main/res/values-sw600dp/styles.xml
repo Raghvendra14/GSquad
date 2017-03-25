@@ -3,4 +3,7 @@
     <style name="CustomTextStyle">
         <item name="android:textSize">@dimen/games_owned_label_size</item>
     </style>
+    <style name="WidgetTextStyle">
+        <item name="android:textColor">@android:color/black</item>
+    </style>
 </resources>

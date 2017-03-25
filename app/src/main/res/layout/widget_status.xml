@@ -45,13 +45,15 @@
             android:layout_height="wrap_content"
             android:text="@string/anonymous_user"
             android:textAppearance="?android:textAppearanceMedium"
+            style="@style/WidgetTextStyle"
             android:fontFamily="sans-serif"
             android:layout_marginBottom="@dimen/linear_padding_top_bottom"/>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:gravity="center">
 
             <ImageButton
                 android:id="@+id/online_image_view"

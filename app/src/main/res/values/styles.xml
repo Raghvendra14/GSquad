@@ -27,4 +27,6 @@
 
     <style name="CustomTextStyle" />
 
+    <style name="WidgetTextStyle" />
+
 </resources>
