@@ -136,6 +136,7 @@ public class MainActivity extends AppCompatActivity
                             .setIsSmartLockEnabled(false)
                             .setProviders(Arrays.asList(new AuthUI.IdpConfig.Builder(AuthUI.GOOGLE_PROVIDER).build(),
                                     new AuthUI.IdpConfig.Builder(AuthUI.FACEBOOK_PROVIDER).build()))
+                            .setTheme(R.style.FullscreenTheme)
                             .build(),
                     RC_SIGN_IN);
                 }
