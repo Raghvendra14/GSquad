@@ -107,6 +107,7 @@ public class MainActivity extends AppCompatActivity
 //        } catch (NoSuchAlgorithmException e) {
 //
 //        }
+
         mStatusDataReference = FirebaseDatabase.getInstance().getReference().child("status");
         mFirebaseAuth = FirebaseAuth.getInstance();
 
