@@ -24,78 +24,102 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
+        android:orientation="vertical"
         android:background="@android:color/white"
         android:gravity="center"
         android:paddingTop="@dimen/widget_top_padding"
         android:paddingBottom="@dimen/widget_bottom_padding">
 
-        <ImageButton
-            android:id="@+id/online_image_view"
-            android:layout_width="@dimen/action_radio_button"
-            android:layout_height="@dimen/action_radio_button"
-            android:src="@drawable/ic_radio_button_unchecked_black_24dp"
-            android:clickable="true"
-            android:focusable="true"
-            android:contentDescription="@string/online_status_label"
-            android:background="@android:color/white"
-            android:paddingStart="@dimen/widget_margin_start_end"
-            android:paddingEnd="@dimen/widget_margin_start_end"/>
+        <ImageView
+         android:id="@+id/widget_user_pic"
+         android:layout_width="@dimen/user_image_view"
+         android:layout_height="@dimen/user_image_view"
+         android:paddingTop="@dimen/image_padding_top_bottom"
+         android:paddingBottom="@dimen/image_padding_top_bottom"
+         android:src="@drawable/no_image"
+         android:contentDescription="@string/user_pic_label"/>
 
         <TextView
-            android:id="@+id/online_status_text_view"
+            android:id="@+id/widget_username"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/online_status"
-            android:layout_gravity="center_vertical"
+            android:text="@string/anonymous_user"
             android:textAppearance="?android:textAppearanceMedium"
-            android:paddingStart="@dimen/widget_margin_start_end"
-            android:paddingEnd="@dimen/widget_margin_start_end"/>
+            android:fontFamily="sans-serif"
+            android:layout_marginBottom="@dimen/linear_padding_top_bottom"/>
 
-        <ImageButton
-            android:id="@+id/away_image_view"
-            android:layout_width="@dimen/action_radio_button"
-            android:layout_height="@dimen/action_radio_button"
-            android:src="@drawable/ic_radio_button_unchecked_black_24dp"
-            android:clickable="true"
-            android:focusable="true"
-            android:contentDescription="@string/away_status_label"
-            android:background="@android:color/white"
-            android:paddingStart="@dimen/widget_margin_start_end"
-            android:paddingEnd="@dimen/widget_margin_start_end"/>
-
-        <TextView
-            android:id="@+id/away_status_text_view"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/away_status"
-            android:layout_gravity="center_vertical"
-            android:textAppearance="?android:textAppearanceMedium"
-            android:paddingStart="@dimen/widget_margin_start_end"
-            android:paddingEnd="@dimen/widget_margin_start_end"/>
+            android:orientation="horizontal">
 
-        <ImageButton
-            android:id="@+id/offline_image_view"
-            android:layout_width="@dimen/action_radio_button"
-            android:layout_height="@dimen/action_radio_button"
-            android:src="@drawable/ic_radio_button_unchecked_black_24dp"
-            android:clickable="true"
-            android:focusable="true"
-            android:contentDescription="@string/offline_status_label"
-            android:background="@android:color/white"
-            android:paddingStart="@dimen/widget_margin_start_end"
-            android:paddingEnd="@dimen/widget_margin_start_end"/>
+            <ImageButton
+                android:id="@+id/online_image_view"
+                android:layout_width="@dimen/action_radio_button"
+                android:layout_height="@dimen/action_radio_button"
+                android:src="@drawable/ic_radio_button_unchecked_black_24dp"
+                android:clickable="true"
+                android:focusable="true"
+                android:contentDescription="@string/online_status_label"
+                android:background="@android:color/white"
+                android:paddingStart="@dimen/widget_margin_start_end"
+                android:paddingEnd="@dimen/widget_margin_start_end"/>
 
-        <TextView
-            android:id="@+id/offline_status_text_view"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/offline_status"
-            android:layout_gravity="center_vertical"
-            android:textAppearance="?android:textAppearanceMedium"
-            android:paddingStart="@dimen/widget_margin_start_end"
-            android:paddingEnd="@dimen/widget_margin_start_end"/>
+            <TextView
+                android:id="@+id/online_status_text_view"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/online_status"
+                android:layout_gravity="center_vertical"
+                android:textAppearance="?android:textAppearanceMedium"
+                android:paddingStart="@dimen/widget_margin_start_end"
+                android:paddingEnd="@dimen/widget_margin_start_end"/>
 
+            <ImageButton
+                android:id="@+id/away_image_view"
+                android:layout_width="@dimen/action_radio_button"
+                android:layout_height="@dimen/action_radio_button"
+                android:src="@drawable/ic_radio_button_unchecked_black_24dp"
+                android:clickable="true"
+                android:focusable="true"
+                android:contentDescription="@string/away_status_label"
+                android:background="@android:color/white"
+                android:paddingStart="@dimen/widget_margin_start_end"
+                android:paddingEnd="@dimen/widget_margin_start_end"/>
+
+            <TextView
+                android:id="@+id/away_status_text_view"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/away_status"
+                android:layout_gravity="center_vertical"
+                android:textAppearance="?android:textAppearanceMedium"
+                android:paddingStart="@dimen/widget_margin_start_end"
+                android:paddingEnd="@dimen/widget_margin_start_end"/>
+
+            <ImageButton
+                android:id="@+id/offline_image_view"
+                android:layout_width="@dimen/action_radio_button"
+                android:layout_height="@dimen/action_radio_button"
+                android:src="@drawable/ic_radio_button_unchecked_black_24dp"
+                android:clickable="true"
+                android:focusable="true"
+                android:contentDescription="@string/offline_status_label"
+                android:background="@android:color/white"
+                android:paddingStart="@dimen/widget_margin_start_end"
+                android:paddingEnd="@dimen/widget_margin_start_end"/>
+
+            <TextView
+                android:id="@+id/offline_status_text_view"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/offline_status"
+                android:layout_gravity="center_vertical"
+                android:textAppearance="?android:textAppearanceMedium"
+                android:paddingStart="@dimen/widget_margin_start_end"
+                android:paddingEnd="@dimen/widget_margin_start_end"/>
+
+        </LinearLayout>
     </LinearLayout>
 
 </LinearLayout>

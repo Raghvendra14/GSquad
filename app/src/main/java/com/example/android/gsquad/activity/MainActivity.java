@@ -157,6 +157,7 @@ public class MainActivity extends AppCompatActivity
             IdpResponse idpResponse = IdpResponse.fromResultIntent(data);
             if (resultCode == RESULT_OK) {
                 // Sign-in succeeded, set up the UI
+                updateWidget();
                 mViewPager.setCurrentItem(0, true);
                 Toast.makeText(this, "You are signed in!", Toast.LENGTH_SHORT).show();
             } else if (resultCode == RESULT_CANCELED) {

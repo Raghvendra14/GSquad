@@ -1,16 +1,19 @@
 package com.example.android.gsquad.widget;
 
 import android.app.IntentService;
-import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;
 import android.content.ComponentName;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.support.annotation.Nullable;
+import android.util.Log;
 import android.widget.RemoteViews;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.target.Target;
 import com.example.android.gsquad.R;
-import com.example.android.gsquad.activity.MainActivity;
+import com.example.android.gsquad.utils.Utils;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -18,23 +21,39 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.concurrent.ExecutionException;
+
 /**
  * Created by Raghvendra on 24-03-2017.
  */
 
 public class StatusService extends IntentService {
     private String mFirebaseId = "";
-
+    private Bitmap mImageBitmap = null;
+    private static final String TAG = StatusService.class.getSimpleName();
+    private String mUserName = "Anonymous";
     public StatusService() {
         super("StatusService");
     }
 
     @Override
     protected void onHandleIntent(@Nullable Intent intent) {
-        String userName = "Anonymous";
+        String imageUrl = "";
         if (FirebaseAuth.getInstance().getCurrentUser() != null) {
             mFirebaseId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+            mUserName = FirebaseAuth.getInstance().getCurrentUser().getDisplayName();
+            imageUrl = Utils.getProfilePicUrl(FirebaseAuth.getInstance().getCurrentUser(), this);
         }
+        try {
+            mImageBitmap = Glide.with(this)
+                    .load(imageUrl)
+                    .asBitmap()
+                    .error(R.drawable.no_image)
+                    .into(Target.SIZE_ORIGINAL, Target.SIZE_ORIGINAL).get();
+        } catch (InterruptedException | ExecutionException e) {
+            Log.e(TAG, "Error retrieving user pic from " + imageUrl, e);
+        }
+
         final AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(this);
         final int[] appWidgetIds = appWidgetManager.getAppWidgetIds(new ComponentName(this,
                 StatusWidgetProvider.class));
@@ -64,6 +83,15 @@ public class StatusService extends IntentService {
 
     private void setIconActivated(String string, AppWidgetManager appWidgetManager, int appWidgetId) {
         RemoteViews views = new RemoteViews(getPackageName(), R.layout.widget_status);
+
+        if (mImageBitmap != null) {
+            views.setImageViewBitmap(R.id.widget_user_pic, mImageBitmap);
+        } else {
+            views.setImageViewResource(R.id.widget_user_pic, R.drawable.no_image);
+        }
+
+        views.setTextViewText(R.id.widget_username, mUserName);
+
         switch (string) {
             case "Online": {
                 views.setTextColor(R.id.online_status_text_view, getResources().getColor(R.color.green));
@@ -89,9 +117,6 @@ public class StatusService extends IntentService {
                 break;
             }
         }
-        Intent launchIntent = new Intent(this, MainActivity.class);
-        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, launchIntent, 0);
-        views.setOnClickPendingIntent(R.id.widget, pendingIntent);
         appWidgetManager.updateAppWidget(appWidgetId, views);
     }
 }

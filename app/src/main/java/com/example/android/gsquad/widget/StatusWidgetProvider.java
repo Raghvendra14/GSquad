@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.widget.RemoteViews;
 
 import com.example.android.gsquad.R;
+import com.example.android.gsquad.activity.MainActivity;
 import com.example.android.gsquad.utils.Constants;
 
 /**
@@ -23,9 +24,13 @@ public class StatusWidgetProvider extends AppWidgetProvider {
         context.startService(new Intent(context, StatusService.class));
         RemoteViews remoteViews = new RemoteViews(context.getPackageName(), R.layout.widget_status);
 
+        Intent launchIntent = new Intent(context, MainActivity.class);
+        PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, launchIntent, 0);
+        remoteViews.setOnClickPendingIntent(R.id.widget, pendingIntent);
+
         Intent dataStorageIntent = new Intent(context, StatusWidgetProvider.class);
         dataStorageIntent.setAction(ONLINE_DATA_PUSH);
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0, dataStorageIntent, 0);
+        pendingIntent = PendingIntent.getBroadcast(context, 0, dataStorageIntent, 0);
         remoteViews.setOnClickPendingIntent(R.id.online_image_view, pendingIntent);
 
         dataStorageIntent = new Intent(context, StatusWidgetProvider.class);
