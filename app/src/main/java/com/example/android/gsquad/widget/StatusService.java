@@ -108,7 +108,9 @@ public class StatusService extends IntentService {
                 mRemoteViews.setTextColor(R.id.online_status_text_view, getResources().getColor(R.color.green));
                 mRemoteViews.setTextColor(R.id.away_status_text_view, Color.BLACK);
                 mRemoteViews.setTextColor(R.id.offline_status_text_view, Color.BLACK);
+                mRemoteViews.setImageViewResource(R.id.online_image_view, R.drawable.ic_radio_button_checked_green_24dp);
                 mRemoteViews.setImageViewResource(R.id.away_image_view, R.drawable.ic_radio_button_unchecked_black_24dp);
+                mRemoteViews.setImageViewResource(R.id.offline_image_view, R.drawable.ic_radio_button_unchecked_black_24dp);
                 break;
             }
             case "Away": {
@@ -124,7 +126,9 @@ public class StatusService extends IntentService {
                 mRemoteViews.setTextColor(R.id.offline_status_text_view, getResources().getColor(R.color.red));
                 mRemoteViews.setTextColor(R.id.away_status_text_view, Color.BLACK);
                 mRemoteViews.setTextColor(R.id.online_status_text_view, Color.BLACK);
+                mRemoteViews.setImageViewResource(R.id.offline_image_view, R.drawable.ic_radio_button_checked_red_24dp);
                 mRemoteViews.setImageViewResource(R.id.away_image_view, R.drawable.ic_radio_button_unchecked_black_24dp);
+                mRemoteViews.setImageViewResource(R.id.online_image_view, R.drawable.ic_radio_button_unchecked_black_24dp);
                 break;
             }
         }
