@@ -280,6 +280,7 @@ public class MainActivity extends AppCompatActivity
                 startActivity(shareIntent);
                 break;
             case R.id.logout:
+                updateWidget();
                 AuthUI.getInstance().signOut(this);
         }
         mDrawer.closeDrawer(GravityCompat.START);

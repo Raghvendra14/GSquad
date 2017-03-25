@@ -28,6 +28,11 @@ public class StatusWidgetProvider extends AppWidgetProvider {
         PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, launchIntent, 0);
         remoteViews.setOnClickPendingIntent(R.id.widget, pendingIntent);
 
+        launchIntent = new Intent(context, MainActivity.class);
+        pendingIntent = PendingIntent.getActivity(context, 0, launchIntent, 0);
+        remoteViews.setOnClickPendingIntent(R.id.widget_username, pendingIntent);
+        remoteViews.setOnClickPendingIntent(R.id.widget_user_pic, pendingIntent);
+
         Intent dataStorageIntent = new Intent(context, StatusWidgetProvider.class);
         dataStorageIntent.setAction(ONLINE_DATA_PUSH);
         pendingIntent = PendingIntent.getBroadcast(context, 0, dataStorageIntent, 0);

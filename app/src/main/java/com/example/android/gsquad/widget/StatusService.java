@@ -32,91 +32,102 @@ public class StatusService extends IntentService {
     private Bitmap mImageBitmap = null;
     private static final String TAG = StatusService.class.getSimpleName();
     private String mUserName = "Anonymous";
+    private RemoteViews mRemoteViews;
+
     public StatusService() {
         super("StatusService");
     }
 
     @Override
     protected void onHandleIntent(@Nullable Intent intent) {
+        mRemoteViews = new RemoteViews(getPackageName(), R.layout.widget_status);
+        final AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(this);
+        final int[] appWidgetIds = appWidgetManager.getAppWidgetIds(new ComponentName(this,
+                StatusWidgetProvider.class));
         String imageUrl = "";
         if (FirebaseAuth.getInstance().getCurrentUser() != null) {
             mFirebaseId = FirebaseAuth.getInstance().getCurrentUser().getUid();
             mUserName = FirebaseAuth.getInstance().getCurrentUser().getDisplayName();
             imageUrl = Utils.getProfilePicUrl(FirebaseAuth.getInstance().getCurrentUser(), this);
-        }
-        try {
-            mImageBitmap = Glide.with(this)
-                    .load(imageUrl)
-                    .asBitmap()
-                    .error(R.drawable.no_image)
-                    .into(Target.SIZE_ORIGINAL, Target.SIZE_ORIGINAL).get();
-        } catch (InterruptedException | ExecutionException e) {
-            Log.e(TAG, "Error retrieving user pic from " + imageUrl, e);
-        }
+            try {
+                mImageBitmap = Glide.with(this)
+                        .load(imageUrl)
+                        .asBitmap()
+                        .error(R.drawable.no_image)
+                        .into(Target.SIZE_ORIGINAL, Target.SIZE_ORIGINAL).get();
+            } catch (InterruptedException | ExecutionException e) {
+                Log.e(TAG, "Error retrieving user pic from " + imageUrl, e);
+            }
+            DatabaseReference mUserDataReference = FirebaseDatabase.getInstance().getReference()
+                    .child("status");
+            mUserDataReference.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                        if (snapshot.getKey().equals(mFirebaseId)) {
+                            String status = (String) snapshot.getValue();
+                            for (int appWidgetId : appWidgetIds) {
+                                setIconActivated(status, appWidgetManager, appWidgetId);
+                            }
 
-        final AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(this);
-        final int[] appWidgetIds = appWidgetManager.getAppWidgetIds(new ComponentName(this,
-                StatusWidgetProvider.class));
-        DatabaseReference mUserDataReference = FirebaseDatabase.getInstance().getReference()
-                .child("status");
-        mUserDataReference.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                    if (snapshot.getKey().equals(mFirebaseId)) {
-                        String status = (String) snapshot.getValue();
-                        for (int appWidgetId : appWidgetIds) {
-                            setIconActivated(status, appWidgetManager, appWidgetId);
                         }
-
                     }
+
                 }
 
-            }
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
 
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
+                }
+            });
+        } else {
+            mRemoteViews.setImageViewResource(R.id.widget_user_pic, R.drawable.no_image);
+            mRemoteViews.setTextViewText(R.id.widget_username, getResources().getString(R.string.anonymous_user));
+            mRemoteViews.setTextColor(R.id.online_status_text_view, Color.BLACK);
+            mRemoteViews.setTextColor(R.id.away_status_text_view, Color.BLACK);
+            mRemoteViews.setTextColor(R.id.offline_status_text_view, Color.BLACK);
+            mRemoteViews.setImageViewResource(R.id.online_image_view, R.drawable.ic_radio_button_unchecked_black_24dp);
+            mRemoteViews.setImageViewResource(R.id.away_image_view, R.drawable.ic_radio_button_unchecked_black_24dp);
+            mRemoteViews.setImageViewResource(R.id.offline_image_view, R.drawable.ic_radio_button_unchecked_black_24dp);
+            appWidgetManager.updateAppWidget(appWidgetIds, mRemoteViews);
+        }
     }
 
     private void setIconActivated(String string, AppWidgetManager appWidgetManager, int appWidgetId) {
-        RemoteViews views = new RemoteViews(getPackageName(), R.layout.widget_status);
 
         if (mImageBitmap != null) {
-            views.setImageViewBitmap(R.id.widget_user_pic, mImageBitmap);
+            mRemoteViews.setImageViewBitmap(R.id.widget_user_pic, mImageBitmap);
         } else {
-            views.setImageViewResource(R.id.widget_user_pic, R.drawable.no_image);
+            mRemoteViews.setImageViewResource(R.id.widget_user_pic, R.drawable.no_image);
         }
 
-        views.setTextViewText(R.id.widget_username, mUserName);
+        mRemoteViews.setTextViewText(R.id.widget_username, mUserName);
 
         switch (string) {
             case "Online": {
-                views.setTextColor(R.id.online_status_text_view, getResources().getColor(R.color.green));
-                views.setTextColor(R.id.away_status_text_view, Color.BLACK);
-                views.setTextColor(R.id.offline_status_text_view, Color.BLACK);
-                views.setImageViewResource(R.id.away_image_view, R.drawable.ic_radio_button_unchecked_black_24dp);
+                mRemoteViews.setTextColor(R.id.online_status_text_view, getResources().getColor(R.color.green));
+                mRemoteViews.setTextColor(R.id.away_status_text_view, Color.BLACK);
+                mRemoteViews.setTextColor(R.id.offline_status_text_view, Color.BLACK);
+                mRemoteViews.setImageViewResource(R.id.away_image_view, R.drawable.ic_radio_button_unchecked_black_24dp);
                 break;
             }
             case "Away": {
-                views.setTextColor(R.id.away_status_text_view, getResources().getColor(R.color.orange));
-                views.setTextColor(R.id.online_status_text_view, Color.BLACK);
-                views.setTextColor(R.id.offline_status_text_view, Color.BLACK);
-                views.setImageViewResource(R.id.away_image_view, R.drawable.ic_radio_button_checked_orange_24dp);
-                views.setImageViewResource(R.id.online_image_view, R.drawable.ic_radio_button_unchecked_black_24dp);
-                views.setImageViewResource(R.id.offline_image_view, R.drawable.ic_radio_button_unchecked_black_24dp);
+                mRemoteViews.setTextColor(R.id.away_status_text_view, getResources().getColor(R.color.orange));
+                mRemoteViews.setTextColor(R.id.online_status_text_view, Color.BLACK);
+                mRemoteViews.setTextColor(R.id.offline_status_text_view, Color.BLACK);
+                mRemoteViews.setImageViewResource(R.id.away_image_view, R.drawable.ic_radio_button_checked_orange_24dp);
+                mRemoteViews.setImageViewResource(R.id.online_image_view, R.drawable.ic_radio_button_unchecked_black_24dp);
+                mRemoteViews.setImageViewResource(R.id.offline_image_view, R.drawable.ic_radio_button_unchecked_black_24dp);
                 break;
             }
             case "Offline": {
-                views.setTextColor(R.id.offline_status_text_view, getResources().getColor(R.color.red));
-                views.setTextColor(R.id.away_status_text_view, Color.BLACK);
-                views.setTextColor(R.id.online_status_text_view, Color.BLACK);
-                views.setImageViewResource(R.id.away_image_view, R.drawable.ic_radio_button_unchecked_black_24dp);
+                mRemoteViews.setTextColor(R.id.offline_status_text_view, getResources().getColor(R.color.red));
+                mRemoteViews.setTextColor(R.id.away_status_text_view, Color.BLACK);
+                mRemoteViews.setTextColor(R.id.online_status_text_view, Color.BLACK);
+                mRemoteViews.setImageViewResource(R.id.away_image_view, R.drawable.ic_radio_button_unchecked_black_24dp);
                 break;
             }
         }
-        appWidgetManager.updateAppWidget(appWidgetId, views);
+        appWidgetManager.updateAppWidget(appWidgetId, mRemoteViews);
     }
 }
