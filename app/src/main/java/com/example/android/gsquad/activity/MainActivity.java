@@ -161,10 +161,10 @@ public class MainActivity extends AppCompatActivity
                 // Sign-in succeeded, set up the UI
                 updateWidget();
                 mViewPager.setCurrentItem(0, true);
-                Toast.makeText(this, "You are signed in!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, getResources().getString(R.string.signed_in_label), Toast.LENGTH_SHORT).show();
             } else if (resultCode == RESULT_CANCELED) {
                 // Sign in was canceled by user, finish the activity
-                Toast.makeText(this, "Sign in canceled", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, getResources().getString(R.string.signed_out_label), Toast.LENGTH_SHORT).show();
                 finish();
             }
         }

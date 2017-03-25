@@ -11,6 +11,8 @@
     <string name="menu_help_and_feedback">Feedback</string>
     <string name="menu_share">Share</string>
     <string name="menu_logout">Logout</string>
+    <string name="signed_in_label">You are signed in!</string>
+    <string name="signed_out_label">Sign in canceled</string>
     <string name="title_activity_friend_list">Find Friends</string>
     <string name="device_unsupported">This device is not supported.</string>
     <string name="tab_title_games">Games</string>
