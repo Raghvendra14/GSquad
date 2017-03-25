@@ -100,6 +100,8 @@ public class NotificationListAdapter extends RecyclerView.Adapter<NotificationLi
                     ResponseToInvite acceptInvite = new ResponseToInvite(mUserBasicInfoList.get(getAdapterPosition()),
                             true);
                     acceptInvite.response();
+                    mUserBasicInfoList.remove(getAdapterPosition());
+                    mIsCurrentUserSender.remove(getAdapterPosition());
                     notifyDataSetChanged();
                 }
             });
@@ -112,6 +114,8 @@ public class NotificationListAdapter extends RecyclerView.Adapter<NotificationLi
                     ResponseToInvite declineInvite = new ResponseToInvite(mUserBasicInfoList.get(getAdapterPosition()),
                             false);
                     declineInvite.response();
+                    mUserBasicInfoList.remove(getAdapterPosition());
+                    mIsCurrentUserSender.remove(getAdapterPosition());
                     notifyDataSetChanged();
                 }
             });
