@@ -91,7 +91,7 @@ public class MainActivity extends AppCompatActivity
         // It is meant to setup the Navigational Drawer for home screen of the app.
         setUpNavigationalDrawer();
         setupTabLayoutWithViewPager();
-        setupFabInMainActivity(MainActivityFragment.class, R.drawable.ic_game_add_white_36dp);
+        setupFabInMainActivity(AddGameActivity.class, R.drawable.ic_game_add_white_36dp);
 
 //        try {
 //            PackageInfo info = getPackageManager().getPackageInfo(
