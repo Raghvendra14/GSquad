@@ -117,7 +117,7 @@ public class NotificationListFragment extends Fragment {
                     if (dataSnapshot.getValue() == null) {
                         mEmptyTextView.setVisibility(View.VISIBLE);
                         mProgressBar.setVisibility(View.GONE);
-                } else {
+                    } else {
                         mUserBasicInfoList.clear();
                         mIsCurrentUserSender.clear();
                         for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
