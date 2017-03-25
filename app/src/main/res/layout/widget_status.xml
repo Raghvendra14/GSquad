@@ -122,6 +122,7 @@
                 android:paddingEnd="@dimen/widget_margin_start_end"/>
 
         </LinearLayout>
+
     </LinearLayout>
 
 </LinearLayout>
