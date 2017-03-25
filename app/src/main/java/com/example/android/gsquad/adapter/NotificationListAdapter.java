@@ -59,9 +59,9 @@ public class NotificationListAdapter extends RecyclerView.Adapter<NotificationLi
                     .getString(R.string.receive_invite_label));
             holder.mActionLinearLayout.setVisibility(View.VISIBLE);
             holder.mAcceptActionImageView.getDrawable().mutate().setColorFilter(
-                    mContext.getResources().getColor(android.R.color.holo_green_dark), PorterDuff.Mode.SRC_IN);
+                    mContext.getResources().getColor(R.color.green), PorterDuff.Mode.SRC_IN);
             holder.mDeclineActionImageView.getDrawable().mutate().setColorFilter(
-                    mContext.getResources().getColor(android.R.color.holo_red_dark), PorterDuff.Mode.SRC_IN);
+                    mContext.getResources().getColor(R.color.red), PorterDuff.Mode.SRC_IN);
         }
         Glide.with(mContext)
                 .load(photoUrl)

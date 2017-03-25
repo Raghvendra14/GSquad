@@ -51,7 +51,7 @@
                 android:focusable="true"
                 android:foreground="?selectableItemBackground"
                 android:contentDescription="@string/accept_icon_label"
-                android:background="@color/green"/>
+                android:background="@android:color/transparent"/>
 
             <ImageButton
                 android:id="@+id/decline_action_icon"
@@ -64,7 +64,7 @@
                 android:focusable="true"
                 android:foreground="?selectableItemBackground"
                 android:contentDescription="@string/decline_icon_label"
-                android:background="@color/red"/>
+                android:background="@android:color/transparent"/>
 
         </LinearLayout>
 
