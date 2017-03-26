@@ -24,7 +24,7 @@ public class Utils {
     public static String getProfilePicUrl(FirebaseUser user, Context context) {
         String photoUrl = "";
         for (UserInfo profile : user.getProviderData()) {
-            if (profile.getProviderId().equals(context.getResources().getString(R.string.facebook_provider_id))) {
+            if (profile.getProviderId().equals(context.getString(R.string.facebook_provider_id))) {
                 String facebookUserId = profile.getUid();
                 photoUrl = "https://graph.facebook.com/" + facebookUserId +
                         "/picture?height=500&width=500";
