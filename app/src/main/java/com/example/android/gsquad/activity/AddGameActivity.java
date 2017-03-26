@@ -15,7 +15,6 @@ import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.InputFilter;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
@@ -124,7 +123,6 @@ public class AddGameActivity extends AppCompatActivity implements
 
     @Override
     public Loader<List<Game>> onCreateLoader(int id, Bundle args) {
-        Log.d("Hello", mAddGameEditText.getText().toString());
         return new SearchGameTask(context, mAddGameEditText.getText().toString());
     }
 
@@ -208,7 +206,7 @@ public class AddGameActivity extends AppCompatActivity implements
 
         if (mActionMode != null) {
             // set action mode title on item selection
-            mActionMode.setTitle("1 selected");
+            mActionMode.setTitle(getString(R.string.selected_count_label));
         }
     }
 

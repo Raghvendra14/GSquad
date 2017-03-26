@@ -60,7 +60,6 @@ public class ToolbarActionModeCallback implements ActionMode.Callback {
                     String message = game.getName() + " " + addGameActivity.getResources().getString(R.string.single_game_string);
                     Toast.makeText(addGameActivity, message,
                             Toast.LENGTH_SHORT).show();
-                    Log.d("Hello", "Selected items: Id - " + game.getId() + " Name - " + game.getName());
 
                     addGameActivity.finish();
                     mode.finish();

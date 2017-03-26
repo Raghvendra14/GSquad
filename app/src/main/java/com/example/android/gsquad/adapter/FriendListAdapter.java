@@ -57,7 +57,7 @@ public class FriendListAdapter extends RecyclerView.Adapter<FriendListAdapter.Vi
                 .diskCacheStrategy(DiskCacheStrategy.RESULT)
                 .into(holder.mCircleImageView);
         holder.mTextView.setText(mUserBasicInfoList.get(position).getName());
-        holder.mCircleImageView.setContentDescription(holder.mTextView.getText() + " Profile Pic");
+        holder.mCircleImageView.setContentDescription(holder.mTextView.getText() + " " + mContext.getResources().getString(R.string.profile_content_label));
     }
 
     @Override

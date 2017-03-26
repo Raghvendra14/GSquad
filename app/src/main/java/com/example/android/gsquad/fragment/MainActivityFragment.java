@@ -245,12 +245,10 @@ public class MainActivityFragment extends Fragment implements GoogleApiClient.Co
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
                         GameDetails gameDetails = dataSnapshot.getValue(GameDetails.class);
-                        Log.d(TAG, gameDetails.getName());
                         gameDetailsList.add(gameDetails);
                         mGameDetailsListAdapter = new GameDetailsListAdapter(gameDetailsList,
                                 getActivity(), true);
                         mRecyclerView.setAdapter(mGameDetailsListAdapter);
-                        Log.d(TAG, gameDetailsList.toString());
                         if (mGameDetailsListAdapter.getItemCount() != 0) {
                             mEmptyTextView.setVisibility(View.GONE);
                             mProgressBar.setVisibility(View.GONE);
@@ -268,7 +266,6 @@ public class MainActivityFragment extends Fragment implements GoogleApiClient.Co
 
     @Override
     public void onConnected(@Nullable Bundle bundle) {
-        Log.d(TAG, "In onConnected");
         requestForRequiredPermissions();
 
     }

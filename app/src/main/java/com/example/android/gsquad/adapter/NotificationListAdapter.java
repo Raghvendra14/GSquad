@@ -96,7 +96,7 @@ public class NotificationListAdapter extends RecyclerView.Adapter<NotificationLi
                 @Override
                 public void onClick(View v) {
                     // Accept the request.
-                    Toast.makeText(view.getContext(), "Invite accepted", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(view.getContext(), mContext.getString(R.string.invite_accepted), Toast.LENGTH_SHORT).show();
                     ResponseToInvite acceptInvite = new ResponseToInvite(mUserBasicInfoList.get(getAdapterPosition()),
                             true);
                     acceptInvite.response();
@@ -110,7 +110,7 @@ public class NotificationListAdapter extends RecyclerView.Adapter<NotificationLi
                 @Override
                 public void onClick(View v) {
                     // Decline the request.
-                    Toast.makeText(view.getContext(), "Invite declined", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(view.getContext(), mContext.getString(R.string.invite_declined), Toast.LENGTH_SHORT).show();
                     ResponseToInvite declineInvite = new ResponseToInvite(mUserBasicInfoList.get(getAdapterPosition()),
                             false);
                     declineInvite.response();

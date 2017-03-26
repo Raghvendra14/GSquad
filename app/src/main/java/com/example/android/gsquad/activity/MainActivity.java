@@ -16,7 +16,6 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -93,21 +92,6 @@ public class MainActivity extends AppCompatActivity
         setupTabLayoutWithViewPager();
         setupFabInMainActivity(AddGameActivity.class, R.drawable.ic_game_add_white_36dp);
 
-//        try {
-//            PackageInfo info = getPackageManager().getPackageInfo(
-//                    "com.example.android.gsquad",
-//                    PackageManager.GET_SIGNATURES);
-//            for (Signature signature : info.signatures) {
-//                MessageDigest md = MessageDigest.getInstance("SHA");
-//                md.update(signature.toByteArray());
-//                Log.d("KeyHash:", Base64.encodeToString(md.digest(), Base64.DEFAULT));
-//            }
-//        } catch (PackageManager.NameNotFoundException e) {
-//
-//        } catch (NoSuchAlgorithmException e) {
-//
-//        }
-
         mStatusDataReference = FirebaseDatabase.getInstance().getReference().child("status");
         mFirebaseAuth = FirebaseAuth.getInstance();
 
@@ -118,7 +102,6 @@ public class MainActivity extends AppCompatActivity
                 if (user != null) {
                     // User is signed in
                     mUserId = user.getUid();
-                    Log.d(TAG, "User Connected");
                     setupProfilePicInNavDrawer(user);
                     mNavigationView.getMenu().getItem(mSize-1).setChecked(false);
                     if (mIsCalledByAddFriendsActivity) {

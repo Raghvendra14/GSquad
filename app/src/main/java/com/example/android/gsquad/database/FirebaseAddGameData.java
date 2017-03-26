@@ -1,7 +1,5 @@
 package com.example.android.gsquad.database;
 
-import android.util.Log;
-
 import com.example.android.gsquad.model.GameDetails;
 import com.example.android.gsquad.model.UserBasicInfo;
 import com.google.firebase.auth.FirebaseAuth;
@@ -68,7 +66,6 @@ public class FirebaseAddGameData {
     }
 
     private void addGameDataInUser() {
-        Log.d("From outside : ", String.valueOf(mGameDetails.getId()));
         mUserDatabaseReference = mFirebaseDatabase.getReference().child("users")
             .child(mFirebaseUser.getUid());
         mUserDatabaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -76,7 +73,6 @@ public class FirebaseAddGameData {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 UserBasicInfo userBasicInfo = dataSnapshot.getValue(UserBasicInfo.class);
                 List<Integer> gameIdList;
-                Log.d("From inside : ", String.valueOf(mGameDetails.getId()));
                 if (userBasicInfo.getGamesOwned() == null) {
                     gameIdList = new ArrayList<Integer>();
                     gameIdList.add(mGameDetails.getId());

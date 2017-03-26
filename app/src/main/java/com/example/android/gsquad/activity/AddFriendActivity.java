@@ -107,7 +107,6 @@ public class AddFriendActivity extends AppCompatActivity {
                                 @Override
                                 public void onDataChange(DataSnapshot dataSnapshot) {
                                     GameDetails gameDetails = dataSnapshot.getValue(GameDetails.class);
-                                    Log.d("Hello from add friend: ", gameDetails.getName());
                                     Game game = new Game();
                                     game.setId(gameDetails.getId());
                                     game.setName(gameDetails.getName());

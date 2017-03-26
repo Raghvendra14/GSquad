@@ -23,6 +23,7 @@
     <string name="search_placeholder">Enter title or keyword of game</string>
     <string name="thumbnail_label">Game Thumbnail</string>
     <string name="selected_label">Selected Game</string>
+    <string name="selected_count_label">1 Game Selected</string>
     <string name="submit">Submit</string>
     <string name="single_game_string">Game added to your library.</string>
     <string name="multiple_game_string">Games added to your library.</string>
@@ -60,6 +61,8 @@
     <string name="email_chooser">Send mail via</string>
     <string name="no_clients_available">No Email Clients are installed.</string>
     <string name="share_app_info">Check out this app - GSQUAD. An app made exclusively for gamers</string>
+    <string name="invite_accepted">Invite Accepted!</string>
+    <string name="invite_declined">Invite Declined!</string>
 
     <!-- Strings related to Settings -->
     <string name="pref_range_label">Range To Find Gamers</string>
