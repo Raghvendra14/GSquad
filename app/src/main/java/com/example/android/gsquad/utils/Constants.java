@@ -19,4 +19,7 @@ public class Constants {
     public static final String ONLINE_DATA_PUSH = "com.example.android.gsquad.app.ONLINE_DATA_PUSH";
     public static final String AWAY_DATA_PUSH = "com.example.android.gsquad.app.AWAY_DATA_PUSH";
     public static final String OFFLINE_DATA_PUSH = "com.example.android.gsquad.app.OFFLINE_DATA_PUSH";
+    public static final String CURRENT_LATLNG = "current_lat_long";
+    public static final String USER_LATLNG = "user_lat_long";
+    public static final String USER_NAME = "user_name";
 }

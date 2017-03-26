@@ -20,7 +20,7 @@
             android:value="@integer/google_play_services_version" />
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="AIzaSyA3feEvHELB1uq7Xr3K0Ib2lJf0dxY-8aQ" />
+            android:value="@string/google_maps_key" />
 
         <activity
             android:name=".activity.SplashActivity"
@@ -63,9 +63,10 @@
             android:theme="@style/AppBarThemeCustom" />
 
         <!-- Notifications Widget -->
-        <receiver android:name=".widget.StatusWidgetProvider"
-            android:label="@string/title_widget_status"
-            android:enabled="true">
+        <receiver
+            android:name=".widget.StatusWidgetProvider"
+            android:enabled="true"
+            android:label="@string/title_widget_status">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
                 <action android:name="com.example.android.gsquad.app.ACTION_DATA_UPDATED" />
@@ -73,11 +74,16 @@
                 <action android:name="com.example.android.gsquad.widget.StatusWidgetProvider.AWAY_DATA_PUSH" />
                 <action android:name="com.example.android.gsquad.widget.StatusWidgetProvider.OFFLINE_DATA_PUSH" />
             </intent-filter>
-            <meta-data android:name="android.appwidget.provider"
+
+            <meta-data
+                android:name="android.appwidget.provider"
                 android:resource="@xml/widget_info_status" />
         </receiver>
+
         <service android:name=".widget.StatusService" />
         <service android:name=".widget.DataService" />
+
+        <activity android:name=".activity.MapActivity" />
     </application>
 
 </manifest>

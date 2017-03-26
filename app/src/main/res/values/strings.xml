@@ -90,4 +90,6 @@
     <string name="away_status">Away</string>
     <string name="offline_status_label">Offline Label</string>
     <string name="offline_status">Offline</string>
+
+    <string name="map_label">Check on Maps</string>
 </resources>

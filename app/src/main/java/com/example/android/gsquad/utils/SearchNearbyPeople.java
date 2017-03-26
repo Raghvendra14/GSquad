@@ -59,6 +59,7 @@ public class SearchNearbyPeople {
     public void search() {
         final List<String> nearbyUserIds = new ArrayList<>();
         final Map<String, Double> nearbyUserDistance = new HashMap<>();
+        final Map<String, LatLng> nearbyUserLatLngs = new HashMap<>();
         mUserBasicDataReference = FirebaseDatabase.getInstance().getReference().child("users");
         mUserBasicDataReference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -91,6 +92,7 @@ public class SearchNearbyPeople {
                         if (Double.compare(distanceInMeters, rangeInDouble) <= 0) {
                             nearbyUserIds.add(mUserIds.get(i));
                             nearbyUserDistance.put(mUserIds.get(i), distanceInMeters);
+                            nearbyUserLatLngs.put(mUserIds.get(i), mLatLngsList.get(mUserIds.get(i)));
                         }
                     }
                 }
@@ -99,7 +101,7 @@ public class SearchNearbyPeople {
                     mProgressBar.setVisibility(View.GONE);
                     mEmptyTextView.setVisibility(View.VISIBLE);
                 } else {
-                    filterAlreadySentRequest(nearbyUserIds, nearbyUserDistance);
+                    filterAlreadySentRequest(nearbyUserIds, nearbyUserDistance, nearbyUserLatLngs);
                 }
             }
 
@@ -110,7 +112,8 @@ public class SearchNearbyPeople {
         });
     }
 
-    private void getNearbyPeopleInfo(final List<String> nearbyUserIds, final Map<String, Double> nearbyUserDistance) {
+    private void getNearbyPeopleInfo(final List<String> nearbyUserIds, final Map<String, Double> nearbyUserDistance,
+                                     final Map<String, LatLng> nearbyUserLatLngs) {
         final List<UserBasicInfo> userBasicInfoList = new ArrayList<>();
         final List<Boolean> userShowDistance = new ArrayList<>();
             mUserBasicDataReference.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -125,7 +128,8 @@ public class SearchNearbyPeople {
                             userShowDistance.add(showLocation);
                         }
                     }
-                    mFindFriendsAdapter = new FindFriendsAdapter(userBasicInfoList, nearbyUserDistance, userShowDistance, mContext);
+                    mFindFriendsAdapter = new FindFriendsAdapter(userBasicInfoList, nearbyUserDistance, userShowDistance,
+                            nearbyUserLatLngs, mCurrentUserLatLng, mContext);
                     mRecyclerView.setAdapter(mFindFriendsAdapter);
                     if (mFindFriendsAdapter.getItemCount() != 0) {
                         mProgressBar.setVisibility(View.GONE);
@@ -139,7 +143,8 @@ public class SearchNearbyPeople {
             });
     }
 
-    private void filterFriendsAlreadyAvailable(final List<String> nearbyUserIds, final Map<String, Double> nearbyUserDistance) {
+    private void filterFriendsAlreadyAvailable(final List<String> nearbyUserIds, final Map<String, Double> nearbyUserDistance,
+                                               final Map<String, LatLng> nearbyUserLatLngs) {
         mUserFriendListDataReference = mUserBasicDataReference.child(mCurrentUserId).child("friends");
         mUserFriendListDataReference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -149,13 +154,14 @@ public class SearchNearbyPeople {
                     if (nearbyUserIds.contains(userFriendInList)) {
                         nearbyUserIds.remove(userFriendInList);
                         nearbyUserDistance.remove(userFriendInList);
+                        nearbyUserLatLngs.remove(userFriendInList);
                     }
                 }
                 if (nearbyUserIds.isEmpty()) {
                     mProgressBar.setVisibility(View.GONE);
                     mEmptyTextView.setVisibility(View.VISIBLE);
                 } else {
-                    getNearbyPeopleInfo(nearbyUserIds, nearbyUserDistance);
+                    getNearbyPeopleInfo(nearbyUserIds, nearbyUserDistance, nearbyUserLatLngs);
                 }
             }
 
@@ -166,7 +172,8 @@ public class SearchNearbyPeople {
         });
     }
 
-    private void filterAlreadySentRequest(final List<String> nearbyUserIds, final Map<String, Double> nearbyUserDistance) {
+    private void filterAlreadySentRequest(final List<String> nearbyUserIds, final Map<String, Double> nearbyUserDistance,
+                                          final Map<String, LatLng> nearbyUserLatLngs) {
         mUserNotificationsDataReference = mUserBasicDataReference.child(mCurrentUserId).child("notifications");
         mUserNotificationsDataReference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -176,16 +183,18 @@ public class SearchNearbyPeople {
                     if (nearbyUserIds.contains(notification.getTo())) {
                         nearbyUserIds.remove(notification.getTo());
                         nearbyUserDistance.remove(notification.getTo());
+                        nearbyUserLatLngs.remove(notification.getTo());
                     } else if (nearbyUserIds.contains(notification.getFrom())) {
                         nearbyUserIds.remove(notification.getFrom());
                         nearbyUserDistance.remove(notification.getFrom());
+                        nearbyUserLatLngs.remove(notification.getFrom());
                     }
                 }
                 if (nearbyUserIds.isEmpty()) {
                     mProgressBar.setVisibility(View.GONE);
                     mEmptyTextView.setVisibility(View.VISIBLE);
                 } else {
-                    filterFriendsAlreadyAvailable(nearbyUserIds, nearbyUserDistance);
+                    filterFriendsAlreadyAvailable(nearbyUserIds, nearbyUserDistance, nearbyUserLatLngs);
                 }
             }
 
