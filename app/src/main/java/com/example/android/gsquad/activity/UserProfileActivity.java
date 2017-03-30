@@ -218,10 +218,6 @@ public class UserProfileActivity extends AppCompatActivity {
                     FirebaseAuth.getInstance().getCurrentUser().getUid());
             addUserInFriendList.add();
             Toast.makeText(this, getResources().getString(R.string.friend_request_sent), Toast.LENGTH_SHORT).show();
-            Intent intent = new Intent(this, MainActivity.class);
-            intent.putExtra(Constants.PARENT_IS_ADD_FRIENDS, true);
-            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-            startActivity(intent);
             return true;
         }
         return super.onOptionsItemSelected(item);

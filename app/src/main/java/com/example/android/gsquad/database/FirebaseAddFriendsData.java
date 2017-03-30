@@ -1,14 +1,22 @@
 package com.example.android.gsquad.database;
 
+import android.content.Intent;
+import android.support.annotation.NonNull;
+
+import com.example.android.gsquad.activity.MainActivity;
 import com.example.android.gsquad.fcm.FcmNotificationBuilder;
 import com.example.android.gsquad.model.Notifications;
 import com.example.android.gsquad.model.UserBasicInfo;
 import com.example.android.gsquad.utils.Constants;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+
+import static com.facebook.FacebookSdk.getApplicationContext;
 
 /**
  * Created by Raghvendra on 22-03-2017.
@@ -31,7 +39,16 @@ public class FirebaseAddFriendsData {
     public void add() {
         Notifications notification = createFriendList(mUserId, mCurrentUserId);
         mUsersDatabaseReference.child(mCurrentUserId).child("notifications").push().setValue(notification);
-        mUsersDatabaseReference.child(mUserId).child("notifications").push().setValue(notification);
+        mUsersDatabaseReference.child(mUserId).child("notifications").push().setValue(notification)
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                        intent.putExtra(Constants.PARENT_IS_ADD_FRIENDS, true);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                        getApplicationContext().startActivity(intent);
+                    }
+                });
         sendNotifications();
     }
 
