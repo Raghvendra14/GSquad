@@ -11,6 +11,7 @@ public class UserBasicInfo {
     private String id;
     private Coordinates coordinates;
     private boolean showLocation;
+    private String firebaseToken;
     private String email;
     private List<Integer> gamesOwned;
     private String name;
@@ -30,6 +31,10 @@ public class UserBasicInfo {
     public boolean getShowLocation() { return showLocation; }
 
     public void setShowLocation(boolean showLocation) { this.showLocation = showLocation; }
+
+    public String getFirebaseToken() { return firebaseToken; }
+
+    public void setFirebaseToken(String firebaseToken) { this.firebaseToken = firebaseToken; }
 
     public String getEmail() { return email; }
 

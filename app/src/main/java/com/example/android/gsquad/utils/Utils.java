@@ -15,6 +15,8 @@ import com.google.firebase.auth.UserInfo;
  */
 
 public class Utils {
+    private static final String APP_PREFS = "gsquad_preferences";
+
     public static boolean isNetworkAvailable(Context context) {
         ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo activeNetworkInfo = cm.getActiveNetworkInfo();
@@ -46,5 +48,17 @@ public class Utils {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         return prefs.getString(context.getString(R.string.pref_range_key),
                 context.getString(R.string.pref_range_default));
+    }
+
+    public static void saveToken(Context context, String key, String value) {
+        SharedPreferences sp = context.getSharedPreferences(APP_PREFS, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sp.edit();
+        editor.putString(key, value);
+        editor.commit();
+    }
+
+    public static String getToken(Context context, String key, String defValue) {
+        SharedPreferences sp = context.getSharedPreferences(APP_PREFS, Context.MODE_PRIVATE);
+        return sp.getString(key, defValue);
     }
 }

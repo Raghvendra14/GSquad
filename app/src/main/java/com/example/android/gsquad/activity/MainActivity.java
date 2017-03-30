@@ -30,6 +30,7 @@ import com.example.android.gsquad.adapter.ViewPagerAdapter;
 import com.example.android.gsquad.fragment.FriendListFragment;
 import com.example.android.gsquad.fragment.MainActivityFragment;
 import com.example.android.gsquad.fragment.NotificationListFragment;
+import com.example.android.gsquad.service.DeleteFirebaseIDService;
 import com.example.android.gsquad.utils.Constants;
 import com.example.android.gsquad.utils.Utils;
 import com.firebase.ui.auth.AuthUI;
@@ -266,6 +267,7 @@ public class MainActivity extends AppCompatActivity
                 break;
             case R.id.logout:
                 updateWidget();
+                startService(new Intent(getApplicationContext(), DeleteFirebaseIDService.class));
                 AuthUI.getInstance().signOut(this);
         }
         mDrawer.closeDrawer(GravityCompat.START);

@@ -24,6 +24,7 @@ public class FirebaseAddFriendsData {
         Notifications notification = createFriendList(mUserId, mCurrentUserId);
         mUsersDatabaseReference.child(mCurrentUserId).child("notifications").push().setValue(notification);
         mUsersDatabaseReference.child(mUserId).child("notifications").push().setValue(notification);
+        sendNotifications();
     }
 
     private Notifications createFriendList(String to, String from) {
@@ -32,5 +33,9 @@ public class FirebaseAddFriendsData {
         notification.setFrom(from);
         notification.setStatus(Constants.PENDING);
         return notification;
+    }
+
+    private void sendNotifications() {
+
     }
 }
