@@ -327,17 +327,15 @@ public class MainActivityFragment extends Fragment implements GoogleApiClient.Co
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if (!dataSnapshot.exists()) {
                     mUserBasicInfo.setShowLocation(true);
-                    mUserBasicInfo.setFirebaseToken(Utils.getToken(getActivity(),
-                            Constants.ARG_FIREBASE_TOKEN, null));
                     setShowLocation(true);
                     mUserDatabaseReference.setValue(mUserBasicInfo);
                 } else {
                     UserBasicInfo userInfo = dataSnapshot.getValue(UserBasicInfo.class);
                     boolean isChecked = userInfo.getShowLocation();
                     setShowLocation(isChecked);
-                    // Set the value of firebase token
-                    Utils.saveToken(getActivity(), Constants.ARG_FIREBASE_TOKEN, userInfo.getFirebaseToken());
                 }
+                mUserDatabaseReference.child(Constants.ARG_FIREBASE_TOKEN).setValue(Utils
+                        .getToken(getActivity(), Constants.ARG_FIREBASE_TOKEN, null));
             }
 
             @Override

@@ -30,7 +30,6 @@ import com.example.android.gsquad.adapter.ViewPagerAdapter;
 import com.example.android.gsquad.fragment.FriendListFragment;
 import com.example.android.gsquad.fragment.MainActivityFragment;
 import com.example.android.gsquad.fragment.NotificationListFragment;
-import com.example.android.gsquad.service.DeleteFirebaseIDService;
 import com.example.android.gsquad.utils.Constants;
 import com.example.android.gsquad.utils.Utils;
 import com.firebase.ui.auth.AuthUI;
@@ -73,6 +72,7 @@ public class MainActivity extends AppCompatActivity
     private Toolbar mToolbar;
     private NavigationView mNavigationView;
     private boolean mIsCalledByAddFriendsActivity;
+    private boolean mIsCalledByNotification;
     private ViewPager mViewPager;
     private Spinner mSpinner;
     private FloatingActionButton mFab;
@@ -87,6 +87,9 @@ public class MainActivity extends AppCompatActivity
         final Intent intent = getIntent();
         if (intent.hasExtra(Constants.PARENT_IS_ADD_FRIENDS)) {
             mIsCalledByAddFriendsActivity = intent.getBooleanExtra(Constants.PARENT_IS_ADD_FRIENDS, false);
+        }
+        if (intent.hasExtra(Constants.PARENT_IS_NOTIFICATION)) {
+            mIsCalledByNotification = intent.getBooleanExtra(Constants.PARENT_IS_NOTIFICATION, false);
         }
         // It is meant to setup the Navigational Drawer for home screen of the app.
         setUpNavigationalDrawer();
@@ -110,11 +113,17 @@ public class MainActivity extends AppCompatActivity
                         intent.putExtra(Constants.PARENT_IS_ADD_FRIENDS, false);
                         mIsCalledByAddFriendsActivity = false;
                     }
+                    if (mIsCalledByNotification) {
+                        mViewPager.setCurrentItem(2, true);
+                        intent.putExtra(Constants.PARENT_IS_NOTIFICATION, false);
+                        mIsCalledByNotification = false;
+                    }
                     checkForStatus(user);
                 } else {
                     // User is signed out
                     mUserId = "";
                     mIsCalledByAddFriendsActivity = false;
+                    mIsCalledByNotification = false;
                     startActivityForResult(
                             AuthUI.getInstance()
                             .createSignInIntentBuilder()
@@ -267,7 +276,6 @@ public class MainActivity extends AppCompatActivity
                 break;
             case R.id.logout:
                 updateWidget();
-                startService(new Intent(getApplicationContext(), DeleteFirebaseIDService.class));
                 AuthUI.getInstance().signOut(this);
         }
         mDrawer.closeDrawer(GravityCompat.START);

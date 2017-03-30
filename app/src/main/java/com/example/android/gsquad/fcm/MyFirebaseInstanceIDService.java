@@ -4,6 +4,8 @@ import android.util.Log;
 
 import com.example.android.gsquad.utils.Constants;
 import com.example.android.gsquad.utils.Utils;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.FirebaseInstanceIdService;
 
@@ -24,5 +26,14 @@ public class MyFirebaseInstanceIDService extends FirebaseInstanceIdService {
     private void sendRegistrationToServer(final String token) {
         // TODO : save it in shared preference if necessary
         Utils.saveToken(getApplicationContext(), Constants.ARG_FIREBASE_TOKEN, token);
+
+        if (FirebaseAuth.getInstance().getCurrentUser() != null) {
+            FirebaseDatabase.getInstance()
+                    .getReference()
+                    .child("users")
+                    .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
+                    .child(Constants.ARG_FIREBASE_TOKEN)
+                    .setValue(token);
+        }
     }
 }

@@ -85,8 +85,6 @@
 
         <activity android:name=".activity.MapActivity" />
 
-        <service android:name=".service.DeleteFirebaseIDService" />
-
         <service
             android:name=".fcm.MyFirebaseMessagingService">
             <intent-filter>

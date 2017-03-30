@@ -15,6 +15,7 @@
     <string name="signed_out_label">Sign in canceled</string>
     <string name="title_activity_friend_list">Find Friends</string>
     <string name="device_unsupported">This device is not supported.</string>
+    <string name="request_sent">has sent a friend invite.</string>
     <string name="tab_title_games">Games</string>
     <string name="tab_title_friends">Friends</string>
     <string name="tab_title_notifications">Notifications</string>
