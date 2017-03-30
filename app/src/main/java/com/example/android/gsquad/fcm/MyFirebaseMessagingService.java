@@ -32,11 +32,11 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
     public void onMessageReceived(RemoteMessage remoteMessage) {
         // Check if message contains a data payload.
         if (remoteMessage.getData().size() > 0) {
-            String senderUid = remoteMessage.getData().get("uid");
+            String receiverUid = remoteMessage.getData().get("uid");
             String username = remoteMessage.getData().get("username");
             String profilePicUrl = remoteMessage.getData().get("profilePicUrl");
 
-            if (!senderUid.equals(FirebaseAuth.getInstance().getCurrentUser().getUid())) {
+            if (receiverUid.equals(FirebaseAuth.getInstance().getCurrentUser().getUid())) {
                 sendNotification(username, profilePicUrl);
             }
         }

@@ -19,7 +19,7 @@ public class FcmNotificationBuilder {
     private static final String TAG = FcmNotificationBuilder.class.getSimpleName();
     private static final String BASE_URL = "https://fcm.googleapis.com/fcm/send";
 
-    private String mSenderUid;
+    private String mReceiverUid;
     private String mUsername;
     private String mProfilePicUrl;
     private String mReceiverFirebaseToken;
@@ -29,8 +29,8 @@ public class FcmNotificationBuilder {
 
     public static FcmNotificationBuilder initialize() { return new FcmNotificationBuilder(); }
 
-    public FcmNotificationBuilder senderUid(String uid) {
-        mSenderUid = uid;
+    public FcmNotificationBuilder receiverUid(String uid) {
+        mReceiverUid = uid;
         return this;
     }
 
@@ -52,7 +52,7 @@ public class FcmNotificationBuilder {
     public void send() {
         Notification notification = new Notification();
         Data data = new Data();
-        data.setUid(mSenderUid);
+        data.setUid(mReceiverUid);
         data.setProfilePicUrl(mProfilePicUrl);
         data.setUsername(mUsername);
         notification.setData(data);

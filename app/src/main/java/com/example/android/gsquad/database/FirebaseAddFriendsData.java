@@ -83,9 +83,9 @@ public class FirebaseAddFriendsData {
 
     private void buildNotificationRequest() {
         FcmNotificationBuilder.initialize()
-                .senderUid(mCurrentUserId)
                 .username(mSenderUsername)
                 .profilePicUrl(mSenderProfilePicUrl)
+                .receiverUid(mUserId)
                 .receiverFirebaseToken(mReceiverFirebaseToken)
                 .send();
 
