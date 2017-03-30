@@ -24,7 +24,6 @@ public class MyFirebaseInstanceIDService extends FirebaseInstanceIdService {
     }
 
     private void sendRegistrationToServer(final String token) {
-        // TODO : save it in shared preference if necessary
         Utils.saveToken(getApplicationContext(), Constants.ARG_FIREBASE_TOKEN, token);
 
         if (FirebaseAuth.getInstance().getCurrentUser() != null) {
