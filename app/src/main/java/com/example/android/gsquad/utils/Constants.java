@@ -24,4 +24,5 @@ public class Constants {
     public static final String USER_NAME = "user_name";
     public static final String ARG_FIREBASE_TOKEN = "firebaseToken";
     public static final String PARENT_IS_NOTIFICATION = "isNotification";
+    public static final String IS_CALLED_BY_FRIEND_LIST = "isFriendProfile";
 }

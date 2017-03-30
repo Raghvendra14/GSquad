@@ -64,6 +64,7 @@
     <string name="share_app_info">Check out this app - GSQUAD. An app made exclusively for gamers</string>
     <string name="invite_accepted">Invite Accepted!</string>
     <string name="invite_declined">Invite Declined!</string>
+    <string name="remove_friend_label">UNFRIEND</string>
 
     <!-- Strings related to Settings -->
     <string name="pref_range_label">Range To Find Gamers</string>

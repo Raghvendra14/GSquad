@@ -24,6 +24,7 @@
     <dimen name="action_image_view">36dp</dimen>
     <dimen name="profile_pic_notification_margin_start">6dp</dimen>
     <dimen name="profile_pic_notification_margin_end">2dp</dimen>
+    <dimen name="remove_friend_padding_top_end">8dp</dimen>
     <dimen name="username_size">16sp</dimen>
     <dimen name="distance_size">12sp</dimen>
     <dimen name="user_name_text_size">20sp</dimen>

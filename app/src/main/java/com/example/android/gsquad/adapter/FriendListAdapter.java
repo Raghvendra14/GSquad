@@ -42,6 +42,7 @@ public class FriendListAdapter extends RecyclerView.Adapter<FriendListAdapter.Vi
                 Intent intent = new Intent(mContext, UserProfileActivity.class);
                 intent.putExtra(Constants.USER_ID, mUserBasicInfoList.get(vh.getAdapterPosition()).getId());
                 intent.putExtra(Constants.CALLING_ACTIVITY, false);
+                intent.putExtra(Constants.IS_CALLED_BY_FRIEND_LIST, true);
                 mContext.startActivity(intent);
             }
         });

@@ -11,6 +11,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -19,6 +20,7 @@ import com.bumptech.glide.Glide;
 import com.example.android.gsquad.R;
 import com.example.android.gsquad.adapter.GameDetailsListAdapter;
 import com.example.android.gsquad.database.FirebaseAddFriendsData;
+import com.example.android.gsquad.database.RemoveFromFriendList;
 import com.example.android.gsquad.model.GameDetails;
 import com.example.android.gsquad.model.UserBasicInfo;
 import com.example.android.gsquad.utils.Constants;
@@ -39,6 +41,7 @@ public class UserProfileActivity extends AppCompatActivity {
 
     private String mUserId;
     private boolean mIsCalledByFindFriends;
+    private boolean mIsFriendProfile;
     private ProgressBar mProgressBar;
     private CircleImageView mCircleImageView;
     private TextView mTextView;
@@ -46,6 +49,7 @@ public class UserProfileActivity extends AppCompatActivity {
     private TextView mEmptyTextView;
     private List<GameDetails> mGameDetailsList;
     private GameDetailsListAdapter mGameDetailsListAdapter;
+    private Button mUnfriendButton;
 
     private DatabaseReference mUserDataReference;
     private DatabaseReference mGameDataReference;
@@ -58,10 +62,13 @@ public class UserProfileActivity extends AppCompatActivity {
         setContentView(R.layout.activity_user_profile);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         mContext = UserProfileActivity.this;
-        Intent intent = getIntent();
+        final Intent intent = getIntent();
         if (intent.hasExtra(Constants.USER_ID) && intent.hasExtra(Constants.CALLING_ACTIVITY)) {
             mUserId = intent.getStringExtra(Constants.USER_ID);
             mIsCalledByFindFriends = intent.getBooleanExtra(Constants.CALLING_ACTIVITY, false);
+        }
+        if (intent.hasExtra(Constants.IS_CALLED_BY_FRIEND_LIST)) {
+            mIsFriendProfile = intent.getBooleanExtra(Constants.IS_CALLED_BY_FRIEND_LIST, false);
         }
         if (mIsCalledByFindFriends) {
             setSupportActionBar(toolbar);
@@ -83,6 +90,7 @@ public class UserProfileActivity extends AppCompatActivity {
             mRecyclerView.setAdapter(mGameDetailsListAdapter);
 
             mEmptyTextView = (TextView) findViewById(R.id.empty_user_profile_textview);
+            mUnfriendButton = (Button) findViewById(R.id.remove_friend_button);
             mCircleImageView = (CircleImageView) findViewById(R.id.profile_pic);
             mCircleImageView.setBorderColor(getResources().getColor(android.R.color.white));
             mCircleImageView.setBorderWidth(getResources().getInteger(R.integer.profile_pic_border_width));
@@ -91,6 +99,16 @@ public class UserProfileActivity extends AppCompatActivity {
             mProgressBar.setVisibility(View.VISIBLE);
             mUserDataReference = FirebaseDatabase.getInstance().getReference().child("users")
                     .child(mUserId);
+            if (mIsFriendProfile) {
+                mUnfriendButton.setVisibility(View.VISIBLE);
+            }
+            mUnfriendButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    RemoveFromFriendList removeFromFriendList = new RemoveFromFriendList();
+                    removeFromFriendList.remove(mUserId);
+                }
+            });
         }
     }
 
