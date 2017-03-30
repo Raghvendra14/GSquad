@@ -7,7 +7,6 @@ import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -28,7 +27,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class AddFriendActivity extends AppCompatActivity {
-
     private ProgressBar mProgressBar;
     private RecyclerView mRecyclerView;
     private SingleGameSelectAdapter mSingleGameSelectAdapter;
