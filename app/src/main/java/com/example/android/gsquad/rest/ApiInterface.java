@@ -20,11 +20,11 @@ import retrofit2.http.Url;
  */
 
 public interface ApiInterface {
-    @Headers({"X-Mashape-Key : lhe24dCZZimshyyXkvQTe51KZ5c1p1zGackjsnfaYVadbb1BYS", "Accept : application/json"})
+    @Headers({"X-Mashape-Key : Fh0f4MAf1rmsh1SbpBJRAFXPNpuqp1kGfTCjsnfjfqHgjuSaSp", "Accept : application/json"})
     @GET("/games/")
     Call<List<Game>> getGameList(@Query("fields") String field, @Query("limit") int limit, @Query("offset") int offset, @Query("search") String gameTitle);
 
-    @Headers({"X-Mashape-Key : lhe24dCZZimshyyXkvQTe51KZ5c1p1zGackjsnfaYVadbb1BYS", "Accept : application/json"})
+    @Headers({"X-Mashape-Key : Fh0f4MAf1rmsh1SbpBJRAFXPNpuqp1kGfTCjsnfjfqHgjuSaSp", "Accept : application/json"})
     @GET("/games/{id}")
     Call<List<GameDetails>> getGameDetailList(@Path("id") int gameId, @Query("fields") String field);
 
