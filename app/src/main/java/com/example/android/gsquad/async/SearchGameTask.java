@@ -41,7 +41,7 @@ public class SearchGameTask extends AsyncTaskLoader<List<Game>> {
             try {
                 Response<List<Game>> response = call.execute();
                 List<Game> entries = response.body();
-                if (!entries.isEmpty()) {
+                if (entries != null) {
                     return entries;
                 }
             } catch (IOException e) {
