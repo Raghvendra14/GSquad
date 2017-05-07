@@ -65,6 +65,7 @@
     <string name="invite_accepted">Invite Accepted!</string>
     <string name="invite_declined">Invite Declined!</string>
     <string name="remove_friend_label">UNFRIEND</string>
+    <string name="empty_game_list">No games are found. Please try again later.</string>
 
     <!-- Strings related to Settings -->
     <string name="pref_range_label">Range To Find Gamers</string>

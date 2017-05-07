@@ -20,6 +20,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import com.example.android.gsquad.R;
 import com.example.android.gsquad.adapter.GameListAdapter;
@@ -40,6 +41,7 @@ public class AddGameActivity extends AppCompatActivity implements
 
     private EditText mAddGameEditText;
     private Button mSearchButton;
+    private TextView mEmptyTextView;
     private ProgressBar mProgressBar;
     private RecyclerView mRecyclerView;
     private GameListAdapter mGameListAdapter;
@@ -60,6 +62,7 @@ public class AddGameActivity extends AppCompatActivity implements
         mAddGameEditText = (EditText) findViewById(R.id.add_game_text);
         mSearchButton = (Button) findViewById(R.id.search_game_button);
         mProgressBar = (ProgressBar) findViewById(R.id.game_list_progressBar);
+        mEmptyTextView = (TextView) findViewById(R.id.empty_game_list);
         setupRecyclerView();
         implementRecyclerViewClickListener();
         if (savedInstanceState != null) {
@@ -128,11 +131,16 @@ public class AddGameActivity extends AppCompatActivity implements
 
     @Override
     public void onLoadFinished(Loader<List<Game>> loader, List<Game> data) {
-        mGameList = data;
-        mGameListAdapter = new GameListAdapter(mGameList, context);
-        mRecyclerView.setAdapter(mGameListAdapter);
-        retainSavedInstanceState();
-        mProgressBar.setVisibility(View.GONE);
+        if (data == null) {
+            mEmptyTextView.setVisibility(View.VISIBLE);
+        } else {
+            mGameList = data;
+            mGameListAdapter = new GameListAdapter(mGameList, context);
+            mRecyclerView.setAdapter(mGameListAdapter);
+            retainSavedInstanceState();
+            mProgressBar.setVisibility(View.GONE);
+            mEmptyTextView.setVisibility(View.GONE);
+        }
     }
 
     @Override
